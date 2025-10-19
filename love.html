@@ -90,12 +90,14 @@
     .message span {
       opacity: 0;
       display: block;
-      animation: fadeInText 1s forwards;
+      transform: translateX(-30px);
+      animation: fadeInText 1.5s forwards;
     }
 
     @keyframes fadeInText {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      0% { opacity: 0; transform: translateX(-30px); filter: brightness(1.4); }
+      60% { opacity: 1; transform: translateX(0); filter: brightness(1.8); }
+      100% { opacity: 1; transform: translateX(0); filter: brightness(1); }
     }
 
     #bigMessage {
@@ -298,16 +300,15 @@
       }
     }, 2000);
 
-    // 💞 Büyük mesaj animasyonu
     setTimeout(() => {
       const msg = document.getElementById("bigMessage");
       msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
     }, 5000);
 
-    // 🎶 Giriş ekranı - müzik başlatma
     const intro = document.getElementById("introScreen");
     const music = document.getElementById("bgMusic");
     intro.addEventListener("click", () => {
+      music.currentTime = 3; // 🎵 3. saniyeden başlasın
       music.play().catch(() => {});
       intro.querySelector(".introContent").innerHTML = `
         <h2>💞 Harika! Müzik başladı 💞</h2>
@@ -318,13 +319,12 @@
       }, 1500);
     });
 
-    // ✨ Yazıları sırayla göster
     const spans = document.querySelectorAll("#loveMessage span");
     spans.forEach((span, index) => {
       setTimeout(() => {
         span.style.opacity = "1";
         span.style.animationDelay = "0s";
-      }, index * 1500); // her satır arası 1.5 saniye
+      }, index * 2500 + 1000); // her satır arası 2.5 saniye, ilk çıkış 1sn sonra
     });
   </script>
 </body>
