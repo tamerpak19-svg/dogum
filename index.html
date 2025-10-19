@@ -1,148 +1,152 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bir Mektup Var — Sürpriz 💌</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sana Bir Mektubum Var 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg1:#ffe5ec;
-      --bg2:#ffb3c6;
-      --accent:#ff4da6;
-      --soft:#fff0f5;
-    }
-    *{box-sizing:border-box; margin:0; padding:0}
-    html,body{
-      height:100%; overflow:hidden;
-      background: radial-gradient(circle at center, var(--bg1), var(--bg2));
-      font-family:'Poppins', sans-serif;
-      color:#5a0047;
-      display:flex; align-items:center; justify-content:center;
-    }
-    h1{font-family:'Great Vibes', cursive; font-size:2.6rem; margin-bottom:10px; color:#c1006f;}
-    p{font-size:1.1rem; color:#76004f;}
-
-    .container{text-align:center; max-width:700px; position:relative;}
-
-    .envelope-wrap{margin-top:40px; position:relative; display:flex; justify-content:center;}
-    .envelope{
-      width:320px; height:200px; position:relative; cursor:pointer; perspective:800px;
-      transition:transform .3s ease; z-index:10;
-    }
-    .envelope:hover{transform:scale(1.03);}
-    .env-back{
-      background:#fff; border:3px solid #ffcce0; border-radius:12px; width:100%; height:100%; position:absolute;
-      box-shadow:0 5px 18px rgba(255,20,147,0.3);
-    }
-    .env-flap{
-      position:absolute; top:0; left:0; width:100%; height:60%; background:#ffe6f3;
-      border:3px solid #ffcce0; border-radius:12px; transform-origin:top center; transition:transform 0.8s ease;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .seal{
-      width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#ff70b8,#ff1493);
-      color:#fff; font-size:26px; display:flex; align-items:center; justify-content:center;
-      box-shadow:0 0 15px rgba(255,20,147,0.4);
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffc1d9, #ff9ecd, #ff8acb);
+      font-family: 'Quicksand', sans-serif;
+      color: white;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
     }
 
-    .letter{
-      width:90%; height:70%; position:absolute; bottom:-15%; left:5%;
-      background:white; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);
-      opacity:0; transition:opacity .8s ease, bottom .8s ease; padding:20px;
-    }
-    .letter h2{font-family:'Great Vibes',cursive; font-size:2rem; color:#c1006f;}
-    .letter p{font-family:'Poppins',sans-serif; color:#5a0047; font-size:1rem;}
-
-    .opened .env-flap{transform:rotateX(180deg);}
-    .opened .letter{opacity:1; bottom:20%;}
-
-    .buttons{display:none; margin-top:25px;}
-    .btn{
-      background:linear-gradient(90deg,#ff5fa2,#ff1493); color:white; border:none;
-      padding:10px 20px; border-radius:30px; font-weight:600; cursor:pointer;
-      box-shadow:0 0 15px rgba(255,20,147,0.5);
-    }
-    .btn:hover{transform:scale(1.05);}
-
-    /* Kalp yağmuru */
-    .hearts{
-      position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;
-      overflow:hidden; z-index:0;
-    }
-    .heart{
-      position:absolute; font-size:1.8rem; animation:fall 6s linear forwards;
-    }
-    @keyframes fall{
-      0%{transform:translateY(-10%) scale(0.8); opacity:1;}
-      100%{transform:translateY(110vh) rotate(360deg); opacity:0;}
+    h1 {
+      font-size: 2.4rem;
+      text-shadow: 0 0 15px rgba(255,255,255,0.9);
+      animation: fadeIn 1.5s ease-out;
     }
 
-    @media(max-width:600px){
-      h1{font-size:2.2rem;}
-      .envelope{width:270px; height:170px;}
-      .letter h2{font-size:1.6rem;}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    button {
+      background: linear-gradient(90deg, #ff69b4, #ff1493);
+      border: none;
+      color: white;
+      padding: 20px 50px;
+      margin-top: 25px;
+      font-size: 1.3rem;
+      border-radius: 35px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+      background: linear-gradient(90deg, #ff85c1, #ff3399);
+      box-shadow: 0 0 40px rgba(255, 192, 203, 1);
+    }
+
+    /* 💌 Parıltı efekti */
+    .flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.9), rgba(255,192,203,0.6), rgba(255,182,193,0));
+      opacity: 0;
+      pointer-events: none;
+      z-index: 999;
+      animation: flashAnim 1.2s ease-out forwards;
+    }
+
+    @keyframes flashAnim {
+      0% { opacity: 0; transform: scale(0.5); }
+      40% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0; transform: scale(1.4); }
+    }
+
+    /* 💖 Kalpler */
+    .emoji {
+      position: fixed;
+      bottom: -50px;
+      font-size: 2rem;
+      animation: fly 6s linear forwards;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    @keyframes fly {
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-110vh) scale(1.6) rotate(720deg); opacity: 0; }
+    }
+
+    /* 💕 Devam Et butonu */
+    #continueBtn {
+      opacity: 0;
+      animation: fadeInBtn 2s ease forwards;
+      animation-delay: 3s;
+      display: none;
+    }
+
+    @keyframes fadeInBtn {
+      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Bir Mektubun Var 💌</h1>
-    <p>Zarfı aç bakalım, içinde ne yazıyor...</p>
 
-    <div class="envelope-wrap">
-      <div class="envelope" id="envelope">
-        <div class="env-back"></div>
-        <div class="env-flap"><div class="seal">💖</div></div>
-        <div class="letter" id="letter">
-          <h2>Canımın içi,</h2>
-          <p>Sen benim en tatlı tesadüfüm, en güzel alışkanlığımsın.  
-          Hazırsan devam et, çünkü bu sadece başlangıç 💫</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="buttons" id="buttons">
-      <button class="btn" id="continueBtn">Devam Et 💕</button>
-    </div>
-
-    <div class="hearts" id="hearts"></div>
+  <div class="content">
+    <h1>💌 Sana Küçük Bir Sürprizim Var 💖</h1>
+    <button id="openLetterBtn">Zarfı Aç ✨</button>
+    <button id="continueBtn" onclick="goToLove()">Devam Et 💕</button>
   </div>
 
   <script>
-    const envelope = document.getElementById('envelope');
-    const hearts = document.getElementById('hearts');
-    const buttons = document.getElementById('buttons');
+    const emojis = ["💖","💞","💘","💝","💋","❤️","🩷","💕","💓","💗","💜","💙","🎂","🎉","🎊","✨","🌈","🦋","🌹","🌸","💫","⭐"];
+    const openBtn = document.getElementById("openLetterBtn");
+    const continueBtn = document.getElementById("continueBtn");
 
-    function createHeart(){
-      const heart = document.createElement('div');
-      heart.className='heart';
-      const emojis = ['💖','💞','💘','💝','🎂','🌹','✨','💕'];
-      heart.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-      heart.style.left = Math.random()*100 + 'vw';
-      heart.style.fontSize = (16 + Math.random()*20) + 'px';
-      heart.style.animationDuration = (4 + Math.random()*3) + 's';
-      hearts.appendChild(heart);
-      setTimeout(()=>heart.remove(),7000);
+    openBtn.addEventListener("click", () => {
+      // ✨ Parıltı efekti oluştur
+      const flash = document.createElement("div");
+      flash.classList.add("flash");
+      document.body.appendChild(flash);
+      setTimeout(() => flash.remove(), 1200);
+
+      // 💕 Kalp fırtınası başlat
+      for (let i = 0; i < 180; i++) {
+        setTimeout(() => createEmoji(), i * 30);
+      }
+
+      // 💌 Buton gizle ve devam butonunu göster
+      openBtn.style.display = "none";
+      setTimeout(() => {
+        continueBtn.style.display = "inline-block";
+      }, 3000);
+    });
+
+    function createEmoji() {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.fontSize = Math.random() * 2 + 1 + "rem";
+      emoji.style.animationDuration = 4 + Math.random() * 4 + "s";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 8000);
     }
 
-    let opened=false;
-    envelope.addEventListener('click', ()=>{
-      if(opened) return;
-      opened=true;
-      envelope.classList.add('opened');
-      buttons.style.display='block';
-      for(let i=0;i<50;i++){
-        setTimeout(createHeart, i*100);
-      }
-    });
-
-    document.getElementById('continueBtn').addEventListener('click',()=>{
-      window.location.href='love.html';
-    });
-
-    // sürekli kalpler (arkaplan süsü)
-    setInterval(createHeart,800);
+    function goToLove() {
+      window.location.href = "love.html";
+    }
   </script>
 </body>
 </html>
