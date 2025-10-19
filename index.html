@@ -1,273 +1,385 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Küçük Bir Hediyem Var 💌</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>💌 Küçük Bir Sürpriz 💌</title>
 
   <style>
-    body {
-      margin: 0;
-      background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Poppins", sans-serif;
-      text-align: center;
+    :root{
+      --pink1:#ffb6c1;
+      --pink2:#ff66b2;
+      --accent:#ff1493;
+      --curtain-dark:#7a0000;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, "Poppins", "Dancing Script", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{
+      background: radial-gradient(circle at center, #ffe6f0, #ffd1e3 40%, #ffb3d0 100%);
+      display:flex;align-items:center;justify-content:center;overflow:hidden;padding:20px;
+      color:#2b2b2b;
     }
 
-    h1 {
-      font-size: 2rem;
-      color: #fff;
-      text-shadow: 0 0 15px #ff66b2;
-      margin-bottom: 25px;
-      animation: fadeIn 2s ease;
+    /* ---------- CURTAIN ---------- */
+    .curtain-wrap{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;}
+    .curtain{flex:1;height:100vh;background:linear-gradient(180deg,var(--curtain-dark),#b2002f);transform-origin:left center;transition:transform 1.5s cubic-bezier(.2,.8,.2,1);box-shadow:inset -20px 0 40px rgba(0,0,0,0.3);}
+    .curtain.right{transform-origin:right center;box-shadow:inset 20px 0 40px rgba(0,0,0,0.3);}
+    .curtain.open.left{transform:translateX(-100%);} 
+    .curtain.open.right{transform:translateX(100%);}
+
+    /* small velvet folds */
+    .curtain::after{
+      content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg, rgba(0,0,0,0.02) 0 6px, transparent 6px 12px);
+      opacity:0.08;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ---------- STAGE (content) ---------- */
+    .stage{position:relative;z-index:50;max-width:1100px;width:100%;display:flex;flex-direction:column;align-items:center;gap:20px;padding-top:20px;}
+
+    h1{font-family:"Dancing Script", "Poppins", sans-serif;font-size:2.2rem;margin:0;color:#560033;text-shadow:0 2px 18px rgba(255,255,255,0.5);}
+
+    /* ---------- ENVELOPE ---------- */
+    .envelope-wrap{display:flex;align-items:center;justify-content:center;width:100%;}
+    .envelope{
+      position:relative; width:clamp(200px,36vw,420px); height:clamp(120px,22vw,260px);
+      background:linear-gradient(180deg,#ffd1e3,#ffb3d0);
+      border-radius:14px; box-shadow:0 10px 40px rgba(255,20,147,0.25);
+      border:2px solid rgba(255,255,255,0.5);
+      cursor:pointer; overflow:visible; transition:transform .5s ease, opacity .6s ease;
     }
 
-    /* Zarf */
-    .envelope {
-      position: relative;
-      width: 280px;
-      height: 180px;
-      background: #ffbfd6;
-      border: 2px solid #ff80aa;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.5s ease;
+    /* triangular flap using pseudo element */
+    .envelope::before{
+      content:""; position:absolute; left:0; top:-1px; width:100%; height:55%;
+      background:linear-gradient(180deg,#ff93bb,#ff5c96); clip-path:polygon(0 0, 100% 0, 50% 100%); border-radius:12px;
+      transform-origin:top center; transition:transform 1s cubic-bezier(.2,.8,.2,1);
+      box-shadow:inset 0 -6px 12px rgba(255,255,255,0.05);
     }
 
-    .envelope:hover {
-      transform: scale(1.05);
+    .envelope.open::before{transform:translateY(-120%) rotateX(180deg);}
+
+    /* envelope label & seal */
+    .label{
+      position:absolute; left:50%; transform:translateX(-50%); bottom:14px; font-weight:700;
+      background:rgba(255,255,255,0.75); color:#62103a; padding:10px 18px; border-radius:999px; font-size:1rem; box-shadow:0 6px 18px rgba(255,105,180,0.12);
+      backdrop-filter:blur(4px);
     }
 
-    /* Zarf kapağı */
-    .envelope::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 90px;
-      background: linear-gradient(to bottom right, #ff8fb3, #ff5c8a);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      transform-origin: top;
-      transition: transform 1s ease;
+    .seal{
+      position:absolute; left:50%; transform:translateX(-50%); top:calc(50% - 30px); width:64px; height:64px; border-radius:50%;
+      background: radial-gradient(circle at 20% 20%, #ff4d6d, #c51162); display:flex;align-items:center;justify-content:center;
+      color:white;font-size:26px;box-shadow:0 8px 30px rgba(197,10,80,0.28);
     }
 
-    /* Kalp mührü */
-    .seal {
-      position: absolute;
-      top: 75px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 2.5rem;
-      text-shadow: 0 0 15px #ff007f;
-      transition: opacity 0.8s;
+    /* envelope pulse while waiting */
+    .envelope.pulse{animation:envelopePulse 2.5s infinite;}
+    @keyframes envelopePulse{0%{transform:translateY(0)}50%{transform:translateY(-6px) scale(1.01)}100%{transform:translateY(0)}}
+
+    /* clicked state (disappear) */
+    .envelope.hide{opacity:0;transform:scale(1.2);pointer-events:none}
+
+    /* ---------- LETTER (big) ---------- */
+    .letter{
+      display:none; width:min(920px,92%); background:linear-gradient(180deg,#fff,#fffefc);
+      color:#4b0033;border-radius:14px;padding:28px 26px; box-shadow:0 20px 60px rgba(255,20,147,0.12);
+      border:3px solid rgba(255,196,203,0.6); transform-origin:center; z-index:60;
+    }
+    .letter.show{display:block; animation:letterIn .9s cubic-bezier(.2,.9,.2,1) both;}
+    @keyframes letterIn{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+    .letter p{margin:0;font-size:1.05rem;line-height:1.7;color:#4b0033;text-align:left}
+
+    /* continue button (in letter) */
+    .continue-btn{
+      margin-top:18px; display:inline-block; padding:12px 28px; background:linear-gradient(90deg,var(--accent),#ff66b2);
+      color:white;border:none;border-radius:999px;font-weight:700;font-size:1rem;cursor:pointer; box-shadow:0 10px 30px rgba(255,20,147,0.18);
     }
 
-    /* Aç butonu */
-    .open-btn {
-      margin-top: 20px;
-      background: #ff66b2;
-      border: none;
-      color: white;
-      font-size: 1.3rem;
-      padding: 12px 25px;
-      border-radius: 25px;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-      transition: all 0.3s ease;
+    /* ---------- FIREWORK/CALLOUTS ---------- */
+    .particle{
+      position:fixed; left:0; top:0; pointer-events:none; font-size:18px; will-change:transform,opacity;
     }
 
-    .open-btn:hover {
-      background: #ff3385;
-      transform: scale(1.05);
-    }
+    /* small sparks for canvas fallback styling if needed */
+    canvas#fw{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:40;mix-blend-mode:screen}
 
-    /* Parıltı */
-    .flash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0));
-      opacity: 0;
-      animation: flashAnim 0.8s ease-out;
-      pointer-events: none;
-      z-index: 1000;
+    /* responsive tweaks */
+    @media (max-width:900px){
+      h1{font-size:1.6rem}
+      .seal{width:56px;height:56px;font-size:22px}
+      .label{font-size:.95rem;padding:8px 16px}
     }
-
-    @keyframes flashAnim {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* Kalpler */
-    .heart, .spark {
-      position: fixed;
-      font-size: 1.5rem;
-      pointer-events: none;
-      animation: floatUp 4s ease-out forwards;
-      z-index: 999;
-    }
-
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
-    }
-
-    /* Mektup */
-    .letter {
-      display: none;
-      max-width: 90%;
-      background: rgba(255,255,255,0.8);
-      border-radius: 20px;
-      padding: 25px;
-      font-size: 1.2rem;
-      line-height: 1.8;
-      box-shadow: 0 0 20px rgba(255,255,255,0.8);
-      animation: fadeIn 1.5s ease;
-    }
-
-    .continue-btn {
-      display: none;
-      margin-top: 25px;
-      background: #ff66b2;
-      color: #fff;
-      border: none;
-      padding: 12px 28px;
-      font-size: 1.2rem;
-      border-radius: 25px;
-      box-shadow: 0 0 15px rgba(255,255,255,0.7);
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .continue-btn:hover {
-      transform: scale(1.05);
-      background: #ff3385;
-    }
-
-    @media (max-width: 768px) {
-      .envelope {
-        width: 220px;
-        height: 140px;
-      }
-      .seal { font-size: 2rem; }
-      h1 { font-size: 1.7rem; }
+    @media (max-width:480px){
+      body{padding:10px}
+      .envelope{width:76vw;height:46vw}
+      .letter{padding:18px;font-size:.95rem}
+      .seal{width:48px;height:48px;font-size:20px}
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>💌 Küçük bir hediyem var 💌</h1>
 
-    <div class="envelope" id="envelope">
-      <div class="seal">💖</div>
-    </div>
-
-    <button class="open-btn" id="openBtn">Aç Beni 💌</button>
-
-    <div class="letter" id="letter">
-      <p>
-        Bu sadece küçük bir sürpriz… 💖  
-        Ama seni ne kadar çok sevdiğimi anlatmaya kelimeler yetmez biliyorsun 💞  
-        Sen benim en güzel alışkanlığım, en huzurlu yerimsin 🌸  
-        Bu mektup sadece başlangıç…  
-        Çünkü hediyenin devamı seni biraz daha bekliyor 💫  
-      </p>
-    </div>
-
-    <button class="continue-btn" id="continueBtn">Devam Et 💞</button>
+  <!-- CURTAIN -->
+  <div class="curtain-wrap" aria-hidden="true">
+    <div class="curtain left" id="curtainLeft"></div>
+    <div class="curtain right" id="curtainRight"></div>
   </div>
 
-  <script>
-    const openBtn = document.getElementById("openBtn");
-    const envelope = document.getElementById("envelope");
-    const seal = document.querySelector(".seal");
-    const letter = document.getElementById("letter");
-    const continueBtn = document.getElementById("continueBtn");
+  <!-- STAGE -->
+  <main class="stage" id="stage">
+    <h1>💌 Birtanem... Sana bir sürpriz hazırladım</h1>
 
-    openBtn.addEventListener("click", () => {
-      openBtn.style.opacity = "0";
-      setTimeout(() => openBtn.style.display = "none", 800);
+    <div class="envelope-wrap">
+      <div class="envelope pulse" id="envelope" aria-label="Zarf - Açmak için tıkla">
+        <div class="seal" id="seal">🩷</div>
+        <div class="label">Aç Beni ❤️</div>
+      </div>
+    </div>
 
-      // zarf açılma animasyonu
-      envelope.style.pointerEvents = "none";
-      envelope.style.transition = "1s ease";
-      envelope.style.transform = "translateY(-20px)";
-      envelope.style.boxShadow = "0 0 40px rgba(255,255,255,0.8)";
-      envelope.style.background = "#ffd1e3";
-      envelope.style.border = "2px solid #ff5c8a";
-      envelope.style.animation = "pulse 2s infinite alternate";
+    <article class="letter" id="letter" role="article" aria-labelledby="letterHeading">
+      <h2 id="letterHeading" style="font-family:'Dancing Script',cursive;font-size:1.6rem;margin:0 0 12px;color:#c1006f;">Sevgilim,</h2>
+      <p>
+        Bu küçük notu sana sevgimle yazıyorum. Seninle geçen her an, kalbimde özel bir yer açtı.
+        Gülüşün karanlık günleri aydınlatıyor, elin elimde olduğunda dünya daha güzel dönüyor.
+        Bu mektup sadece küçük bir başlangıç — asıl sürpriz için devam et butonuna bas.  
+        Seni her şeyden çok seviyorum. 💖
+      </p>
+      <div style="text-align:center">
+        <button class="continue-btn" id="continueBtn">Devam Et 💞</button>
+      </div>
+    </article>
+  </main>
 
-      envelope.style.setProperty("--lid-rotate", "-140deg");
-      envelope.querySelector("::before");
+  <!-- Canvas for fireworks -->
+  <canvas id="fw"></canvas>
 
-      envelope.classList.add("opened");
-      envelope.style.setProperty("--open", "1");
+  <!-- audio -->
+  <audio id="openSound" preload="auto">
+    <source src="open.mp3" type="audio/mpeg">
+  </audio>
 
-      // kapağı kaldır (CSS before)
-      envelope.style.setProperty("--lid-angle", "180deg");
-      envelope.style.setProperty("--lid-rotate", "-180deg");
-      envelope.style.setProperty("--lid-open", "1");
-      envelope.style.setProperty("--lid-opacity", "0.5");
-      envelope.style.setProperty("--lid-scale", "1.2");
-      envelope.style.setProperty("--lid-transform", "rotateX(180deg)");
+<script>
+/* =========================
+   Curtain open (2s delay)
+   ========================= */
+const leftCurtain = document.getElementById("curtainLeft");
+const rightCurtain = document.getElementById("curtainRight");
+setTimeout(()=> {
+  leftCurtain.classList.add("open");
+  rightCurtain.classList.add("open");
+  // remove from layout after animation
+  setTimeout(()=> {
+    // hide the curtain wrapper to free pointer events to envelope
+    const wrapper = leftCurtain.parentElement;
+    if(wrapper) wrapper.style.display = "none";
+  },1600);
+},2000);
 
-      envelope.style.setProperty("--lid-duration", "2s");
-      envelope.style.setProperty("--lid-ease", "ease-in-out");
+/* =========================
+   Envelope open & particles
+   ========================= */
+const envelope = document.getElementById("envelope");
+const letter = document.getElementById("letter");
+const continueBtn = document.getElementById("continueBtn");
+const openSound = document.getElementById("openSound");
+const canvas = document.getElementById("fw");
+const ctx = canvas.getContext && canvas.getContext("2d");
+let fwAnimId=null;
 
-      envelope.style.setProperty("--lid-delay", "0.5s");
+function resizeCanvas(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resizeCanvas(); window.addEventListener("resize", resizeCanvas);
 
-      // kalpler ve fişekler
-      const isMobile = window.innerWidth < 768;
-      const heartCount = isMobile ? 500 : 750;
-      const emojis = ["💖","💞","💘","💝","❤️","🩷"];
-      const sparks = ["✨","🌟","💫","⭐"];
+function isMobile(){ return window.innerWidth < 768; }
 
-      const flash = document.createElement("div");
-      flash.classList.add("flash");
-      document.body.appendChild(flash);
-      setTimeout(() => flash.remove(), 1000);
+// particle generator: hearts and sparks fışkırma from envelope center
+function spawnParticles(count){
+  const rect = envelope.getBoundingClientRect();
+  const startX = rect.left + rect.width/2;
+  const startY = rect.top + rect.height*0.18; // from near flap
 
-      for (let i = 0; i < heartCount; i++) {
-        const elem = document.createElement("div");
-        elem.textContent = Math.random() < 0.8 ? emojis[Math.floor(Math.random() * emojis.length)] : sparks[Math.floor(Math.random() * sparks.length)];
-        elem.classList.add(Math.random() < 0.8 ? "heart" : "spark");
-        elem.style.left = Math.random() * 100 + "vw";
-        elem.style.bottom = "0";
-        elem.style.fontSize = Math.random() * 2 + 1 + "rem";
-        elem.style.animationDuration = (Math.random() * 3 + 3) + "s";
-        document.body.appendChild(elem);
-        setTimeout(() => elem.remove(), 5000);
+  const hearts = ["💖","💞","💘","💝","❤️","🩷","💕","💗"];
+  const sparks = ["✨","🌟","💫","⭐"];
+  const total = count;
+
+  for(let i=0;i<total;i++){
+    // staggered spawn for fireworks effect
+    setTimeout(()=>{
+      // decide heart or spark
+      const isSpark = Math.random() < 0.18; // ~18% as spark
+      if(isSpark && ctx){
+        // spawn canvas based particle (fast)
+        spawnCanvasSpark(startX, startY);
+      } else {
+        spawnDOMParticle(startX,startY, hearts[Math.floor(Math.random()*hearts.length)]);
       }
+    }, i*8 + (Math.random()*200)); // small jitter
+  }
+}
 
-      // mektup göster
-      setTimeout(() => {
-        letter.style.display = "block";
-      }, 2500);
+// DOM particle (emoji) with JS-driven translate animation
+function spawnDOMParticle(sx,sy,char){
+  const el = document.createElement("div");
+  el.className = "particle particle-emoji";
+  el.innerText = char;
+  document.body.appendChild(el);
 
-      // devam et butonu
-      setTimeout(() => {
-        continueBtn.style.display = "inline-block";
-      }, 4500);
+  // initial style
+  const size = (Math.random()*14) + 14; // px
+  el.style.fontSize = size + "px";
+  el.style.left = (sx - size/2) + "px";
+  el.style.top = (sy - size/2) + "px";
+  el.style.opacity = "1";
+  el.style.transform = "translate3d(0,0,0)";
+
+  // random direction (prefer up and to sides)
+  const angle = (Math.random()*120 - 60) * (Math.PI/180); // between -60 and +60 deg from vertical
+  const spread = Math.random()*0.6 + 0.6; // multiplier on distance
+  const distance = (Math.random()*0.45 + 0.55) * Math.max(innerWidth, innerHeight) * 0.35 * spread;
+  const dx = Math.sin(angle) * distance * (Math.random()*0.8 + 0.6);
+  const dy = -Math.cos(angle) * distance * (Math.random()*0.6 + 0.9);
+
+  const rot = (Math.random()*360 - 180);
+  const dur = (Math.random()*1.6 + 1.6); // 1.6 - 3.2s
+  // force reflow to ensure transition (not using CSS transitions but JS step)
+  requestAnimationFrame(()=>{
+    el.style.transition = `transform ${dur}s cubic-bezier(.2,.8,.2,1), opacity ${dur*.9}s linear`;
+    el.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg) scale(${(Math.random()*0.6)+0.6})`;
+    el.style.opacity = "0";
+  });
+
+  // cleanup
+  setTimeout(()=> {
+    try{ el.remove(); }catch(e){}
+  }, (dur*1000)+200);
+}
+
+// canvas-based sparks/firework burst (fast)
+function spawnCanvasSpark(sx,sy){
+  if(!ctx) return;
+  const particles = [];
+  const count = 10 + Math.round(Math.random()*12);
+  for(let i=0;i<count;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = 2 + Math.random()*6;
+    particles.push({
+      x: sx,
+      y: sy,
+      vx: Math.cos(angle)*speed*(Math.random()*0.9 + 0.6),
+      vy: Math.sin(angle)*speed*(Math.random()*0.9 + 0.6),
+      life: 0,
+      ttl: 40 + Math.random()*30,
+      size: 1 + Math.random()*3,
+      hue: Math.random()*60 + 20
     });
+  }
+  // push to animator
+  addFirework(particles);
+}
 
-    // Devam butonu
-    continueBtn.addEventListener("click", () => {
-      window.location.href = "love.html";
-    });
-  </script>
+/* FIREWORKS engine (simple, performant) */
+const fireworksStore = [];
+function addFirework(particles){ fireworksStore.push(...particles); if(!fwAnimId) fwLoop(); }
+
+function fwLoop(){
+  if(!ctx) return;
+  fwAnimId = requestAnimationFrame(fwLoop);
+  // clear with slight alpha for trailing
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  for(let i = fireworksStore.length-1; i>=0; i--){
+    const p = fireworksStore[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    // gravity-ish
+    p.vy += 0.06;
+    p.life++;
+    const alpha = 1 - p.life / p.ttl;
+    ctx.beginPath();
+    ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${alpha})`;
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+    ctx.fill();
+
+    if(p.life > p.ttl){
+      fireworksStore.splice(i,1);
+    }
+  }
+  if(fireworksStore.length === 0){
+    cancelAnimationFrame(fwAnimId); fwAnimId = null;
+  }
+}
+
+/* envelope click handler */
+let spawned=false;
+envelope.addEventListener("click", async (e) => {
+  if(spawned) return;
+  spawned = true;
+
+  // fade out label & pulse / hide envelope after small animation
+  envelope.classList.remove("pulse");
+  envelope.classList.add("hide");
+
+  // play open sound (if available)
+  try{
+    openSound.currentTime = 0; openSound.volume = 0.7;
+    await openSound.play();
+  }catch(e){ /* ignore autoplay / play fail */ }
+
+  // animate flap (done via class toggled in CSS pseudo)
+  envelope.classList.add("open");
+
+  // particle counts adaptive
+  const targetCount = isMobile() ? 500 : 750;
+
+  // spawn particles from envelope center
+  spawnParticles(targetCount);
+
+  // show fireworks bursts occasionally during the spawn
+  let bursts = Math.round(targetCount / 120);
+  for(let i=0;i<bursts;i++){
+    setTimeout(()=> {
+      const rect = envelope.getBoundingClientRect();
+      spawnCanvasSpark(rect.left + rect.width/2, rect.top + rect.height*0.15);
+    }, i*350 + 100);
+  }
+
+  // reveal letter after short delay
+  setTimeout(()=> {
+    letter.classList.add("show");
+    // scroll letter into view on very small screens
+    if(window.innerWidth < 480) letter.scrollIntoView({behavior:"smooth",block:"center"});
+  }, 2200);
+
+  // after some time fade out remaining canvas particles
+  setTimeout(()=> {
+    // allow last fireworks to finish, then clear
+    setTimeout(()=> {
+      fireworksStore.length = 0;
+      if(ctx) ctx.clearRect(0,0,canvas.width,canvas.height);
+    }, 1200);
+  }, 4200);
+});
+
+/* Continue button */
+continueBtn.addEventListener("click", ()=> {
+  // small click animation then navigate
+  continueBtn.disabled = true;
+  continueBtn.style.transform = "scale(.96)";
+  setTimeout(()=> window.location.href = "love.html", 200);
+});
+
+/* Accessibility: allow Enter on envelope */
+envelope.tabIndex = 0;
+envelope.addEventListener("keydown", (ev)=>{
+  if(ev.key === "Enter" || ev.key === " ") envelope.click();
+});
+
+/* cleanup on unload for animations */
+window.addEventListener("beforeunload", ()=>{
+  try{ cancelAnimationFrame(fwAnimId); }catch(e){}
+});
+</script>
 </body>
 </html>
