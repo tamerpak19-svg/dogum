@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Merriweather', serif;
       color: #000; /* siyah yazı */
       text-align: center;
       margin: 0;
@@ -17,7 +18,9 @@
     h1 {
       margin-top: 40px;
       font-size: 2.8rem;
-      text-shadow: 3px 3px 8px rgba(255, 255, 255, 0.8);
+      font-weight: 700;
+      color: #2b2b2b;
+      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
       animation: fadeIn 2s ease-in;
     }
 
@@ -39,13 +42,6 @@
       animation: glow 3s infinite alternate;
     }
 
-    /* fallback görüntü (resim + buton) */
-    .fallback {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-
     .fallback img {
       width: 100%;
       border-radius: 25px;
@@ -59,45 +55,38 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.9);
       color: #ff1493;
-      font-weight: bold;
+      font-weight: 700;
       border: none;
-      border-radius: 50px;
-      padding: 12px 25px;
-      font-size: 1.2rem;
+      border-radius: 40px;
+      padding: 12px 28px;
+      font-size: 1.1rem;
       cursor: pointer;
-      backdrop-filter: blur(5px);
+      box-shadow: 0 0 10px rgba(255, 20, 147, 0.4);
       transition: all 0.3s ease;
-      text-shadow: 0 0 5px #fff;
     }
-
     .play-button:hover {
-      background: rgba(255, 192, 203, 0.95);
+      background: rgba(255, 182, 193, 0.95);
       transform: translate(-50%, -50%) scale(1.05);
-    }
-
-    @keyframes glow {
-      from { box-shadow: 0 0 25px #ff1493; }
-      to { box-shadow: 0 0 40px #ff66b2; }
     }
 
     .message {
       margin: 30px auto;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       line-height: 1.8;
-      text-shadow: 1px 1px 5px rgba(255,255,255,0.5);
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.4);
       border-radius: 20px;
-      padding: 15px;
+      padding: 20px;
       max-width: 90%;
       animation: fadeIn 4s ease-in;
     }
 
     #bigMessage {
       margin-top: 30px;
-      font-size: 2rem;
-      text-shadow: 2px 2px 10px rgba(255,255,255,0.8);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2b2b2b;
       opacity: 0;
       animation: none;
       background: rgba(255, 255, 255, 0.4);
@@ -122,30 +111,9 @@
       100% { transform: scale(1); }
     }
 
-    .decor {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 5;
-    }
-
-    h5.item {
-      position: absolute;
-      font-size: 1rem;
-      animation: floatUp 8s linear infinite;
-      text-shadow: 0 0 8px rgba(255,255,255,0.8);
-      filter: drop-shadow(0 0 8px rgba(255,105,180,0.9));
-      margin: 0;
-      padding: 0;
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(100vh) scale(1); opacity: 1; }
-      to { transform: translateY(-10vh) scale(1.3); opacity: 0; }
+    @keyframes glow {
+      from { box-shadow: 0 0 25px #ff1493; }
+      to { box-shadow: 0 0 40px #ff66b2; }
     }
 
     audio {
@@ -157,15 +125,15 @@
       transition: 0.3s;
       z-index: 10;
     }
+
     audio:hover { opacity: 1; }
 
     @media (max-width: 768px) {
       h1 { font-size: 2.1rem; margin-top: 25px; }
-      .message { font-size: 1.3rem; padding: 10px; }
-      #bigMessage { font-size: 1.5rem; padding: 15px; }
+      .message { font-size: 1.1rem; padding: 12px; }
+      #bigMessage { font-size: 1.4rem; padding: 15px; }
       iframe { height: 400px; }
-      h5.item { font-size: 0.8rem; }
-      .play-button { font-size: 1rem; padding: 10px 20px; }
+      .play-button { font-size: 1rem; padding: 10px 22px; }
     }
   </style>
 </head>
@@ -193,14 +161,11 @@
     💫 NİCE MUTLU YAŞLAR DİLİYORUM 💫
   </div>
 
-  <div class="decor" id="decor"></div>
-
   <audio id="bgMusic" autoplay loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // Fallback (eğer YouTube iframe yüklenmezse)
     setTimeout(() => {
       const iframe = document.getElementById('ytiframe');
       try {
@@ -215,22 +180,6 @@
       }
     }, 2000);
 
-    // Emoji efektleri
-    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
-    const decor = document.getElementById("decor");
-    function createItem() {
-      const item = document.createElement("h5");
-      item.classList.add("item");
-      item.style.left = Math.random() * 100 + "vw";
-      item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
-      item.style.animationDuration = (5 + Math.random() * 5) + "s";
-      item.innerHTML = items[Math.floor(Math.random() * items.length)];
-      decor.appendChild(item);
-      setTimeout(() => item.remove(), 10000);
-    }
-    setInterval(createItem, 150);
-
-    // Mesaj animasyonu
     setTimeout(() => {
       const msg = document.getElementById("bigMessage");
       msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
