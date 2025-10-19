@@ -195,4 +195,88 @@
     @media (max-width: 768px) {
       h1 { font-size: 1.6rem; }
       .letter p { font-size: 0.95rem; }
-      .envelope .label { font-size: 1.1r
+      .envelope .label { font-size: 1.1rem; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.2rem; }
+      .letter p { font-size: 0.9rem; }
+      .envelope { max-width: 300px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>💌 Küçük bir hediyem var ama bu sadece başlangıç... 💖</h1>
+
+    <div class="envelope" id="envelope">
+      <div class="label">Aç Beni 💌</div>
+      <div class="seal">🩷</div>
+      <div class="letter">
+        <p>
+          Aşkım,<br><br>
+          Bu mektubu sana sevgimle, içimdeki tüm güzel duygularla yazıyorum.  
+          Seninle geçen her an, hayatımın en güzel anlarından biri oluyor. 💞  
+          Gülüşün, sesin, dokunuşun… her şeyim oldun sen.  
+          İyi ki doğdun, iyi ki varsın, iyi ki seni seviyorum. 🎂❤️<br><br>
+          Ama burada bittiğini düşünme…  
+          Çünkü bu sadece ilk adım.  
+          Devam et butonuna bastığında, seni bekleyen başka bir sürpriz var. 💫<br><br>
+          Sonsuz sevgimle... 💋  
+        </p>
+      </div>
+    </div>
+
+    <button id="continueBtn" onclick="window.location.href='love.html'">Devam Et 💕</button>
+  </div>
+
+  <div id="heartContainer"></div>
+  <div id="flash"></div>
+
+  <audio id="openSound">
+    <source src="open.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const envelope = document.getElementById("envelope");
+    const continueBtn = document.getElementById("continueBtn");
+    const heartContainer = document.getElementById("heartContainer");
+    const flash = document.getElementById("flash");
+    const openSound = document.getElementById("openSound");
+
+    const hearts = ["💖","💞","💘","💝","❤️","🩷","💕","💗","💓","💜","💫","✨","🌸","💎","🕊️"];
+
+    envelope.addEventListener("click", () => {
+      envelope.classList.add("open");
+      flash.classList.add("flashActive");
+
+      openSound.currentTime = 0;
+      openSound.volume = 0.7;
+      openSound.play();
+
+      // 💖 750 kalp fırlat
+      for (let i = 0; i < 750; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.bottom = Math.random() * 60 + "vh";
+        heart.style.fontSize = Math.random() * 1.5 + 0.8 + "rem";
+        heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        heartContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 4500);
+      }
+
+      setTimeout(() => {
+        heartContainer.classList.add("fadeOut");
+      }, 3500);
+
+      setTimeout(() => {
+        continueBtn.style.display = "inline-block";
+        continueBtn.style.animation = "fadeIn 1.5s ease forwards";
+      }, 4800);
+    });
+  </script>
+</body>
+</html>
