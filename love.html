@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -45,16 +44,6 @@
       animation: glow 3s infinite alternate;
     }
 
-    .fallback img {
-      width: 100%;
-      height: 650px;
-      object-fit: cover;
-      border-radius: 25px;
-      border: 6px solid white;
-      box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
-      display: block;
-    }
-
     .message {
       margin: 30px auto;
       font-size: 1.4rem;
@@ -63,19 +52,7 @@
       border-radius: 20px;
       padding: 20px;
       max-width: 90%;
-    }
-
-    .message span {
-      opacity: 0;
-      display: inline-block;
-      transform: translateY(10px);
-      animation: fadeInWord 0.8s forwards;
-      margin-right: 4px;
-    }
-
-    @keyframes fadeInWord {
-      0% { opacity: 0; transform: translateY(10px); filter: brightness(1.4); }
-      100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
+      animation: fadeIn 4s ease-in;
     }
 
     #bigMessage {
@@ -89,6 +66,12 @@
       border-radius: 25px;
       padding: 20px;
       display: inline-block;
+    }
+
+    #loveMessage span {
+      opacity: 0;
+      display: inline-block;
+      transition: opacity 0.6s ease;
     }
 
     @keyframes fadeIn {
@@ -112,59 +95,11 @@
       to { box-shadow: 0 0 40px #ff66b2; }
     }
 
-    audio {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 220px;
-      opacity: 0.6;
-      transition: 0.3s;
-      z-index: 10;
-    }
-
-    audio:hover { opacity: 1; }
-
-    .decor {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 5;
-    }
-
-    h5.item {
-      position: absolute;
-      font-size: 1rem;
-      animation: floatUp 8s linear infinite;
-      text-shadow: 0 0 8px rgba(255,255,255,0.8);
-      filter: drop-shadow(0 0 8px rgba(255,105,180,0.9));
-      margin: 0;
-      padding: 0;
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(100vh) scale(1); opacity: 1; }
-      to { transform: translateY(-10vh) scale(1.3); opacity: 0; }
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 2.1rem; margin-top: 25px; }
-      .message { font-size: 1.1rem; padding: 12px; }
-      #bigMessage { font-size: 1.4rem; padding: 15px; }
-      iframe { height: 450px; }
-      .fallback img { height: 450px; }
-      h5.item { font-size: 0.8rem; }
-    }
-
+    /* 💞 Giriş ekranı */
     #introScreen {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: radial-gradient(circle at center, #ffb6c1, #ff66b2, #ff1493);
       color: white;
       display: flex;
@@ -174,12 +109,12 @@
       text-align: center;
       font-family: 'Merriweather', serif;
       z-index: 9999;
-      animation: fadeInIntro 1s ease-in forwards;
+      animation: fadeInIntro 0.8s ease-in forwards;
     }
 
     .introContent h2 {
       font-size: 2rem;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       text-shadow: 0 0 12px rgba(255,255,255,0.9);
     }
 
@@ -199,14 +134,34 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
+    audio {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 220px;
+      opacity: 0.6;
+      transition: 0.3s;
+      z-index: 10;
+    }
+
+    audio:hover { opacity: 1; }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.1rem; margin-top: 25px; }
+      .message { font-size: 1.1rem; padding: 12px; }
+      #bigMessage { font-size: 1.4rem; padding: 15px; }
+      iframe { height: 450px; }
+    }
   </style>
 </head>
 
 <body>
+  <!-- 💞 Giriş ekranı -->
   <div id="introScreen">
     <div class="introContent">
-      <h2>💖 Hoş Geldin Aşkım 💖</h2>
-      <p>🎵 Müzik başlaması için ekrana bir kez dokun...</p>
+      <h2>💞 Hoş Geldin Aşkım 💞</h2>
+      <p>Müziği başlatmak için ekrana bir kez dokun 💖</p>
     </div>
   </div>
 
@@ -221,10 +176,10 @@
   </div>
 
   <div class="message" id="loveMessage">
-    Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕
-    Sen benim hayatımın en güzel parçasısın 💞
-    Doğum günün kutlu olsun bir tanem 🎂
-    Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫
+    Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕  
+    Sen benim hayatımın en güzel parçasısın 💞  
+    Doğum günün kutlu olsun bir tanem 🎂  
+    Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫  
   </div>
 
   <div id="bigMessage">
@@ -233,63 +188,50 @@
     💫 NİCE MUTLU YAŞLAR DİLİYORUM 💫
   </div>
 
-  <div class="decor" id="decor"></div>
-
   <audio id="bgMusic" loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    const decor = document.getElementById("decor");
-    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
-    function createItem() {
-      const item = document.createElement("h5");
-      item.classList.add("item");
-      item.style.left = Math.random() * 100 + "vw";
-      item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
-      item.style.animationDuration = (5 + Math.random() * 5) + "s";
-      item.innerHTML = items[Math.floor(Math.random() * items.length)];
-      decor.appendChild(item);
-      setTimeout(() => item.remove(), 10000);
-    }
-    setInterval(createItem, 150);
-
+    // 💞 Giriş ekranı & müzik
     const intro = document.getElementById("introScreen");
     const music = document.getElementById("bgMusic");
-    intro.addEventListener("click", () => {
-      music.currentTime = 3;
-      music.play().catch(() => {});
-      intro.querySelector(".introContent").innerHTML = `
-        <h2>💞 Harika! Müzik başladı 💞</h2>
-        <p>Şimdi yazılar akmaya başlıyor... 💖</p>`;
-      setTimeout(() => {
-        intro.style.animation = "fadeOutIntro 1.5s ease forwards";
-        setTimeout(() => intro.remove(), 1500);
-      }, 1500);
+    document.body.addEventListener("click", async () => {
+      try {
+        await music.play();
+        music.currentTime = 3; // 🎵 müzik 3. saniyeden başlar
+        intro.querySelector(".introContent").innerHTML = "<p>🎶 Harika! Müzik başladı 💞</p><p>Şimdi yazıları okuyabilirsin...</p>";
+        setTimeout(() => {
+          intro.style.animation = "fadeOutIntro 1.5s ease forwards";
+          setTimeout(() => intro.remove(), 1500);
+        }, 1500);
+      } catch (e) {}
     });
 
-    // 🎀 Her kelimeyi ayrı ayrı animasyonla göster
-    const msg = document.getElementById("loveMessage");
-    const text = msg.innerText.trim();
-    msg.innerHTML = "";
-    const words = text.split(" ");
-    words.forEach((word, i) => {
-      const span = document.createElement("span");
-      span.textContent = word;
-      span.style.animationDelay = `${i * 1}s`;
-      msg.appendChild(span);
-    });
-
-    setTimeout(() => {
-      document.querySelectorAll("#loveMessage span").forEach((s, i) => {
-        setTimeout(() => s.style.opacity = "1", i * 1000);
+    // 💬 Kelime kelime çıkış efekti
+    window.addEventListener("load", () => {
+      const msg = document.getElementById("loveMessage");
+      const text = msg.textContent.trim();
+      msg.textContent = "";
+      const words = text.split(" ");
+      words.forEach((word, i) => {
+        const span = document.createElement("span");
+        span.textContent = word + " ";
+        msg.appendChild(span);
       });
-    }, 2000);
 
-    setTimeout(() => {
-      const bm = document.getElementById("bigMessage");
-      bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-    }, words.length * 1000 + 3000);
+      const spans = msg.querySelectorAll("span");
+      spans.forEach((span, i) => {
+        setTimeout(() => {
+          span.style.opacity = "1";
+        }, i * 600);
+      });
+
+      setTimeout(() => {
+        const bm = document.getElementById("bigMessage");
+        bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
+      }, words.length * 600 + 3000);
+    });
   </script>
 </body>
 </html>
