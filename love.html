@@ -1,199 +1,247 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💖 Doğum Günün Kutlu Olsun Aşkım 💖</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      font-family: 'Merriweather', serif;
-      color: #000;
-      text-align: center;
-      margin: 0;
-      padding: 0 10px;
-      overflow-x: hidden;
+    :root{
+      --accent:#ff2e86;
+      --accent-2:#ff7ab8;
+      --bg1:#ffe6f0;
+      --bg2:#ff99cc;
+      --bg3:#ff66b2;
     }
 
-    h1 {
-      margin-top: 40px;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #2b2b2b;
-      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
-      animation: fadeIn 2s ease-in;
+    html,body{
+      height:100%;
+      margin:0;
+      font-family:'Merriweather', serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    #videoWrapper {
-      margin-top: 30px;
-      width: 92%;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      position: relative;
+    body{
+      background: radial-gradient(circle at center, var(--bg1), var(--bg2), var(--bg3));
+      color:#111;
+      text-align:center;
+      padding: 0 12px 60px;
+      overflow-x:hidden;
     }
 
-    iframe {
-      width: 100%;
-      height: 650px;
-      border: 6px solid white;
-      border-radius: 25px;
-      box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
-      animation: glow 3s infinite alternate;
+    h1{
+      margin-top:38px;
+      font-size:2.6rem;
+      color:#222;
+      text-shadow:2px 2px 6px rgba(255,255,255,0.7);
+      animation:fadeIn 1.8s ease;
     }
 
-    .message {
-      margin: 30px auto;
-      font-size: 1.4rem;
-      line-height: 1.8;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 90%;
-      animation: fadeIn 4s ease-in;
-      white-space: pre-wrap;
+    #videoWrapper{
+      margin:28px auto 6px;
+      width:92%;
+      max-width:420px;
+      position:relative;
     }
 
-    #bigMessage {
-      margin-top: 30px;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #2b2b2b;
-      opacity: 0;
-      animation: none;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 25px;
-      padding: 20px;
-      display: inline-block;
+    iframe{
+      width:100%;
+      height: 560px;
+      max-height:65vh;
+      border-radius:20px;
+      border:6px solid #fff;
+      box-shadow:0 0 40px rgba(255,20,147,0.25);
+      display:block;
     }
 
-    #loveMessage span {
-      opacity: 0;
-      display: inline-block;
-      transition: opacity 0.4s ease;
+    .message{
+      margin:20px auto;
+      font-size:1.15rem;
+      line-height:1.9;
+      background: rgba(255,255,255,0.45);
+      border-radius:16px;
+      padding:18px;
+      max-width:900px;
+      white-space:pre-wrap; /* satır düzeni korunur */
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    #bigMessage{
+      margin-top:22px;
+      font-size:1.5rem;
+      font-weight:700;
+      color:#222;
+      opacity:0;
+      background: rgba(255,255,255,0.45);
+      display:inline-block;
+      border-radius:18px;
+      padding:18px;
+      transform-origin:center;
     }
 
-    @keyframes slideDown {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    /* kelime span başlangıç */
+    .message span{
+      opacity:0;
+      display:inline-block;
+      transform: translateY(6px);
+      transition: opacity 0.28s ease, transform 0.34s ease, filter 0.3s ease;
+      white-space:pre; /* boşlukları koru */
     }
 
-    @keyframes glow {
-      from { box-shadow: 0 0 25px #ff1493; }
-      to { box-shadow: 0 0 40px #ff66b2; }
+    /* giriş ekran (arka plan) - görünürken butonu ortada tutuyor */
+    #introScreen{
+      position:fixed;
+      inset:0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      z-index:2000;
+      pointer-events:none; /* sadece buton etkileşimli olsun */
     }
 
-    /* 💞 Giriş ekranı */
-    #introScreen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle at center, #ffb6c1, #ff66b2, #ff1493);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      z-index: 9999;
-      transition: opacity 1.5s ease;
+    /* Kalp buton */
+    #heartBtn{
+      position:fixed;
+      z-index:3000;
+      width:84px;
+      height:84px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      border-radius:999px;
+      box-shadow: 0 10px 30px rgba(255,105,180,0.18), 0 2px 8px rgba(0,0,0,0.08);
+      cursor:pointer;
+      border: 2px solid rgba(255,255,255,0.6);
+      transition: all 900ms cubic-bezier(.2,.9,.2,1);
+      pointer-events:auto;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .introContent h2 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      text-shadow: 0 0 12px rgba(255,255,255,0.9);
+    /* merkezi başlangıç konumu */
+    #heartBtn.center{
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%) scale(1.05);
+      animation: btnPulse 1.5s infinite ease-in-out;
     }
 
-    .introContent p {
-      font-size: 1.2rem;
-      margin-top: 8px;
-      text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    @keyframes btnPulse{
+      0%{ transform:translate(-50%,-50%) scale(1); }
+      50%{ transform:translate(-50%,-50%) scale(1.12); }
+      100%{ transform:translate(-50%,-50%) scale(1); }
     }
 
-    /* 🔊 Ses ikonları */
-    #soundIcon, #restartIcon {
-      position: fixed;
-      font-size: 2rem;
-      background: rgba(255,255,255,0.95);
-      color: #ff1493;
-      border-radius: 50%;
-      padding: 12px 15px;
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
-      cursor: pointer;
-      transition: all 1s ease;
-      z-index: 10000;
+    /* top-left konumu */
+    #heartBtn.top-left{
+      top:14px;
+      left:14px;
+      transform:translate(0,0) scale(0.95);
+      width:64px;
+      height:64px;
     }
 
-    /* Başlangıç konumu ortada */
-    #soundIcon.center {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1.1);
-      animation: pulse 1.5s infinite ease-in-out;
+    /* kalp SVG stilleri */
+    .heart-svg{
+      width:44px;
+      height:44px;
+      display:block;
+      transition: transform 420ms ease;
     }
 
-    /* Sol üst */
-    #soundIcon.top-left {
-      top: 20px;
-      left: 20px;
+    /* oynatıyorsa dolu renk, değilse outline */
+    #heartBtn.playing .heart-fill{
+      fill: var(--accent);
       transform: scale(1);
+      transition: fill 260ms ease, transform 320ms cubic-bezier(.2,.9,.2,1);
     }
 
-    /* 🔁 Restart butonu (müziği sıfırla) */
-    #restartIcon {
-      top: 20px;
-      left: 80px;
-      font-size: 1.8rem;
-      opacity: 0;
-      pointer-events: none;
+    .heart-fill{
+      fill:transparent;
+      stroke:var(--accent);
+      stroke-width:2;
+      transition: fill 260ms ease, stroke 220ms ease;
     }
 
-    #restartIcon.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transition: opacity 0.6s ease;
+    .heart-fill.pulse{
+      filter: drop-shadow(0 6px 16px rgba(255,50,120,0.35));
+      transform-origin:center;
+      animation: heartPulse 900ms ease;
     }
 
-    @keyframes pulse {
-      0% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.15); }
-      100% { transform: translate(-50%, -50%) scale(1); }
+    @keyframes heartPulse{
+      0%{ transform:scale(0.9); }
+      40%{ transform:scale(1.06); }
+      100%{ transform:scale(1); }
     }
 
-    @media (max-width: 768px) {
-      h1 { font-size: 2.1rem; margin-top: 25px; }
-      .message { font-size: 1.1rem; padding: 12px; }
-      #bigMessage { font-size: 1.4rem; padding: 15px; }
-      iframe { height: 450px; }
+    /* restart icon */
+    #restartBtn{
+      position:fixed;
+      top:14px;
+      left:84px;
+      width:46px;
+      height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      background:rgba(255,255,255,0.95);
+      color:var(--accent);
+      box-shadow:0 8px 18px rgba(0,0,0,0.06);
+      border:2px solid rgba(255,255,255,0.6);
+      cursor:pointer;
+      opacity:0;
+      transform: translateY(-6px) scale(0.96);
+      transition: opacity 360ms ease, transform 360ms ease;
+      pointer-events:none;
+      z-index:2999;
     }
+
+    #restartBtn.visible{
+      opacity:1;
+      pointer-events:auto;
+      transform: translateY(0) scale(1);
+    }
+
+    /* küçük ekranlar */
+    @media (max-width:520px){
+      #heartBtn{ width:72px; height:72px; }
+      .heart-svg{ width:38px; height:38px; }
+      #restartBtn{ left:74px; width:42px; height:42px; }
+      iframe{ height:420px; }
+      h1{ font-size:1.9rem; margin-top:22px; }
+    }
+
+    /* animasyon helper */
+    @keyframes fadeIn{ from {opacity:0; transform:translateY(12px)} to {opacity:1; transform:none} }
+
   </style>
 </head>
-
 <body>
-  <div id="introScreen">
-    <div class="introContent">
-      <h2>💞 Hoş Geldin Aşkım 💞</h2>
-      <p>Müziği başlatmak için 🔊 simgesine dokun 💖</p>
-    </div>
-  </div>
+  <!-- intro overlay (buton kendisi etkileşimli) -->
+  <div id="introScreen" aria-hidden="true"></div>
 
-  <div id="soundIcon" class="center">🔊</div>
-  <div id="restartIcon">🔁</div>
+  <!-- başlat/durdur kalp butonu (orta -> sola kayacak) -->
+  <button id="heartBtn" class="center" aria-pressed="false" aria-label="Müziği başlat/durdur">
+    <!-- modern heart SVG -->
+    <svg class="heart-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path class="heart-fill" d="M12 21s-7.5-4.6-10-8.1C-0.2 8.8 3.2 4 7.6 6.1 9.6 7.1 10 9.8 12 11c2-1.2 2.4-3.9 4.4-4.9C20.8 4 24.2 8.8 22 12.9 19.5 16.4 12 21 12 21z"/>
+    </svg>
+  </button>
+
+  <!-- baştan başlat butonu (görünür hale gelir) -->
+  <button id="restartBtn" aria-label="Müziği baştan başlat" title="Baştan başlat">🔁</button>
 
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
 
-  <div id="videoWrapper">
+  <div id="videoWrapper" aria-hidden="false">
     <iframe id="ytiframe"
       src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
+      allowfullscreen
+      title="Video"></iframe>
   </div>
 
   <div class="message" id="loveMessage">
@@ -203,70 +251,176 @@
     Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫  
   </div>
 
-  <div id="bigMessage">
+  <div id="bigMessage" aria-hidden="true">
     💞 SENİ ÇOK SEVİYORUM BİRTANEM 💞<br>
     🎂 DOĞUM GÜNÜN KUTLU OLSUN 🎂<br>
     💫 NİCE MUTLU YAŞLAR DİLİYORUM 💫
   </div>
 
-  <audio id="bgMusic" loop>
+  <!-- kullanımda kalan görünür küçük ses kontrolü (görsel) -->
+  <audio id="bgMusic" loop preload="auto">
     <source src="music.mp3" type="audio/mpeg">
+    Tarayıcınız ses dosyasını desteklemiyor.
   </audio>
 
   <script>
-    const music = document.getElementById("bgMusic");
-    const intro = document.getElementById("introScreen");
-    const soundIcon = document.getElementById("soundIcon");
-    const restartIcon = document.getElementById("restartIcon");
-    let isPlaying = false;
+    (function(){
+      const heartBtn = document.getElementById('heartBtn');
+      const restartBtn = document.getElementById('restartBtn');
+      const music = document.getElementById('bgMusic');
+      const intro = document.getElementById('introScreen');
+      const message = document.getElementById('loveMessage');
+      const bigMessage = document.getElementById('bigMessage');
 
-    soundIcon.addEventListener("click", async () => {
-      if (!isPlaying) {
-        await music.play();
-        if (music.currentTime < 9) music.currentTime = 9; // ilk başlatmada 5. sn
-        isPlaying = true;
-        soundIcon.classList.remove("center");
-        soundIcon.classList.add("top-left");
-        restartIcon.classList.add("visible");
-        intro.style.opacity = "0";
-        setTimeout(() => intro.remove(), 1500);
-      } else {
-        music.pause();
-        isPlaying = false;
+      let hasStarted = false;
+      let isPlaying = false;
+      const START_TIME = 8; // başlangıç 8. saniye
+      const WORD_DELAY = 400; // ms
+      const spans = [];
+
+      // -- metni kelime kelime, boşluk koruyarak parçalayıp span yapıyoruz --
+      function prepareText(){
+        const originalHTML = message.innerHTML;
+        const parts = originalHTML.split(/(\s+)/); // boşlukları korur
+        message.innerHTML = ''; // temizle
+        parts.forEach(part => {
+          const span = document.createElement('span');
+          span.innerHTML = part;
+          span.style.opacity = '0';
+          span.style.transform = 'translateY(6px)';
+          message.appendChild(span);
+          spans.push(span);
+        });
       }
-      soundIcon.textContent = isPlaying ? "🔊" : "🔇";
-    });
 
-    // 🔁 Baştan başlat
-    restartIcon.addEventListener("click", () => {
-      music.currentTime = 9;
-      music.play();
-      isPlaying = true;
-      soundIcon.textContent = "🔊";
-    });
+      function playFromStartTime(){
+        // Başlatırken eğer ses daha önce biraz çalmışsa currentTime kontrolü uygula
+        try {
+          if (music.currentTime < START_TIME) music.currentTime = START_TIME;
+        } catch(e){ /* bazı tarayıcılar cross-origin veya loaded state nedeniyle hata fırlatabilir; yinede dene */ }
+        music.play().catch(()=>{});
+        isPlaying = true;
+        heartBtn.classList.add('playing');
+        heartBtn.setAttribute('aria-pressed','true');
+        updateHeartVisual(true);
+      }
 
-    // ✨ Yazı animasyonu (kelime kelime)
-    window.addEventListener("load", () => {
-      const msg = document.getElementById("loveMessage");
-      const text = msg.innerHTML.trim();
-      msg.innerHTML = "";
-      const words = text.split(/(\s+)/);
-      words.forEach((word) => {
-        const span = document.createElement("span");
-        span.innerHTML = word;
-        msg.appendChild(span);
+      function togglePlayPause(){
+        if(!hasStarted){
+          // ilk kez basılıyorsa
+          hasStarted = true;
+          // animasyon: kalp sola kayacak ve intro kapanacak
+          heartBtn.classList.remove('center');
+          heartBtn.classList.add('top-left');
+          intro.style.transition = 'opacity 1.4s ease';
+          intro.style.opacity = '0';
+          setTimeout(()=>{ if(intro && intro.parentNode) intro.remove(); }, 1400);
+
+          // göster restart butonunu
+          setTimeout(()=> restartBtn.classList.add('visible'), 600);
+
+          // metin akışını başlat (eşzamanlı veya istersek hafif gecikme)
+          startTextFlow();
+        }
+
+        if(!isPlaying){
+          // başlat ya da devam
+          // eğer müzik hiç başlamadıysa startTime ayarla
+          try {
+            if (music.currentTime < START_TIME) music.currentTime = START_TIME;
+          } catch(e){}
+          music.play().catch(()=>{});
+          isPlaying = true;
+          heartBtn.classList.add('playing');
+          updateHeartVisual(true);
+        } else {
+          music.pause();
+          isPlaying = false;
+          heartBtn.classList.remove('playing');
+          updateHeartVisual(false);
+        }
+        heartBtn.setAttribute('aria-pressed', String(isPlaying));
+      }
+
+      function updateHeartVisual(playing){
+        const path = heartBtn.querySelector('.heart-fill');
+        if(!path) return;
+        if(playing){
+          path.classList.add('pulse');
+          path.style.fill = 'var(--accent)';
+          path.style.stroke = 'transparent';
+        } else {
+          path.classList.remove('pulse');
+          path.style.fill = 'transparent';
+          path.style.stroke = 'var(--accent)';
+        }
+      }
+
+      function startTextFlow(){
+        // Eğer zaten başlamışsa tekrar başlatma
+        if(spans.length === 0) return;
+        spans.forEach((s, i) => {
+          setTimeout(()=>{
+            s.style.opacity = '1';
+            s.style.transform = 'translateY(0)';
+            s.style.filter = 'brightness(1)';
+          }, i * WORD_DELAY);
+        });
+
+        // bigMessage animasyonu: tüm spanlar sonrası + 2s buffer
+        setTimeout(()=>{
+          bigMessage.style.animation = 'slideDown 1s ease-out forwards';
+          bigMessage.style.opacity = '1';
+        }, spans.length * WORD_DELAY + 2000);
+      }
+
+      // restart: baştan (8.saniyeden)
+      function restartMusicFromStart(){
+        try { music.currentTime = START_TIME; } catch(e){}
+        music.play().catch(()=>{});
+        isPlaying = true;
+        heartBtn.classList.add('playing');
+        updateHeartVisual(true);
+        heartBtn.setAttribute('aria-pressed','true');
+      }
+
+      // tuş olayları
+      heartBtn.addEventListener('click', async (e)=>{
+        e.stopPropagation();
+        // toggle play/pause + ilk başlatma davranışı
+        togglePlayPause();
       });
 
-      const spans = msg.querySelectorAll("span");
-      spans.forEach((span, i) => {
-        setTimeout(() => { span.style.opacity = "1"; }, i * 400);
+      restartBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        // Kalp sola kaydıysa restart butonu kullanılabilir
+        restartMusicFromStart();
       });
 
-      setTimeout(() => {
-        const bm = document.getElementById("bigMessage");
-        bm.style.animation = "slideDown 1.5s ease-out forwards";
-      }, spans.length * 400 + 3000);
-    });
+      // dokunmatik için küçük erişim: kalp butonu ENTER/Space ile çalışsın
+      heartBtn.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); heartBtn.click(); }
+      });
+      restartBtn.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); restartBtn.click(); }
+      });
+
+      // sayfa yüklenince hazırla (metin), ama metni görünür yapmayı kullanıcı etkileşimine bırakıyoruz
+      window.addEventListener('DOMContentLoaded', () => {
+        prepareText();
+        // başlangıçta kalp butonu odakta kalsın (erişilebilirlik)
+        setTimeout(()=> heartBtn.focus(), 300);
+      });
+
+      // ekran dışına tıklayınca (ör: video alanına) kalp fonksiyonunu aynı davranışla toggle etmek istersen:
+      // ama şu an sadece butonlar kontrol ediyor; istersen video tıklaması da toggle etsin - şu an istemedin diye pasif bıraktım.
+
+      // küçük güvenlik: müzik elementinin canplay olayında autoplay izinleri sağlanırsa vb. - sessiz autoplayler için değil
+      music.addEventListener('ended', () => {
+        // döngü açık (loop attribute var). Bu tetiklenmeyebilir.
+      });
+
+    })();
   </script>
 </body>
 </html>
