@@ -36,13 +36,33 @@
       max-width: 800px;
     }
 
+    .message, #bigMessage {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 20px;
+      padding: 15px 10px;
+      box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
+      color: #fff0f5;
+      text-shadow: 1px 1px 3px #ff007f;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 800px;
+    }
+
     .message {
-      margin-top: 25px;
-      font-size: 1.4rem;
-      line-height: 1.8;
-      text-shadow: 1px 1px 5px #ff007f;
+      font-size: 1.3rem;
+      line-height: 1.9;
       animation: fadeIn 4s ease-in;
-      padding: 0 10px;
+    }
+
+    #bigMessage {
+      opacity: 0;
+      font-size: 1.6rem;
+      color: #fff0f5;
+      line-height: 1.8;
+      text-shadow: 2px 2px 6px #ff007f;
+      animation: none;
+      margin-bottom: 100px;
     }
 
     .decor {
@@ -52,7 +72,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      z-index: -1;
+      z-index: 5; /* 🎉 artık emojiler önde */
       pointer-events: none;
     }
 
@@ -60,6 +80,7 @@
       position: absolute;
       font-size: 2.5rem;
       animation: floatUp 8s linear infinite;
+      opacity: 0.8;
       text-shadow: 0 0 10px rgba(255,255,255,0.8);
       filter: drop-shadow(0 0 10px rgba(255,105,180,0.8));
     }
@@ -72,18 +93,6 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    #bigMessage {
-      position: relative;
-      opacity: 0;
-      font-size: 1.8rem;
-      color: #fff;
-      text-shadow: 3px 3px 10px #ff1493;
-      margin-top: 30px;
-      animation: none;
-      line-height: 1.6;
-      margin-bottom: 80px; /* alt boşluk eklendi */
     }
 
     @keyframes slideDown {
@@ -119,12 +128,12 @@
 
       .message {
         font-size: 1.1rem;
-        line-height: 1.6;
+        line-height: 1.7;
       }
 
       #bigMessage {
         font-size: 1.3rem;
-        margin-bottom: 100px;
+        margin-bottom: 120px;
       }
 
       audio {
