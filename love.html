@@ -11,6 +11,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       overflow-y: auto;
+      scroll-behavior: smooth;
       background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
       font-family: 'Comic Sans MS', 'Segoe UI Emoji', 'Noto Color Emoji', 'Apple Color Emoji', cursive, sans-serif;
       color: #fff;
@@ -21,7 +22,7 @@
     h1 {
       margin-top: 20px;
       font-size: 2.5rem;
-      text-shadow: 3px 3px 8px #ff1493;
+      text-shadow: 3px 3px 10px rgba(255, 20, 147, 0.9);
       animation: fadeIn 2s ease-in;
       position: relative;
       z-index: 5;
@@ -39,15 +40,16 @@
       z-index: 5;
     }
 
+    /* 💫 Yazı kutularını daha koyu ve net hale getirdik */
     .message, #bigMessage {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.4), rgba(255, 0, 100, 0.4));
+      backdrop-filter: blur(10px);
       border-radius: 20px;
-      padding: 15px 10px;
-      box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
-      color: #fff0f5;
-      text-shadow: 1px 1px 3px #ff007f;
-      margin: 20px auto;
+      padding: 20px 15px;
+      box-shadow: 0 0 25px rgba(255, 0, 102, 0.5);
+      color: #ffffff;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+      margin: 25px auto;
       width: 90%;
       max-width: 800px;
       position: relative;
@@ -63,14 +65,12 @@
     #bigMessage {
       opacity: 0;
       font-size: 1.6rem;
-      color: #fff0f5;
       line-height: 1.8;
-      text-shadow: 2px 2px 6px #ff007f;
       animation: none;
       margin-bottom: 100px;
     }
 
-    /* 💖 Emojiler artık önde */
+    /* 💖 Emojiler önde */
     .decor {
       position: fixed;
       top: 0;
@@ -78,7 +78,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      z-index: 10; /* 🎉 öne aldık */
+      z-index: 10; /* Önde */
       pointer-events: none;
     }
 
@@ -89,7 +89,6 @@
       opacity: 0.9;
       text-shadow: 0 0 10px rgba(255,255,255,0.8);
       filter: drop-shadow(0 0 10px rgba(255,105,180,0.8));
-      pointer-events: none;
     }
 
     @keyframes floatUp {
@@ -112,16 +111,16 @@
       bottom: 10px;
       right: 10px;
       width: 200px;
-      opacity: 0.5;
+      opacity: 0.6;
       transition: 0.3s;
-      z-index: 20; /* müzik de en önde */
+      z-index: 20;
     }
 
     audio:hover {
       opacity: 1;
     }
 
-    /* 📱 Mobil görünüm */
+    /* 📱 Mobil için */
     @media (max-width: 768px) {
       h1 {
         font-size: 1.8rem;
@@ -165,7 +164,6 @@
     💫 NİCE MUTLU YAŞLAR DİLİYORUM 💫
   </div>
 
-  <!-- 💖 Emojiler önde -->
   <div class="decor" id="decor"></div>
 
   <audio id="bgMusic" autoplay loop>
@@ -188,7 +186,6 @@
     }
     setInterval(createItem, 120);
 
-    // 5 saniye sonra büyük mesajı göster
     setTimeout(() => {
       const msg = document.getElementById("bigMessage");
       msg.style.animation = "slideDown 1.5s ease-out forwards";
