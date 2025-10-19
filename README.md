@@ -1,2 +1,1 @@
-# dogum
-SENİ ÇOK SEVİYORUM SEVGİLİM DOĞUM GÜNÜN KUTLU OLSUN
+
