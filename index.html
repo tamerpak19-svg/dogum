@@ -22,12 +22,13 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 2.4rem;
+      font-size: 2rem;
       color: #3b3b3b;
-      margin-bottom: 60px;
+      margin-bottom: 40px;
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
       max-width: 90%;
     }
@@ -35,8 +36,9 @@
     /* ✉️ Zarf */
     .envelope {
       position: relative;
-      width: 450px;
-      height: 320px;
+      width: 90vw;
+      max-width: 400px;
+      aspect-ratio: 1.3 / 1;
       background: #ff80b3;
       border-radius: 8px;
       cursor: pointer;
@@ -50,9 +52,9 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 225px solid transparent;
-      border-right: 225px solid transparent;
-      border-bottom: 160px solid #ff4d94;
+      border-left: 50% solid transparent;
+      border-right: 50% solid transparent;
+      border-bottom: 45% solid #ff4d94;
       transform-origin: top;
       transition: transform 1s ease;
       border-radius: 8px;
@@ -60,10 +62,10 @@
 
     .letter {
       position: absolute;
-      top: 40px;
-      left: 30px;
-      width: 390px;
-      height: 250px;
+      top: 10%;
+      left: 7%;
+      width: 86%;
+      height: 70%;
       background: white;
       border-radius: 12px;
       border: 3px solid #ffb6c1;
@@ -75,10 +77,10 @@
     }
 
     .letter p {
-      margin: 22px;
-      font-size: 1.2rem;
+      margin: 18px;
+      font-size: 1rem;
       color: #444;
-      line-height: 1.8;
+      line-height: 1.7;
       text-align: left;
     }
 
@@ -87,7 +89,7 @@
     }
 
     .open .letter {
-      transform: translateY(-140px);
+      transform: translateY(-100px);
       opacity: 1;
     }
 
@@ -96,13 +98,13 @@
       background: linear-gradient(135deg, #ff1493, #ff66b2);
       color: white;
       border: none;
-      padding: 18px 48px;
-      font-size: 1.4rem;
+      padding: 15px 40px;
+      font-size: 1.2rem;
       border-radius: 40px;
       cursor: pointer;
-      box-shadow: 0 0 25px rgba(255, 182, 193, 0.8);
+      box-shadow: 0 0 20px rgba(255, 182, 193, 0.8);
       transition: all 0.3s ease;
-      margin-top: 45px;
+      margin-top: 40px;
       z-index: 50;
       position: relative;
     }
@@ -159,6 +161,25 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
+    /* 📱 Mobil uyumlu ayarlar */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      .letter p {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+      .letter p {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 
@@ -206,14 +227,14 @@
       openSound.volume = 0.7;
       openSound.play();
 
-      // 💖 5000 kalp fırlat
-      for (let i = 0; i < 5000; i++) {
+      // 💖 750 kalp fırlat
+      for (let i = 0; i < 750; i++) {
         const heart = document.createElement("div");
         heart.classList.add("heart");
         heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
         heart.style.left = Math.random() * 100 + "vw";
         heart.style.bottom = Math.random() * 60 + "vh";
-        heart.style.fontSize = Math.random() * 2 + 1 + "rem";
+        heart.style.fontSize = Math.random() * 1.5 + 0.8 + "rem";
         heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
         heartContainer.appendChild(heart);
         setTimeout(() => heart.remove(), 4500);
