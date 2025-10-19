@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
-  <!-- Merriweather + emoji destekli fontlar -->
+
+  <!-- Zarif ve okunaklı font -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body {
       background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
@@ -14,6 +16,7 @@
       text-align: center;
       margin: 0;
       padding: 0 10px;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -25,10 +28,11 @@
       animation: fadeIn 2s ease-in;
     }
 
+    /* 🎥 Video alanı */
     #videoWrapper {
       margin-top: 30px;
-      width: 90%;
-      max-width: 400px;
+      width: 92%;
+      max-width: 420px;
       margin-left: auto;
       margin-right: auto;
       position: relative;
@@ -36,21 +40,24 @@
 
     iframe {
       width: 100%;
-      height: 600px;
+      height: 650px;
       border: 6px solid white;
       border-radius: 25px;
-      box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
+      box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
       animation: glow 3s infinite alternate;
     }
 
     .fallback img {
       width: 100%;
+      height: 650px;
+      object-fit: cover;
       border-radius: 25px;
       border: 6px solid white;
-      box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
+      box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
       display: block;
     }
 
+    /* ▶️ Buton */
     .play-button {
       position: absolute;
       top: 50%;
@@ -61,8 +68,8 @@
       font-weight: 700;
       border: none;
       border-radius: 40px;
-      padding: 12px 28px;
-      font-size: 1.1rem;
+      padding: 14px 32px;
+      font-size: 1.2rem;
       cursor: pointer;
       box-shadow: 0 0 10px rgba(255, 20, 147, 0.4);
       transition: all 0.3s ease;
@@ -130,15 +137,45 @@
 
     audio:hover { opacity: 1; }
 
+    /* 💞 Dekoratif emojiler */
+    .decor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    h5.item {
+      position: absolute;
+      font-size: 1rem;
+      animation: floatUp 8s linear infinite;
+      text-shadow: 0 0 8px rgba(255,255,255,0.8);
+      filter: drop-shadow(0 0 8px rgba(255,105,180,0.9));
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh) scale(1); opacity: 1; }
+      to { transform: translateY(-10vh) scale(1.3); opacity: 0; }
+    }
+
     @media (max-width: 768px) {
       h1 { font-size: 2.1rem; margin-top: 25px; }
       .message { font-size: 1.1rem; padding: 12px; }
       #bigMessage { font-size: 1.4rem; padding: 15px; }
-      iframe { height: 400px; }
+      iframe { height: 450px; }
+      .fallback img { height: 450px; }
       .play-button { font-size: 1rem; padding: 10px 22px; }
+      h5.item { font-size: 0.8rem; }
     }
   </style>
 </head>
+
 <body>
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
 
@@ -163,11 +200,29 @@
     💫 NİCE MUTLU YAŞLAR DİLİYORUM 💫
   </div>
 
+  <div class="decor" id="decor"></div>
+
   <audio id="bgMusic" autoplay loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
   <script>
+    // 🎈 Emoji yağmuru
+    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
+    const decor = document.getElementById("decor");
+    function createItem() {
+      const item = document.createElement("h5");
+      item.classList.add("item");
+      item.style.left = Math.random() * 100 + "vw";
+      item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
+      item.style.animationDuration = (5 + Math.random() * 5) + "s";
+      item.innerHTML = items[Math.floor(Math.random() * items.length)];
+      decor.appendChild(item);
+      setTimeout(() => item.remove(), 10000);
+    }
+    setInterval(createItem, 150);
+
+    // 🎥 Eğer video engellendiyse fallback göster
     setTimeout(() => {
       const iframe = document.getElementById('ytiframe');
       try {
@@ -182,6 +237,7 @@
       }
     }, 2000);
 
+    // 💞 Büyük mesaj animasyonu
     setTimeout(() => {
       const msg = document.getElementById("bigMessage");
       msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
