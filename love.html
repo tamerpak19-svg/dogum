@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
+  <title>💖 Doğum Günün Kutlu Olsun Aşkım 💖</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
-
   <style>
     body {
       background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      font-family: 'Merriweather', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', serif;
+      font-family: 'Merriweather', serif;
       color: #000;
       text-align: center;
       margin: 0;
@@ -53,7 +52,7 @@
       padding: 20px;
       max-width: 90%;
       animation: fadeIn 4s ease-in;
-      white-space: pre-wrap; /* 💡 Satır düzeni korunur */
+      white-space: pre-wrap;
     }
 
     #bigMessage {
@@ -85,12 +84,6 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
     @keyframes glow {
       from { box-shadow: 0 0 25px #ff1493; }
       to { box-shadow: 0 0 40px #ff66b2; }
@@ -108,9 +101,8 @@
       justify-content: center;
       flex-direction: column;
       text-align: center;
-      font-family: 'Merriweather', serif;
       z-index: 9999;
-      animation: fadeInIntro 0.8s ease-in forwards;
+      transition: opacity 1.5s ease;
     }
 
     .introContent h2 {
@@ -121,32 +113,44 @@
 
     .introContent p {
       font-size: 1.2rem;
-      line-height: 1.6;
-      margin: 8px 0;
+      margin-top: 8px;
       text-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
 
-    @keyframes fadeOutIntro {
-      from { opacity: 1; }
-      to { opacity: 0; visibility: hidden; }
-    }
-
-    @keyframes fadeInIntro {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    audio {
+    /* 🔊 Ses ikonu */
+    #soundIcon {
       position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 220px;
-      opacity: 0.6;
-      transition: 0.3s;
-      z-index: 10;
+      font-size: 2.2rem;
+      background: rgba(255,255,255,0.9);
+      color: #ff1493;
+      border-radius: 50%;
+      padding: 12px 15px;
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
+      cursor: pointer;
+      transition: all 1s ease;
+      z-index: 10000;
     }
 
-    audio:hover { opacity: 1; }
+    /* İlk konum ortada */
+    #soundIcon.center {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.1);
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    /* Son konum sol üst */
+    #soundIcon.top-left {
+      top: 20px;
+      left: 20px;
+      transform: scale(1);
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.15); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
 
     @media (max-width: 768px) {
       h1 { font-size: 2.1rem; margin-top: 25px; }
@@ -158,13 +162,14 @@
 </head>
 
 <body>
-  <!-- 💞 Giriş ekranı -->
   <div id="introScreen">
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
-      <p>Müziği başlatmak için ekrana bir kez dokun 💖</p>
+      <p>Müziği başlatmak için 🔊 simgesine dokun 💖</p>
     </div>
   </div>
+
+  <div id="soundIcon" class="center">🔊</div>
 
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
 
@@ -172,8 +177,7 @@
     <iframe id="ytiframe"
       src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen>
-    </iframe>
+      allowfullscreen></iframe>
   </div>
 
   <div class="message" id="loveMessage">
@@ -194,41 +198,34 @@
   </audio>
 
   <script>
-    // 💞 Giriş ekranı & müzik başlatma
-    const intro = document.getElementById("introScreen");
     const music = document.getElementById("bgMusic");
-    const videoArea = document.getElementById("videoWrapper");
+    const intro = document.getElementById("introScreen");
+    const soundIcon = document.getElementById("soundIcon");
+    let isPlaying = false;
 
-    document.body.addEventListener("click", async () => {
-      try {
+    soundIcon.addEventListener("click", async () => {
+      if (!isPlaying) {
         await music.play();
-        music.currentTime = 5; // 🎵 müzik 5. saniyeden başlar
-        intro.querySelector(".introContent").innerHTML = "<p>🎶 Harika! Müzik başladı 💞</p><p>Şimdi yazıları okuyabilirsin...</p>";
-        setTimeout(() => {
-          intro.style.animation = "fadeOutIntro 1.5s ease forwards";
-          setTimeout(() => intro.remove(), 1500);
-        }, 1500);
-      } catch (e) {}
-    });
-
-    // 🎵 Video alanına dokununca müzik durdur/devam ettir
-    let isMusicPlaying = true;
-    videoArea.addEventListener("click", () => {
-      if (isMusicPlaying) {
-        music.pause();
+        music.currentTime = 5; // 🎶 5. saniyeden başla
+        isPlaying = true;
+        soundIcon.classList.remove("center");
+        soundIcon.classList.add("top-left");
+        intro.style.opacity = "0";
+        setTimeout(() => intro.remove(), 1500);
       } else {
-        music.play();
+        music.pause();
+        isPlaying = false;
       }
-      isMusicPlaying = !isMusicPlaying;
+      soundIcon.textContent = isPlaying ? "🔊" : "🔇";
     });
 
-    // 💬 Kelime kelime çıkış efekti
+    // ✨ Yazı animasyonu (kelime kelime)
     window.addEventListener("load", () => {
       const msg = document.getElementById("loveMessage");
       const text = msg.innerHTML.trim();
       msg.innerHTML = "";
-      const words = text.split(/(\s+)/); // boşlukları da koru
-      words.forEach((word, i) => {
+      const words = text.split(/(\s+)/);
+      words.forEach((word) => {
         const span = document.createElement("span");
         span.innerHTML = word;
         msg.appendChild(span);
@@ -236,14 +233,12 @@
 
       const spans = msg.querySelectorAll("span");
       spans.forEach((span, i) => {
-        setTimeout(() => {
-          span.style.opacity = "1";
-        }, i * 400);
+        setTimeout(() => { span.style.opacity = "1"; }, i * 400);
       });
 
       setTimeout(() => {
         const bm = document.getElementById("bigMessage");
-        bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
+        bm.style.animation = "slideDown 1.5s ease-out forwards";
       }, words.length * 400 + 3000);
     });
   </script>
