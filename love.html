@@ -223,7 +223,7 @@
     soundIcon.addEventListener("click", async () => {
       if (!isPlaying) {
         await music.play();
-        if (music.currentTime < 5) music.currentTime = 5; // ilk başlatmada 5. sn
+        if (music.currentTime < 9) music.currentTime = 9; // ilk başlatmada 5. sn
         isPlaying = true;
         soundIcon.classList.remove("center");
         soundIcon.classList.add("top-left");
@@ -239,7 +239,7 @@
 
     // 🔁 Baştan başlat
     restartIcon.addEventListener("click", () => {
-      music.currentTime = 5;
+      music.currentTime = 9;
       music.play();
       isPlaying = true;
       soundIcon.textContent = "🔊";
