@@ -53,7 +53,7 @@
       padding: 20px;
       max-width: 90%;
       animation: fadeIn 4s ease-in;
-      white-space: pre-wrap; /* satır düzeni bozulmasın */
+      white-space: pre-wrap; /* 💡 Satır düzeni korunur */
     }
 
     #bigMessage {
@@ -69,12 +69,10 @@
       display: inline-block;
     }
 
-    /* 💖 kelime efekti */
     #loveMessage span {
       opacity: 0;
       display: inline-block;
-      transition: opacity 0.6s ease;
-      white-space: pre; /* boşlukları korur */
+      transition: opacity 0.4s ease;
     }
 
     @keyframes fadeIn {
@@ -196,9 +194,11 @@
   </audio>
 
   <script>
-    // 💞 Giriş ekranı & müzik
+    // 💞 Giriş ekranı & müzik başlatma
     const intro = document.getElementById("introScreen");
     const music = document.getElementById("bgMusic");
+    const videoArea = document.getElementById("videoWrapper");
+
     document.body.addEventListener("click", async () => {
       try {
         await music.play();
@@ -211,23 +211,36 @@
       } catch (e) {}
     });
 
-    // 💬 Kelime kelime çıkış efekti (boşluklar & satırlar korunur)
+    // 🎵 Video alanına dokununca müzik durdur/devam ettir
+    let isMusicPlaying = true;
+    videoArea.addEventListener("click", () => {
+      if (isMusicPlaying) {
+        music.pause();
+      } else {
+        music.play();
+      }
+      isMusicPlaying = !isMusicPlaying;
+    });
+
+    // 💬 Kelime kelime çıkış efekti
     window.addEventListener("load", () => {
       const msg = document.getElementById("loveMessage");
-      const originalHTML = msg.innerHTML; // orijinal biçimiyle al
-      msg.innerHTML = ""; // başta tamamen gizle
-      const words = originalHTML.split(/(\s+)/); // boşlukları da ayır
-
+      const text = msg.innerHTML.trim();
+      msg.innerHTML = "";
+      const words = text.split(/(\s+)/); // boşlukları da koru
       words.forEach((word, i) => {
         const span = document.createElement("span");
         span.innerHTML = word;
         msg.appendChild(span);
-        setTimeout(() => {
-          span.style.opacity = "1";
-        }, i * 400); // ⏱ 0.4 saniye aralık
       });
 
-      // büyük mesaj geçişi
+      const spans = msg.querySelectorAll("span");
+      spans.forEach((span, i) => {
+        setTimeout(() => {
+          span.style.opacity = "1";
+        }, i * 400);
+      });
+
       setTimeout(() => {
         const bm = document.getElementById("bigMessage");
         bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
