@@ -1,180 +1,211 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>💌 Küçük Bir Sürpriz 💌</title>
 
   <style>
     :root {
-      --pink1:#ffb6c1;
-      --pink2:#ff66b2;
-      --accent:#ff1493;
+      --pink1: #ffb6c1;
+      --pink2: #ff66b2;
+      --accent: #ff1493;
     }
     * { box-sizing: border-box; }
-    html, body {
-      margin:0; height:100%;
-      font-family:"Poppins","Dancing Script",system-ui;
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
       background: radial-gradient(circle at center, #ffe6f0, #ffd1e3 40%, #ffb3d0 100%);
-      display:flex; align-items:center; justify-content:center;
-      overflow:hidden; color:#3a0033;
+      font-family: "Poppins", "Dancing Script", system-ui;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #3a0033;
     }
 
-    /* === HEART CURTAIN === */
+    /* === Kalp Perdesi === */
     .curtain-wrap {
-      position:fixed; inset:0; display:flex; z-index:9999; pointer-events:none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      overflow: hidden;
+      display: flex;
     }
     .curtain {
-      flex:1; display:flex; flex-wrap:wrap; align-content:flex-start;
-      justify-content:center; transition:transform 2s cubic-bezier(.2,.8,.2,1);
-      overflow:hidden;
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 30px);
+      justify-content: center;
+      align-content: start;
+      background: transparent;
+      transition: transform 2s ease-in-out;
     }
     .curtain span {
-      display:inline-block; font-size:clamp(14px,2vw,22px);
+      font-size: 20px;
+      opacity: 0.8;
       animation: floatHeart 3s ease-in-out infinite alternate;
     }
     @keyframes floatHeart {
-      0% { transform:translateY(0) rotate(0deg); }
-      100% { transform:translateY(-10px) rotate(10deg); }
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
     }
-    .curtain.left { transform-origin:left center; background:transparent; }
-    .curtain.right { transform-origin:right center; background:transparent; }
-    .curtain.open.left { transform:translateX(-100%); }
-    .curtain.open.right { transform:translateX(100%); }
+    .curtain.left { transform-origin: left; }
+    .curtain.right { transform-origin: right; }
+    .curtain.open.left { transform: translateX(-100%); }
+    .curtain.open.right { transform: translateX(100%); }
 
-    /* === STAGE === */
+    /* === Sahne === */
     .stage {
-      position:relative; z-index:50; max-width:1000px;
-      display:flex; flex-direction:column; align-items:center; gap:20px;
-      padding:20px;
-    }
-    h1 {
-      font-family:"Dancing Script",cursive;
-      font-size:2.3rem; color:#a0006b; text-align:center;
-      text-shadow:0 2px 15px rgba(255,255,255,0.7);
-      margin-bottom:10px;
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
     }
 
-    /* === ENVELOPE === */
+    h1 {
+      font-family: "Dancing Script", cursive;
+      font-size: 2.3rem;
+      color: #a0006b;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+      margin-bottom: 20px;
+    }
+
+    /* === Zarf === */
     .envelope {
-      position:relative;
-      width:clamp(200px,36vw,420px);
-      height:clamp(120px,22vw,260px);
-      background:linear-gradient(180deg,#ffd1e3,#ffb3d0);
-      border-radius:14px;
-      box-shadow:0 10px 40px rgba(255,20,147,0.25);
-      border:2px solid rgba(255,255,255,0.5);
-      cursor:pointer;
-      overflow:visible;
-      transition:transform .5s ease, opacity .6s ease;
+      position: relative;
+      width: clamp(200px, 35vw, 420px);
+      height: clamp(130px, 25vw, 260px);
+      background: linear-gradient(180deg, #ffd1e3, #ffb3d0);
+      border-radius: 14px;
+      box-shadow: 0 10px 40px rgba(255, 20, 147, 0.25);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: transform 0.5s ease, opacity 0.6s ease;
     }
     .envelope::before {
-      content:""; position:absolute; left:0; top:-1px;
-      width:100%; height:55%;
-      background:linear-gradient(180deg,#ff93bb,#ff5c96);
-      clip-path:polygon(0 0, 100% 0, 50% 100%);
-      border-radius:12px; transform-origin:top center;
-      transition:transform 1s cubic-bezier(.2,.8,.2,1);
+      content: "";
+      position: absolute;
+      left: 0; top: -1px;
+      width: 100%; height: 55%;
+      background: linear-gradient(180deg, #ff93bb, #ff5c96);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-radius: 12px;
+      transform-origin: top center;
+      transition: transform 1s cubic-bezier(.2,.8,.2,1);
     }
-    .envelope.open::before { transform:translateY(-120%) rotateX(180deg); }
-    .envelope.pulse { animation:pulse 2.5s infinite; }
-    @keyframes pulse {
-      0%{transform:translateY(0)}
-      50%{transform:translateY(-6px) scale(1.02)}
-      100%{transform:translateY(0)}
+    .envelope.open::before {
+      transform: translateY(-120%) rotateX(180deg);
     }
-    .seal {
-      position:absolute; left:50%; top:calc(50% - 30px);
-      transform:translateX(-50%);
-      width:64px; height:64px; border-radius:50%;
-      background:radial-gradient(circle at 20% 20%, #ff4d6d, #c51162);
-      color:white; font-size:26px;
-      display:flex; align-items:center; justify-content:center;
-      box-shadow:0 8px 30px rgba(197,10,80,0.28);
-    }
-    .label {
-      position:absolute; left:50%; transform:translateX(-50%);
-      bottom:14px; background:rgba(255,255,255,0.75);
-      color:#62103a; padding:10px 18px; border-radius:999px;
-      font-weight:700; font-size:1rem;
-      box-shadow:0 6px 18px rgba(255,105,180,0.12);
-    }
-    .envelope.hide { opacity:0; transform:scale(1.2); pointer-events:none; }
 
-    /* === LETTER === */
-    .letter {
-      display:none;
-      width:min(900px,92%);
-      background:white;
-      border-radius:14px;
-      padding:25px;
-      box-shadow:0 15px 50px rgba(255,20,147,0.2);
-      border:3px solid rgba(255,196,203,0.6);
+    .seal {
+      position: absolute;
+      left: 50%; top: calc(50% - 25px);
+      transform: translateX(-50%);
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 20% 20%, #ff4d6d, #c51162);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 26px;
+      box-shadow: 0 8px 30px rgba(197, 10, 80, 0.28);
     }
-    .letter.show { display:block; animation:pop 1s cubic-bezier(.2,.9,.2,1); }
-    @keyframes pop { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
+
+    .label {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.8);
+      padding: 10px 18px;
+      border-radius: 999px;
+      color: #62103a;
+      font-weight: bold;
+      transition: opacity 0.5s ease;
+    }
+
+    .label.hide { opacity: 0; }
+
+    .letter {
+      display: none;
+      width: min(90%, 700px);
+      background: white;
+      border-radius: 14px;
+      padding: 25px;
+      box-shadow: 0 15px 50px rgba(255, 20, 147, 0.2);
+      border: 3px solid rgba(255, 196, 203, 0.6);
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
     .continue-btn {
-      margin-top:15px; padding:12px 26px;
-      background:linear-gradient(90deg,#ff66b2,#ff1493);
-      border:none; border-radius:999px;
-      color:white; font-weight:700; font-size:1rem;
-      cursor:pointer; box-shadow:0 10px 30px rgba(255,20,147,0.18);
+      margin-top: 20px;
+      background: linear-gradient(90deg, #ff66b2, #ff1493);
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 12px 28px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 6px 25px rgba(255, 20, 147, 0.3);
     }
 
-    /* particle hearts */
+    /* Fırlayan Kalpler */
     .particle {
-      position:fixed; left:0; top:0; pointer-events:none;
-      will-change:transform,opacity; font-size:18px;
+      position: fixed;
+      pointer-events: none;
+      font-size: 20px;
+      will-change: transform, opacity;
+      z-index: 999;
     }
   </style>
 </head>
-<body>
 
-  <!-- HEART CURTAIN -->
+<body>
+  <!-- Kalp Perdesi -->
   <div class="curtain-wrap">
     <div class="curtain left" id="curtainLeft"></div>
     <div class="curtain right" id="curtainRight"></div>
   </div>
 
   <main class="stage">
-    <h1>💌 Birtanem... Sana bir sürpriz hazırladım</h1>
-    <div class="envelope pulse" id="envelope">
-      <div class="seal">🩷</div>
-      <div class="label">Aç Beni ❤️</div>
+    <h1>💌 Küçük Bir Hediyem Var Aşkım 💌</h1>
+    <div class="envelope" id="envelope">
+      <div class="seal">❤️</div>
+      <div class="label" id="openLabel">Aç Beni 💖</div>
     </div>
+
     <article class="letter" id="letter">
       <h2 style="font-family:'Dancing Script',cursive;">Sevgilim,</h2>
-      <p>Bu küçük notu sana sevgimle yazıyorum. Seninle geçen her an kalbimde özel bir yer açtı.  
-      Gülüşün karanlık günleri aydınlatıyor, elin elimde olduğunda dünya daha güzel dönüyor.  
-      Bu mektup sadece küçük bir başlangıç — asıl sürpriz için devam et butonuna bas. 💖</p>
-      <div style="text-align:center">
-        <button class="continue-btn" id="continueBtn">Devam Et 💞</button>
-      </div>
+      <p>Bu küçük notu sana sevgimle yazıyorum.  
+      Gülüşün, kalbimin en güzel melodisi.  
+      Her an seni düşünmek bile yüzümü güldürüyor.  
+      Ama sakın burada bitti sanma, bu sadece başlangıç...  
+      Asıl sürpriz seni devamda bekliyor! 💖</p>
+      <button class="continue-btn" id="continueBtn">Devam Et 💞</button>
     </article>
   </main>
 
-  <audio id="openSound" preload="auto">
-    <source src="open.mp3" type="audio/mpeg">
-  </audio>
-
   <script>
-    /* === Kalp perdesi oluştur === */
+    // Kalp perdesini doldur
     const leftCurtain = document.getElementById("curtainLeft");
     const rightCurtain = document.getElementById("curtainRight");
-
-    function makeHearts(sideEl){
-      const count = 250; // per side
-      for(let i=0;i<count;i++){
-        const s = document.createElement("span");
-        s.textContent = ["❤️","💖","💕","💗","💞","🩷"][Math.floor(Math.random()*6)];
-        s.style.opacity = 0.5 + Math.random()*0.5;
-        s.style.transform = `scale(${0.8+Math.random()*1.2}) rotate(${Math.random()*60-30}deg)`;
-        sideEl.appendChild(s);
-      }
+    const hearts = ["❤️","💖","💕","💗","💞","🩷"];
+    for(let i=0;i<600;i++){
+      const h=document.createElement("span");
+      h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+      (i%2?leftCurtain:rightCurtain).appendChild(h);
     }
-    makeHearts(leftCurtain);
-    makeHearts(rightCurtain);
 
     setTimeout(()=>{
       leftCurtain.classList.add("open");
@@ -182,50 +213,47 @@
       setTimeout(()=>document.querySelector(".curtain-wrap").remove(),2000);
     },2000);
 
-    /* === Envelope interaction === */
     const envelope = document.getElementById("envelope");
     const letter = document.getElementById("letter");
+    const label = document.getElementById("openLabel");
     const continueBtn = document.getElementById("continueBtn");
-    const openSound = document.getElementById("openSound");
 
-    let opened=false;
-    envelope.addEventListener("click", async ()=>{
-      if(opened) return; opened=true;
-      envelope.classList.remove("pulse");
-      envelope.classList.add("hide");
-      try{openSound.currentTime=0;await openSound.play();}catch(e){}
-      spawnHearts(400);
-      setTimeout(()=>letter.classList.add("show"),2000);
+    envelope.addEventListener("click", ()=>{
+      envelope.classList.add("open");
+      label.classList.add("hide");
+      spawnHearts(300);
+      setTimeout(()=>{
+        letter.style.display="block";
+        envelope.style.opacity="0";
+      },1000);
     });
 
     function spawnHearts(count){
-      const rect = envelope.getBoundingClientRect();
-      const cx = rect.left + rect.width/2;
-      const cy = rect.top + rect.height/4;
+      const rect=envelope.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height/2;
       for(let i=0;i<count;i++){
-        setTimeout(()=>{
-          const h = document.createElement("div");
-          h.className="particle";
-          h.textContent=["💖","💕","💘","💗","❤️","🩷"][Math.floor(Math.random()*6)];
-          const size=16+Math.random()*12;
-          h.style.fontSize=size+"px";
-          h.style.left=cx+"px";
-          h.style.top=cy+"px";
-          document.body.appendChild(h);
-          const dx=(Math.random()-0.5)*innerWidth*0.9;
-          const dy=(Math.random()-1)*innerHeight*0.9;
-          const dur=1.8+Math.random()*1.8;
-          requestAnimationFrame(()=>{
-            h.style.transition=`transform ${dur}s cubic-bezier(.2,.8,.2,1), opacity ${dur}s ease`;
-            h.style.transform=`translate(${dx}px,${dy}px) rotate(${Math.random()*360}deg) scale(${Math.random()+0.5})`;
-            h.style.opacity="0";
-          });
-          setTimeout(()=>h.remove(),dur*1000);
-        },i*5);
+        const h=document.createElement("div");
+        h.className="particle";
+        h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+        document.body.appendChild(h);
+        const dx=(Math.random()-0.5)*window.innerWidth*1.2;
+        const dy=(Math.random()-1)*window.innerHeight*1.2;
+        const dur=1.5+Math.random()*1.5;
+        const size=14+Math.random()*12;
+        h.style.fontSize=size+"px";
+        h.style.left=cx+"px";
+        h.style.top=cy+"px";
+        requestAnimationFrame(()=>{
+          h.style.transition=`transform ${dur}s ease-out, opacity ${dur}s`;
+          h.style.transform=`translate(${dx}px,${dy}px) rotate(${Math.random()*360}deg)`;
+          h.style.opacity="0";
+        });
+        setTimeout(()=>h.remove(),dur*1000);
       }
     }
 
-    continueBtn.addEventListener("click",()=>window.location.href="love.html");
+    continueBtn.addEventListener("click", ()=>window.location.href="love.html");
   </script>
 </body>
 </html>
