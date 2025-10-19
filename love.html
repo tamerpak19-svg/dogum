@@ -117,11 +117,11 @@
       text-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
 
-    /* 🔊 Ses ikonu */
-    #soundIcon {
+    /* 🔊 Ses ikonları */
+    #soundIcon, #restartIcon {
       position: fixed;
-      font-size: 2.2rem;
-      background: rgba(255,255,255,0.9);
+      font-size: 2rem;
+      background: rgba(255,255,255,0.95);
       color: #ff1493;
       border-radius: 50%;
       padding: 12px 15px;
@@ -131,7 +131,7 @@
       z-index: 10000;
     }
 
-    /* İlk konum ortada */
+    /* Başlangıç konumu ortada */
     #soundIcon.center {
       top: 50%;
       left: 50%;
@@ -139,11 +139,26 @@
       animation: pulse 1.5s infinite ease-in-out;
     }
 
-    /* Son konum sol üst */
+    /* Sol üst */
     #soundIcon.top-left {
       top: 20px;
       left: 20px;
       transform: scale(1);
+    }
+
+    /* 🔁 Restart butonu (müziği sıfırla) */
+    #restartIcon {
+      top: 20px;
+      left: 80px;
+      font-size: 1.8rem;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #restartIcon.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.6s ease;
     }
 
     @keyframes pulse {
@@ -170,6 +185,7 @@
   </div>
 
   <div id="soundIcon" class="center">🔊</div>
+  <div id="restartIcon">🔁</div>
 
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
 
@@ -201,15 +217,17 @@
     const music = document.getElementById("bgMusic");
     const intro = document.getElementById("introScreen");
     const soundIcon = document.getElementById("soundIcon");
+    const restartIcon = document.getElementById("restartIcon");
     let isPlaying = false;
 
     soundIcon.addEventListener("click", async () => {
       if (!isPlaying) {
         await music.play();
-        music.currentTime = 5; // 🎶 5. saniyeden başla
+        if (music.currentTime < 5) music.currentTime = 5; // ilk başlatmada 5. sn
         isPlaying = true;
         soundIcon.classList.remove("center");
         soundIcon.classList.add("top-left");
+        restartIcon.classList.add("visible");
         intro.style.opacity = "0";
         setTimeout(() => intro.remove(), 1500);
       } else {
@@ -217,6 +235,14 @@
         isPlaying = false;
       }
       soundIcon.textContent = isPlaying ? "🔊" : "🔇";
+    });
+
+    // 🔁 Baştan başlat
+    restartIcon.addEventListener("click", () => {
+      music.currentTime = 5;
+      music.play();
+      isPlaying = true;
+      soundIcon.textContent = "🔊";
     });
 
     // ✨ Yazı animasyonu (kelime kelime)
@@ -239,7 +265,7 @@
       setTimeout(() => {
         const bm = document.getElementById("bigMessage");
         bm.style.animation = "slideDown 1.5s ease-out forwards";
-      }, words.length * 400 + 3000);
+      }, spans.length * 400 + 3000);
     });
   </script>
 </body>
