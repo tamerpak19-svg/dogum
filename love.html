@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
     body {
       background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      font-family: 'Merriweather', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', serif;
+      font-family: 'Quicksand', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
       color: #000;
       text-align: center;
       margin: 0;
@@ -22,7 +22,7 @@
       font-size: 2.8rem;
       font-weight: 700;
       color: #2b2b2b;
-      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
       animation: fadeIn 2s ease-in;
     }
 
@@ -51,10 +51,11 @@
       margin: 30px auto;
       font-size: 1.4rem;
       line-height: 1.8;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.5);
       border-radius: 20px;
       padding: 20px;
       max-width: 90%;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
     }
 
     #bigMessage {
@@ -63,7 +64,6 @@
       font-weight: 700;
       color: #2b2b2b;
       opacity: 0;
-      animation: none;
       background: rgba(255, 255, 255, 0.4);
       border-radius: 25px;
       padding: 20px;
@@ -104,7 +104,7 @@
       justify-content: center;
       flex-direction: column;
       text-align: center;
-      font-family: 'Merriweather', serif;
+      font-family: 'Quicksand', sans-serif;
       z-index: 9999;
       animation: fadeInIntro 0.8s ease-in forwards;
     }
@@ -253,14 +253,14 @@
     // 🎵 Başlatma
     startBtn.addEventListener("click", async () => {
       try {
-        music.currentTime = 8;
+        music.currentTime = 9;
         await music.play();
         isPlaying = true;
         controls.style.display = "flex";
         intro.style.animation = "fadeOutIntro 1.5s ease forwards";
         setTimeout(() => intro.remove(), 1500);
         startEmojis();
-        setTimeout(startTextAnimation, 1500);
+        setTimeout(startTextAnimation, 2000);
       } catch (e) { console.log(e); }
     });
 
@@ -280,7 +280,7 @@
 
     // 🔁 Yeniden başlat
     restartBtn.addEventListener("click", () => {
-      music.currentTime = 8;
+      music.currentTime = 9;
       music.play();
       isPlaying = true;
       musicBtn.textContent = "❤️";
@@ -310,12 +310,12 @@
       });
       const spans = msg.querySelectorAll("span");
       spans.forEach((span, i) => {
-        setTimeout(() => { span.style.opacity = "1"; }, i * 180);
+        setTimeout(() => { span.style.opacity = "1"; }, i * 140);
       });
       setTimeout(() => {
         const bm = document.getElementById("bigMessage");
         bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-      }, words.length * 180 + 1000);
+      }, words.length * 140 + 1000);
     }
 
     // 🎈 Sonsuz emoji akışı
@@ -328,7 +328,7 @@
         emoji.style.fontSize = Math.random() * 2 + 1 + "rem";
         document.body.appendChild(emoji);
         setTimeout(() => emoji.remove(), 6000);
-      }, 350);
+      }, 200);
     }
   </script>
 </body>
