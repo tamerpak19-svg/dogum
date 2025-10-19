@@ -5,36 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
   <style>
-    body {
+    html, body {
+      height: auto;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scroll-behavior: smooth;
       background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Comic Sans MS', 'Segoe UI Emoji', 'Noto Color Emoji', 'Apple Color Emoji', cursive, sans-serif;
       color: #fff;
       text-align: center;
-      overflow: hidden;
     }
 
     h1 {
-      margin-top: 40px;
-      font-size: 2.8rem;
+      margin-top: 20px;
+      font-size: 2.5rem;
       text-shadow: 3px 3px 8px #ff1493;
       animation: fadeIn 2s ease-in;
     }
 
     iframe {
-      margin-top: 30px;
-      width: 80%;
-      height: 450px;
+      margin-top: 20px;
+      width: 90%;
+      height: 50vh;
       border: 6px solid white;
       border-radius: 25px;
       box-shadow: 0 0 25px #ff1493;
+      max-width: 800px;
     }
 
     .message {
-      margin-top: 30px;
-      font-size: 1.6rem;
+      margin-top: 25px;
+      font-size: 1.4rem;
       line-height: 1.8;
       text-shadow: 1px 1px 5px #ff007f;
       animation: fadeIn 4s ease-in;
+      padding: 0 10px;
     }
 
     .decor {
@@ -69,11 +77,13 @@
     #bigMessage {
       position: relative;
       opacity: 0;
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: #fff;
       text-shadow: 3px 3px 10px #ff1493;
       margin-top: 30px;
       animation: none;
+      line-height: 1.6;
+      margin-bottom: 80px; /* alt boşluk eklendi */
     }
 
     @keyframes slideDown {
@@ -81,17 +91,47 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* 🎵 Müzik kontrolü (isteğe bağlı görünür yapılabilir) */
     audio {
       position: fixed;
       bottom: 10px;
       right: 10px;
-      width: 250px;
+      width: 200px;
       opacity: 0.5;
       transition: 0.3s;
+      z-index: 10;
     }
+
     audio:hover {
       opacity: 1;
+    }
+
+    /* 📱 Mobil cihazlar için */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+        margin-top: 10px;
+      }
+
+      iframe {
+        width: 95%;
+        height: 40vh;
+      }
+
+      .message {
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      #bigMessage {
+        font-size: 1.3rem;
+        margin-bottom: 100px;
+      }
+
+      audio {
+        width: 150px;
+        bottom: 5px;
+        right: 5px;
+      }
     }
   </style>
 </head>
@@ -115,7 +155,6 @@
 
   <div class="decor" id="decor"></div>
 
-  <!-- 🎶 Müzik: Klasörüne "music.mp3" ekle -->
   <audio id="bgMusic" autoplay loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
@@ -143,4 +182,3 @@
   </script>
 </body>
 </html>
->
