@@ -85,7 +85,17 @@
       border-radius: 20px;
       padding: 20px;
       max-width: 90%;
-      animation: fadeIn 4s ease-in;
+    }
+
+    .message span {
+      opacity: 0;
+      display: block;
+      animation: fadeInText 1s forwards;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     #bigMessage {
@@ -170,7 +180,6 @@
       h5.item { font-size: 0.8rem; }
     }
 
-    /* 🌸 Giriş ekranı */
     #introScreen {
       position: fixed;
       top: 0;
@@ -222,7 +231,6 @@
 </head>
 
 <body>
-  <!-- 🎵 Giriş ekranı -->
   <div id="introScreen">
     <div class="introContent">
       <h2>💖 Hoş Geldin Aşkım 💖</h2>
@@ -241,11 +249,11 @@
     </iframe>
   </div>
 
-  <div class="message">
-    Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕<br>
-    Sen benim hayatımın en güzel parçasısın 💞<br>
-    Doğum günün kutlu olsun bir tanem 🎂<br>
-    Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫  
+  <div class="message" id="loveMessage">
+    <span>Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕</span>
+    <span>Sen benim hayatımın en güzel parçasısın 💞</span>
+    <span>Doğum günün kutlu olsun bir tanem 🎂</span>
+    <span>Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫</span>
   </div>
 
   <div id="bigMessage">
@@ -262,10 +270,8 @@
   </audio>
 
   <script>
-    // 🎈 Emoji yağmuru
     const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
     const decor = document.getElementById("decor");
-
     function createItem() {
       const item = document.createElement("h5");
       item.classList.add("item");
@@ -276,10 +282,8 @@
       decor.appendChild(item);
       setTimeout(() => item.remove(), 10000);
     }
-
     setInterval(createItem, 150);
 
-    // 🎥 Fallback video
     setTimeout(() => {
       const iframe = document.getElementById('ytiframe');
       try {
@@ -303,17 +307,24 @@
     // 🎶 Giriş ekranı - müzik başlatma
     const intro = document.getElementById("introScreen");
     const music = document.getElementById("bgMusic");
-
     intro.addEventListener("click", () => {
       music.play().catch(() => {});
       intro.querySelector(".introContent").innerHTML = `
         <h2>💞 Harika! Müzik başladı 💞</h2>
-        <p>Şimdi sayfayı okumaya başlayabilirsin... 💖</p>
-      `;
+        <p>Şimdi sayfayı okumaya başlayabilirsin... 💖</p>`;
       setTimeout(() => {
-  intro.style.animation = "fadeOutIntro 1.5s ease forwards";
-  setTimeout(() => intro.remove(), 1500);
-}, 1500);
+        intro.style.animation = "fadeOutIntro 1.5s ease forwards";
+        setTimeout(() => intro.remove(), 1500);
+      }, 1500);
+    });
+
+    // ✨ Yazıları sırayla göster
+    const spans = document.querySelectorAll("#loveMessage span");
+    spans.forEach((span, index) => {
+      setTimeout(() => {
+        span.style.opacity = "1";
+        span.style.animationDelay = "0s";
+      }, index * 700); // her satır arası 1.5 saniye
     });
   </script>
 </body>
