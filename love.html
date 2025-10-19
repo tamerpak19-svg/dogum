@@ -202,46 +202,57 @@
 
   <div class="decor" id="decor"></div>
 
-  <audio id="bgMusic" autoplay loop>
-    <source src="music.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bgMusic" autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+  Tarayıcınız ses dosyasını desteklemiyor.
+</audio>
 
-  <script>
-    // 🎈 Emoji yağmuru
-    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
-    const decor = document.getElementById("decor");
-    function createItem() {
-      const item = document.createElement("h5");
-      item.classList.add("item");
-      item.style.left = Math.random() * 100 + "vw";
-      item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
-      item.style.animationDuration = (5 + Math.random() * 5) + "s";
-      item.innerHTML = items[Math.floor(Math.random() * items.length)];
-      decor.appendChild(item);
-      setTimeout(() => item.remove(), 10000);
+<script>
+  // 🎈 Emoji yağmuru (kalan kodun devamı burada kalabilir)
+  const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
+  const decor = document.getElementById("decor");
+
+  function createItem() {
+    const item = document.createElement("h5");
+    item.classList.add("item");
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
+    item.style.animationDuration = (5 + Math.random() * 5) + "s";
+    item.innerHTML = items[Math.floor(Math.random() * items.length)];
+    decor.appendChild(item);
+    setTimeout(() => item.remove(), 10000);
+  }
+
+  setInterval(createItem, 150);
+
+  // 🎥 Eğer video engellendiyse fallback göster
+  setTimeout(() => {
+    const iframe = document.getElementById('ytiframe');
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+    } catch (e) {
+      const wrapper = document.getElementById('videoWrapper');
+      wrapper.innerHTML = `
+        <div class="fallback">
+          <img src="https://img.youtube.com/vi/sr7PADgCNP0/maxresdefault.jpg" alt="Video kapağı">
+          <button class="play-button" onclick="window.open('https://youtube.com/shorts/sr7PADgCNP0?si=1PZLTGeT96BF-ey','_blank')">▶️ Bas 🩷</button>
+        </div>`;
     }
-    setInterval(createItem, 150);
+  }, 2000);
 
-    // 🎥 Eğer video engellendiyse fallback göster
-    setTimeout(() => {
-      const iframe = document.getElementById('ytiframe');
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-      } catch (e) {
-        const wrapper = document.getElementById('videoWrapper');
-        wrapper.innerHTML = `
-          <div class="fallback">
-            <img src="https://img.youtube.com/vi/sr7PADgCNP0/maxresdefault.jpg" alt="Video kapağı">
-            <button class="play-button" onclick="window.open('https://youtube.com/shorts/sr7PADgCNP0?si=1PZLTGeT96BF-ey','_blank')">▶️ Bas 🩷</button>
-          </div>`;
-      }
-    }, 2000);
+  // 💞 Büyük mesaj animasyonu
+  setTimeout(() => {
+    const msg = document.getElementById("bigMessage");
+    msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
+  }, 5000);
 
-    // 💞 Büyük mesaj animasyonu
-    setTimeout(() => {
-      const msg = document.getElementById("bigMessage");
-      msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-    }, 5000);
-  </script>
+  // 🎧 Mobilde otomatik çalmama durumuna çözüm
+  document.body.addEventListener('click', () => {
+    const music = document.getElementById('bgMusic');
+    if (music.paused) {
+      music.play().catch(() => {});
+    }
+  });
+</script>
 </body>
 </html>
