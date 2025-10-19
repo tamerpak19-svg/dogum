@@ -1,158 +1,321 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doğum Günü Sürprizi 🎉</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bir Mektup Var — Sürpriz 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ff77aa);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-      color: white;
-      overflow: hidden;
+    :root{
+      --bg1:#0f1226;
+      --bg2:#2b1434;
+      --accent:#ff4da6;
+      --soft:#ffd6ec;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Merriweather', serif;background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(255,214,233,0.06), transparent),
+      linear-gradient(180deg,var(--bg1),var(--bg2)); color:var(--soft); -webkit-font-smoothing:antialiased}
+    .scene{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      position:relative;
+      overflow:hidden;
     }
 
-    /* 🎀 Giriş animasyonu */
-    .container {
-      animation: fadeInDown 1.5s ease-out;
+    /* decorative twinkles */
+    .twinkles {
+      position:absolute; inset:0; pointer-events:none; z-index:0;
+    }
+    .twinkles i{
+      position:absolute; width:6px; height:6px; background:rgba(255,255,255,0.12);
+      border-radius:50%; filter:blur(6px); opacity:0.9;
+      animation: twinkle 6s linear infinite;
+    }
+    @keyframes twinkle{
+      0%{transform:translateY(0) scale(1); opacity:0.6}
+      50%{opacity:1}
+      100%{transform:translateY(-30px) scale(1.2); opacity:0}
     }
 
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-40px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* center card */
+    .card {
+      width: min(720px, 92%);
+      max-width:720px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius:20px;
+      padding:36px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      position:relative;
+      z-index:5;
+      text-align:center;
     }
 
-    h1 {
-      font-size: 2.6rem;
-      margin-bottom: 50px;
-      text-shadow: 3px 3px 8px rgba(255, 20, 147, 0.9);
-      animation: fadeInDown 2s ease-in-out;
+    .headline {
+      font-size:1.6rem;
+      margin:0 0 8px;
+      color:var(--soft);
+      text-shadow: 0 4px 18px rgba(0,0,0,0.5);
+    }
+    .sub {
+      font-size:1rem;
+      margin:0 0 20px;
+      opacity:0.9;
+      color: #ffdff0;
     }
 
-    button {
-      background: linear-gradient(90deg, #ff1493, #ff69b4);
-      border: none;
-      color: white;
-      padding: 20px 45px;
-      margin: 15px;
-      font-size: 1.2rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      box-shadow: 0px 4px 15px rgba(255, 0, 102, 0.6);
-      position: relative;
-      overflow: hidden;
+    /* envelope area */
+    .envelope-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      height:260px;
+      margin-bottom:14px;
     }
 
-    /* 🎆 Buton hover efekti */
-    button:hover {
-      transform: scale(1.08) rotate(-1deg);
-      background: linear-gradient(90deg, #ff5fa2, #ff1493);
-      box-shadow: 0 6px 18px rgba(255, 20, 147, 0.8);
+    /* envelope base */
+    .envelope {
+      width:320px;
+      height:200px;
+      position:relative;
+      transform-origin:center;
+      transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+      z-index:3;
+      cursor:pointer;
     }
 
-    /* ✨ Buton parıltı animasyonu */
-    button::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: skewX(-45deg);
-      transition: 0.6s;
+    /* back of envelope */
+    .env-back{
+      position:absolute; inset:0;
+      background: linear-gradient(180deg,#fff 0%, #ffeef8 100%);
+      border-radius:10px;
+      border:2px solid rgba(255,255,255,0.6);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+      overflow:hidden;
     }
 
-    button:hover::after {
-      left: 100%;
+    /* flap */
+    .env-flap{
+      position:absolute;
+      width:100%;
+      height:60%;
+      top:-2%;
+      left:0;
+      transform-origin:top center;
+      border-bottom-left-radius:20px;
+      border-bottom-right-radius:20px;
+      background: linear-gradient(135deg,#ffdff0,#fff0f8);
+      border:2px solid rgba(255,255,255,0.6);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+      display:flex; align-items:center; justify-content:center;
     }
 
-    /* 💖 Kalpler animasyonu */
-    .hearts {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
+    .env-seal{
+      width:68px; height:68px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #ff90c9, #ff3b8e);
+      color:white; display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:22px; box-shadow: 0 6px 18px rgba(255, 80, 140, 0.3);
+      transform:translateY(8px);
     }
 
-    .heart {
-      position: absolute;
-      color: #fff;
-      font-size: 2rem;
-      animation: float 10s infinite ease-in;
+    /* letter */
+    .letter {
+      width: 92%;
+      left:4%;
+      height:70%;
+      position:absolute;
+      bottom: -12%;
+      background: linear-gradient(180deg,#fff,#fff7fb);
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:18px 20px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+      transform-origin: bottom center;
+      transition: transform 900ms cubic-bezier(.2,.9,.2,1), bottom 700ms ease;
+      z-index:2;
+      opacity:0;
     }
 
-    @keyframes float {
-      from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-      to { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    /* opened states */
+    .opened .env-flap{ transform: rotateX(180deg) translateY(-12px) }
+    .opened .letter{ opacity:1; bottom:18%; transform: translateY(0) }
+
+    /* message inside letter */
+    .letter h2{ margin:2px 0 8px; color:#333; font-size:1.1rem }
+    .letter p{ margin:0; color:#444; line-height:1.6; font-size:0.98rem }
+
+    /* reveal button */
+    .reveal {
+      margin-top:18px;
+      display:flex; gap:12px; justify-content:center; align-items:center;
     }
 
-    /* 👇 Aşağı yönlendirme */
-    .scroll-down {
-      font-size: 2rem;
-      margin-top: 40px;
-      animation: bounce 1.5s infinite;
+    .btn {
+      background: linear-gradient(90deg,#ff6aa6,#ff2e86);
+      color:white; border:none; padding:10px 18px; border-radius:999px; cursor:pointer;
+      box-shadow: 0 8px 24px rgba(255, 46, 134, 0.18); transition:transform .18s ease;
+      font-weight:700;
+    }
+    .btn:active{ transform:translateY(2px) }
+
+    .btn-ghost{
+      background:transparent; border:1px solid rgba(255,255,255,0.14); color:#ffdff0; padding:8px 14px; border-radius:999px;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
+    /* small hint */
+    .hint{ font-size:0.85rem; color:#ffdff0; opacity:0.95; margin-top:12px }
 
-    /* 📱 Mobil görünüm */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      button {
-        width: 80%;
-        font-size: 1.1rem;
-        padding: 18px 0;
-      }
-
-      .scroll-down {
-        font-size: 1.8rem;
-        margin-top: 30px;
-      }
+    /* responsive */
+    @media (max-width:520px){
+      .envelope { width:260px; height:170px }
+      .env-flap{ height:62% }
+      .letter{ bottom:-8% }
+      .card{ padding:20px }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎂 Birtanem için özel bir sürpriz 🎂</h1>
+  <div class="scene">
+    <div class="twinkles" aria-hidden="true"></div>
 
-    <button onclick="goToLove()">SENİ ÇOK SEVDİĞİMİ BİLİYORSAN BU BUTONA TIKLA 💖</button>
-    <button onclick="goToLove()">BENİM SENİ ÇOK SEVDİĞİMDEN ŞÜPHE EDİYORSAN BUNA TIKLA 😢</button>
+    <div class="card" role="main" aria-labelledby="title">
+      <h1 id="title" class="headline">Sana küçük bir sürprizim var...</h1>
+      <div class="sub">Mektubu açmak için zarfın üstüne dokun veya tıkla 💌</div>
 
-    <div class="scroll-down">👇</div>
+      <div class="envelope-wrap" aria-hidden="false">
+        <div class="envelope" id="envelope" role="button" aria-pressed="false" tabindex="0" aria-label="Mektubu aç">
+          <div class="env-back"></div>
+          <div class="env-flap"><div class="env-seal">💖</div></div>
+          <div class="letter" id="letter" aria-hidden="true">
+            <h2>Canımın içi,</h2>
+            <p>
+              Bugün senin günün — her anın mutluluk, her nefesin huzurla dolsun.
+              Seni sevdiğimi bilmeni istedim. Hazırsan devam et, asıl sürpriz orada 💫
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" id="revealActions" style="display:none;">
+        <button class="btn" id="continueBtn">Devam Et</button>
+        <button class="btn btn-ghost" id="closeBtn">Kapat</button>
+      </div>
+
+      <div class="hint">Not: Mobilde zarfı açmak için dokun — masaüstünde tıkla veya Enter tuşuna bas.</div>
+    </div>
   </div>
 
-  <div class="hearts" id="hearts"></div>
-
   <script>
-    function goToLove() {
-      window.location.href = "love.html";
-    }
+    // küçük, erişilebilir ve bağımsız bir mektup açma animasyonu
+    (function(){
+      const envelope = document.getElementById('envelope');
+      const letter = document.getElementById('letter');
+      const reveal = document.getElementById('revealActions');
+      const continueBtn = document.getElementById('continueBtn');
+      const closeBtn = document.getElementById('closeBtn');
+      const twinkles = document.querySelector('.twinkles');
 
-    // 💞 Kalpler animasyonu
-    const heartsContainer = document.getElementById("hearts");
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
-      heart.innerHTML = "💖";
-      heartsContainer.appendChild(heart);
-      setTimeout(() => heart.remove(), 10000);
-    }
-    setInterval(createHeart, 300);
+      // generate twinkles decor
+      (function makeTwinkles(){
+        for(let i=0;i<20;i++){
+          const el = document.createElement('i');
+          el.style.left = (5 + Math.random()*90) + 'vw';
+          el.style.top = (5 + Math.random()*85) + 'vh';
+          el.style.width = (3 + Math.random()*8) + 'px';
+          el.style.height = el.style.width;
+          el.style.animationDuration = (5 + Math.random()*6) + 's';
+          el.style.opacity = 0.6 + Math.random()*0.4;
+          twinkles.appendChild(el);
+        }
+      })();
+
+      let opened = false;
+
+      function openEnvelope(){
+        if(opened) return;
+        opened = true;
+        document.querySelector('.card').classList.add('opened');
+        envelope.setAttribute('aria-pressed','true');
+        letter.setAttribute('aria-hidden','false');
+        reveal.style.display = 'flex';
+
+        // optional tiny sound (disabled by default)
+        // const audio = new Audio(); audio.src = ''; audio.play().catch(()=>{});
+
+        // little floating hearts burst (decor)
+        burstHearts(16);
+      }
+
+      function closeEnvelope(){
+        opened = false;
+        document.querySelector('.card').classList.remove('opened');
+        envelope.setAttribute('aria-pressed','false');
+        letter.setAttribute('aria-hidden','true');
+        reveal.style.display = 'none';
+      }
+
+      function burstHearts(count=10){
+        for(let i=0;i<count;i++){
+          setTimeout(()=> {
+            const d = document.createElement('div');
+            d.textContent = ['💖','💞','✨','🎂','🌹'][Math.floor(Math.random()*5)];
+            d.style.position='fixed';
+            d.style.left = (50 + (Math.random()*40-20)) + 'vw';
+            d.style.top = (60 + (Math.random()*20-10)) + 'vh';
+            d.style.fontSize = (12 + Math.random()*22) + 'px';
+            d.style.opacity = 1;
+            d.style.zIndex = 1200;
+            document.body.appendChild(d);
+            d.animate([
+              { transform: `translateY(0) scale(1)`, opacity:1 },
+              { transform: `translateY(-420px) translateX(${(Math.random()*200-100)}px) scale(1.5)`, opacity:0 }
+            ], { duration: 1700 + Math.random()*1200, easing:'cubic-bezier(.2,.9,.2,1)'});
+            setTimeout(()=> d.remove(), 3200);
+          }, i * 60);
+        }
+      }
+
+      // open on click or Enter/Space
+      envelope.addEventListener('click', openEnvelope);
+      envelope.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnvelope(); }
+        if(e.key === 'Escape') closeEnvelope();
+      });
+
+      closeBtn.addEventListener('click', closeEnvelope);
+
+      continueBtn.addEventListener('click', ()=>{
+        // small flourish then navigate to love.html
+        continueBtn.disabled = true;
+        continueBtn.textContent = 'Hazırlanıyor...';
+        // gentle animation then redirect
+        setTimeout(()=> {
+          // navigate to your main surprise page
+          window.location.href = 'love.html';
+        }, 900);
+      });
+
+      // accessibility: click outside letter to close when opened
+      document.addEventListener('click', (e)=>{
+        if(!opened) return;
+        const inside = e.composedPath().includes(document.querySelector('.card'));
+        if(!inside) closeEnvelope();
+      });
+
+      // if user prefers reduced motion, skip heavy animations
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(prefersReduced){
+        document.querySelectorAll('.env-flap, .letter, .card, .envelope').forEach(el=>{
+          el.style.transition = 'none';
+          el.style.animation = 'none';
+        });
+      }
+    })();
   </script>
 </body>
 </html>
