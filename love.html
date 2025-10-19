@@ -3,199 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet" />
-
+  <title>Aşk Sayfası 💞</title>
   <style>
     body {
-      background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
-      font-family: 'Merriweather', serif;
-      color: #000;
-      text-align: center;
       margin: 0;
-      padding: 0 10px;
-      overflow-x: hidden;
-    }
-
-    h1 {
-      margin-top: 40px;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #2b2b2b;
-      text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
-      animation: fadeIn 2s ease-in;
-    }
-
-    #videoWrapper {
-      margin-top: 30px;
-      width: 92%;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      position: relative;
-    }
-
-    iframe {
-      width: 100%;
-      height: 650px;
-      border: 6px solid white;
-      border-radius: 25px;
-      box-shadow: 0 0 35px rgba(255, 20, 147, 0.8);
-      animation: glow 3s infinite alternate;
-    }
-
-    .message {
-      margin: 30px auto;
-      font-size: 1.4rem;
-      line-height: 1.8;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 90%;
-    }
-
-    #loveMessage span {
-      opacity: 0;
-      display: inline-block;
-      transition: opacity 0.4s ease;
-    }
-
-    #bigMessage {
-      margin-top: 30px;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #2b2b2b;
-      opacity: 0;
-      animation: none;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 25px;
-      padding: 20px;
-      display: inline-block;
-    }
-
-    /* 💞 Giriş ekranı */
-    #introScreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, #ffb6c1, #ff66b2, #ff1493);
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      font-family: "Poppins", sans-serif;
       color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      overflow-x: hidden;
       text-align: center;
-      font-family: 'Merriweather', serif;
-      z-index: 9999;
-      animation: fadeInIntro 0.8s ease-in forwards;
     }
 
-    .introContent h2 {
+    #startContainer {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 192, 203, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: opacity 1s ease;
+      z-index: 1000;
+    }
+
+    #startContainer h1 {
       font-size: 2rem;
-      margin-bottom: 10px;
-      text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+      margin-bottom: 20px;
+      animation: pulse 2s infinite ease-in-out;
     }
 
-    .introContent p {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      margin: 8px 0;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-    }
-
-    /* Kalp buton */
-    #musicButton {
-      position: fixed;
-      bottom: 50%;
-      left: 50%;
-      transform: translate(-50%, 50%) scale(1.2);
-      background: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 90px;
-      height: 90px;
-      font-size: 2.4rem;
-      color: #ff1493;
-      box-shadow: 0 0 25px rgba(255, 20, 147, 0.6);
+    #startButton {
+      font-size: 3rem;
       cursor: pointer;
-      z-index: 10000;
-      transition: all 0.6s ease;
-    }
-
-    #musicButton.active {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      transform: scale(1);
-      width: 60px;
-      height: 60px;
-      font-size: 1.8rem;
-      box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
-    }
-
-    #musicButton.paused {
-      color: #999;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+      transition: transform 0.5s ease, top 1s ease, left 1s ease;
+      position: relative;
+      animation: glow 2s infinite alternate;
     }
 
     #restartButton {
       position: fixed;
-      top: 90px;
-      left: 20px;
-      background: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.2rem;
-      color: #ff1493;
-      box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+      top: 20px;
+      left: 90px;
+      font-size: 2rem;
       cursor: pointer;
-      z-index: 10000;
-      transition: all 0.3s ease;
       display: none;
+      animation: glow 2s infinite alternate;
     }
 
-    @keyframes fadeInIntro {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    #loveMessage {
+      margin-top: 150px;
+      font-size: 1.5rem;
+      max-width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
     }
 
-    @keyframes fadeOutIntro {
-      from {
-        opacity: 1;
-      }
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
+    #loveMessage span {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: inline-block;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    #bigMessage {
+      font-size: 2.5rem;
+      margin-top: 60px;
+      opacity: 0;
     }
 
-    @keyframes slideDown {
+    #musicControls {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    #controlText {
+      font-size: 0.9rem;
+      font-weight: 600;
+      animation: hologram 2s infinite;
+    }
+
+    #restartText {
+      font-size: 0.9rem;
+      font-weight: 600;
+      animation: hologram 2s infinite;
+    }
+
+    @keyframes glow {
       from {
-        transform: translateY(-50px);
-        opacity: 0;
+        text-shadow: 0 0 10px #fff;
       }
       to {
-        transform: translateY(0);
-        opacity: 1;
+        text-shadow: 0 0 30px #ff1493;
       }
     }
 
@@ -204,116 +107,93 @@
         transform: scale(1);
       }
       50% {
-        transform: scale(1.05);
+        transform: scale(1.1);
       }
       100% {
         transform: scale(1);
       }
     }
 
-    @keyframes glow {
-      from {
-        box-shadow: 0 0 25px #ff1493;
-      }
-      to {
-        box-shadow: 0 0 40px #ff66b2;
-      }
+    @keyframes hologram {
+      0%, 100% { opacity: 0.6; text-shadow: 0 0 5px #fff; }
+      50% { opacity: 1; text-shadow: 0 0 15px #ff69b4; }
     }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2.1rem;
-        margin-top: 25px;
-      }
-      .message {
-        font-size: 1.1rem;
-        padding: 12px;
-      }
-      #bigMessage {
-        font-size: 1.4rem;
-        padding: 15px;
-      }
-      iframe {
-        height: 450px;
-      }
+    @keyframes slideDown {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-
 <body>
-  <div id="introScreen">
-    <div class="introContent">
-      <h2>💞 Hoş Geldin Aşkım 💞</h2>
-      <p>Müziği başlatmak için kalbe dokun 💖</p>
-    </div>
+  <audio id="bgMusic" src="music.mp3"></audio>
+
+  <div id="startContainer">
+    <h1>Hoş geldin aşkım 💖<br> Müziği başlatmak için kalbe dokun 💞</h1>
+    <div id="startButton">💗</div>
   </div>
 
-  <button id="musicButton">💖</button>
-  <button id="restartButton">⟳</button>
-
-  <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
-
-  <div id="videoWrapper">
-    <iframe
-      id="ytiframe"
-      src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
+  <div id="musicControls">
+    <div id="controlText">🎵 Durdur</div>
+    <div id="restartButton">⟳</div>
+    <div id="restartText">⟳ Yeniden Başlat</div>
   </div>
 
-  <div class="message" id="loveMessage">
-    Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕  
-    Sen benim hayatımın en güzel parçasısın 💞  
-    Doğum günün kutlu olsun bir tanem 🎂  
-    Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫  
-  </div>
-
-  <div id="bigMessage">
-    💞 SENİ ÇOK SEVİYORUM BİRTANEM 💞<br />
-    🎂 DOĞUM GÜNÜN KUTLU OLSUN 🎂<br />
-    💫 NİCE MUTLU YAŞLAR DİLİYORUM 💫
-  </div>
-
-  <audio id="bgMusic" loop>
-    <source src="music.mp3" type="audio/mpeg" />
-  </audio>
+  <div id="loveMessage">Seninle her şey daha güzel, her an daha anlamlı, her nefes daha özel...</div>
+  <div id="bigMessage">💞 SENİ ÇOK SEVİYORUM 💞</div>
 
   <script>
-    const intro = document.getElementById("introScreen");
-    const music = document.getElementById("bgMusic");
-    const musicButton = document.getElementById("musicButton");
+    const startContainer = document.getElementById("startContainer");
+    const startButton = document.getElementById("startButton");
+    const bgMusic = document.getElementById("bgMusic");
+    const controlText = document.getElementById("controlText");
     const restartButton = document.getElementById("restartButton");
+    const restartText = document.getElementById("restartText");
 
-    let started = false;
+    let isPlaying = false;
 
-    musicButton.addEventListener("click", async () => {
-      if (!started) {
-        intro.style.animation = "fadeOutIntro 1s ease forwards";
-        started = true;
-        musicButton.classList.add("active");
-        restartButton.style.display = "block";
-        try {
-          if (music.currentTime < 9) music.currentTime = 9;
-          await music.play();
-        } catch (e) {}
+    startButton.addEventListener("click", () => {
+      if (!isPlaying) {
+        bgMusic.currentTime = 9; // 💿 Müzik 9. saniyeden başlar
+        bgMusic.play();
+        isPlaying = true;
+
+        startContainer.style.opacity = "0";
+        setTimeout(() => {
+          startContainer.style.display = "none";
+          startButton.style.position = "fixed";
+          startButton.style.top = "20px";
+          startButton.style.left = "20px";
+          restartButton.style.display = "inline";
+          restartText.style.display = "inline";
+        }, 1000);
       } else {
-        if (music.paused) {
-          await music.play();
-          musicButton.classList.remove("paused");
-        } else {
-          music.pause();
-          musicButton.classList.add("paused");
-        }
+        bgMusic.pause();
+        isPlaying = false;
+        controlText.textContent = "▶️ Devam Ettir";
+      }
+    });
+
+    startButton.addEventListener("click", () => {
+      if (isPlaying) {
+        bgMusic.pause();
+        isPlaying = false;
+        controlText.textContent = "▶️ Devam Ettir";
+      } else {
+        bgMusic.play();
+        isPlaying = true;
+        controlText.textContent = "🎵 Durdur";
       }
     });
 
     restartButton.addEventListener("click", () => {
-      music.currentTime = 9;
-      music.play();
-      musicButton.classList.remove("paused");
+      bgMusic.currentTime = 9;
+      bgMusic.play();
+      isPlaying = true;
+      controlText.textContent = "🎵 Durdur";
     });
 
+    // 💬 Kelime kelime çıkış efekti
     window.addEventListener("load", () => {
       const msg = document.getElementById("loveMessage");
       const text = msg.textContent.trim();
@@ -324,17 +204,19 @@
         span.textContent = word + " ";
         msg.appendChild(span);
       });
+
       const spans = msg.querySelectorAll("span");
       spans.forEach((span, i) => {
         setTimeout(() => {
           span.style.opacity = "1";
-        }, i * 250);
+        }, i * 180); // 💨 Kelime çıkış hızı
       });
+
       setTimeout(() => {
         const bm = document.getElementById("bigMessage");
         bm.style.animation =
           "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-      }, words.length * 250 + 2000);
+      }, words.length * 180 + 1000);
     });
   </script>
 </body>
