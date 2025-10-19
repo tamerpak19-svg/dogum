@@ -162,11 +162,6 @@
       backdrop-filter: blur(6px);
     }
 
-    .iconButton:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(255,255,255,0.9);
-    }
-
     .glowText {
       color: white;
       font-size: 1rem;
@@ -194,7 +189,7 @@
   <div id="introScreen">
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
-      <p>Müziği başlatmak için aşağıdaki kalbe dokun 💖</p>
+      <p>Müziği başlatmak için kalbe dokun 💖</p>
       <div id="startBtn" class="iconButton" style="margin-top:15px;">❤️</div>
     </div>
   </div>
@@ -209,7 +204,10 @@
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
 
   <div id="videoWrapper">
-    <iframe src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0" allowfullscreen></iframe>
+    <iframe id="ytiframe"
+      src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
   </div>
 
   <div class="message" id="loveMessage" style="opacity:0;">
@@ -234,12 +232,18 @@
     const startBtn = document.getElementById("startBtn");
     const music = document.getElementById("bgMusic");
     const controls = document.getElementById("controls");
+    const musicBtn = document.getElementById("musicBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const musicText = document.getElementById("musicText");
+    const video = document.getElementById("ytiframe");
     const msg = document.getElementById("loveMessage");
+
     let isPlaying = false;
     let emojiInterval;
 
     const emojis = ["💖","💞","💘","💝","💋","❤️","🩷","💕","💓","💗","💜","💙","🎂","🎉","🎊","✨","🌈","🦋","🌹","🌸","💫","⭐","💍"];
 
+    // 🎵 Başlatma
     startBtn.addEventListener("click", async () => {
       try {
         music.currentTime = 8;
@@ -253,6 +257,40 @@
       } catch (e) { console.log(e); }
     });
 
+    // ❤️ Müzik durdur/devam
+    musicBtn.addEventListener("click", () => {
+      if (isPlaying) {
+        music.pause();
+        musicBtn.textContent = "💔";
+        musicText.textContent = "Devam Ettir";
+      } else {
+        music.play();
+        musicBtn.textContent = "❤️";
+        musicText.textContent = "Durdur";
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // 🔁 Yeniden başlat
+    restartBtn.addEventListener("click", () => {
+      music.currentTime = 8;
+      music.play();
+      isPlaying = true;
+      musicBtn.textContent = "❤️";
+      musicText.textContent = "Durdur";
+    });
+
+    // 🎬 Video oynatılınca müziği durdur
+    video.addEventListener("mouseenter", () => {
+      if (isPlaying) {
+        music.pause();
+        musicBtn.textContent = "💔";
+        musicText.textContent = "Devam Ettir";
+        isPlaying = false;
+      }
+    });
+
+    // 💬 Yazı efektleri
     function startTextAnimation() {
       msg.style.opacity = "1";
       const text = msg.textContent.trim();
