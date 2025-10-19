@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
 
-  <!-- Zarif ve okunaklı font -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -28,7 +27,6 @@
       animation: fadeIn 2s ease-in;
     }
 
-    /* 🎥 Video alanı */
     #videoWrapper {
       margin-top: 30px;
       width: 92%;
@@ -57,7 +55,6 @@
       display: block;
     }
 
-    /* ▶️ Buton */
     .play-button {
       position: absolute;
       top: 50%;
@@ -137,7 +134,6 @@
 
     audio:hover { opacity: 1; }
 
-    /* 💞 Dekoratif emojiler */
     .decor {
       position: fixed;
       top: 0;
@@ -173,10 +169,68 @@
       .play-button { font-size: 1rem; padding: 10px 22px; }
       h5.item { font-size: 0.8rem; }
     }
+
+    /* 🌸 Giriş ekranı */
+    #introScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #ffb6c1, #ff66b2, #ff1493);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Merriweather', serif;
+      z-index: 9999;
+      animation: fadeInIntro 1s ease-in forwards;
+    }
+
+    .introContent h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 12px rgba(255,255,255,0.9);
+    }
+
+    .introContent p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin: 8px 0;
+      text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    .introContent .smallNote {
+      font-size: 1rem;
+      opacity: 0.8;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    @keyframes fadeOutIntro {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes fadeInIntro {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 
 <body>
+  <!-- 🎵 Giriş ekranı -->
+  <div id="introScreen">
+    <div class="introContent">
+      <h2>💖 Hoş Geldin Aşkım 💖</h2>
+      <p>🎵 Müzik başlaması için ekrana bir kez dokun...</p>
+      <p class="smallNote">(Daha sonra alttaki yazıları oku 💞)</p>
+    </div>
+  </div>
+
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
 
   <div id="videoWrapper">
@@ -202,57 +256,65 @@
 
   <div class="decor" id="decor"></div>
 
-<audio id="bgMusic" autoplay loop>
-  <source src="music.mp3" type="audio/mpeg">
-  Tarayıcınız ses dosyasını desteklemiyor.
-</audio>
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    Tarayıcınız ses dosyasını desteklemiyor.
+  </audio>
 
-<script>
-  // 🎈 Emoji yağmuru (kalan kodun devamı burada kalabilir)
-  const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
-  const decor = document.getElementById("decor");
+  <script>
+    // 🎈 Emoji yağmuru
+    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
+    const decor = document.getElementById("decor");
 
-  function createItem() {
-    const item = document.createElement("h5");
-    item.classList.add("item");
-    item.style.left = Math.random() * 100 + "vw";
-    item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
-    item.style.animationDuration = (5 + Math.random() * 5) + "s";
-    item.innerHTML = items[Math.floor(Math.random() * items.length)];
-    decor.appendChild(item);
-    setTimeout(() => item.remove(), 10000);
-  }
-
-  setInterval(createItem, 150);
-
-  // 🎥 Eğer video engellendiyse fallback göster
-  setTimeout(() => {
-    const iframe = document.getElementById('ytiframe');
-    try {
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
-    } catch (e) {
-      const wrapper = document.getElementById('videoWrapper');
-      wrapper.innerHTML = `
-        <div class="fallback">
-          <img src="https://img.youtube.com/vi/sr7PADgCNP0/maxresdefault.jpg" alt="Video kapağı">
-          <button class="play-button" onclick="window.open('https://youtube.com/shorts/sr7PADgCNP0?si=1PZLTGeT96BF-ey','_blank')">▶️ Bas 🩷</button>
-        </div>`;
+    function createItem() {
+      const item = document.createElement("h5");
+      item.classList.add("item");
+      item.style.left = Math.random() * 100 + "vw";
+      item.style.fontSize = (0.7 + Math.random() * 0.8) + "rem";
+      item.style.animationDuration = (5 + Math.random() * 5) + "s";
+      item.innerHTML = items[Math.floor(Math.random() * items.length)];
+      decor.appendChild(item);
+      setTimeout(() => item.remove(), 10000);
     }
-  }, 2000);
 
-  // 💞 Büyük mesaj animasyonu
-  setTimeout(() => {
-    const msg = document.getElementById("bigMessage");
-    msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-  }, 5000);
+    setInterval(createItem, 150);
 
-  // 🎧 Mobilde otomatik çalmama durumuna çözüm
-  document.body.addEventListener('click', () => {
-    const music = document.getElementById('bgMusic');
-    if (music.paused) {
+    // 🎥 Fallback video
+    setTimeout(() => {
+      const iframe = document.getElementById('ytiframe');
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+      } catch (e) {
+        const wrapper = document.getElementById('videoWrapper');
+        wrapper.innerHTML = `
+          <div class="fallback">
+            <img src="https://img.youtube.com/vi/sr7PADgCNP0/maxresdefault.jpg" alt="Video kapağı">
+            <button class="play-button" onclick="window.open('https://youtube.com/shorts/sr7PADgCNP0?si=1PZLTGeT96BF-ey','_blank')">▶️ Bas 🩷</button>
+          </div>`;
+      }
+    }, 2000);
+
+    // 💞 Büyük mesaj animasyonu
+    setTimeout(() => {
+      const msg = document.getElementById("bigMessage");
+      msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
+    }, 5000);
+
+    // 🎶 Giriş ekranı - müzik başlatma
+    const intro = document.getElementById("introScreen");
+    const music = document.getElementById("bgMusic");
+
+    intro.addEventListener("click", () => {
       music.play().catch(() => {});
-    }
-  });
-</script>
+      intro.querySelector(".introContent").innerHTML = `
+        <h2>💞 Harika! Müzik başladı 💞</h2>
+        <p>Şimdi sayfayı okumaya başlayabilirsin... 💖</p>
+      `;
+      setTimeout(() => {
+        intro.style.animation = "fadeOutIntro 1.5s ease forwards";
+        setTimeout(() => intro.remove(), 1500);
+      }, 5000);
+    });
+  </script>
 </body>
 </html>
