@@ -136,8 +136,18 @@
       to { opacity: 1; }
     }
 
-    audio {
-      display: none;
+    /* 💕 Uçan kalpler */
+    .heart {
+      position: fixed;
+      bottom: 0;
+      font-size: 2rem;
+      animation: flyUp 4s linear forwards;
+      z-index: 10000;
+    }
+
+    @keyframes flyUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
     }
 
     /* 💖 Sabit buton alanı */
@@ -201,9 +211,11 @@
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
       <p>Müziği başlatmak için kalbe dokun 💖</p>
+      <div id="startBtn" class="iconButton" style="margin-top:15px;">❤️</div>
     </div>
   </div>
 
+  <!-- 💖 Kontroller -->
   <div id="controls" style="display:none;">
     <div id="musicBtn" class="iconButton">❤️</div>
     <div id="musicText" class="glowText">Durdur</div>
@@ -240,6 +252,7 @@
 
   <script>
     const intro = document.getElementById("introScreen");
+    const startBtn = document.getElementById("startBtn");
     const music = document.getElementById("bgMusic");
     const controls = document.getElementById("controls");
     const musicBtn = document.getElementById("musicBtn");
@@ -249,14 +262,15 @@
     let isPlaying = false;
 
     // 🎵 Başlatma
-    intro.addEventListener("click", async () => {
+    startBtn.addEventListener("click", async () => {
       try {
+        music.currentTime = 8; // 🎶 8. saniyeden başla
         await music.play();
-        if (music.currentTime < 9) music.currentTime = 9;
         isPlaying = true;
         controls.style.display = "flex";
         intro.style.animation = "fadeOutIntro 1.5s ease forwards";
         setTimeout(() => intro.remove(), 1500);
+        createHearts();
       } catch (e) { console.log(e); }
     });
 
@@ -276,11 +290,12 @@
 
     // 🔁 Yeniden başlat
     restartBtn.addEventListener("click", () => {
-      music.currentTime = 9;
+      music.currentTime = 8;
       music.play();
       isPlaying = true;
       musicBtn.textContent = "❤️";
       musicText.textContent = "Durdur";
+      createHearts();
     });
 
     // 💬 Yazı efektleri
@@ -289,7 +304,7 @@
       const text = msg.textContent.trim();
       msg.textContent = "";
       const words = text.split(" ");
-      words.forEach((word, i) => {
+      words.forEach((word) => {
         const span = document.createElement("span");
         span.textContent = word + " ";
         msg.appendChild(span);
@@ -297,14 +312,29 @@
 
       const spans = msg.querySelectorAll("span");
       spans.forEach((span, i) => {
-        setTimeout(() => { span.style.opacity = "1"; }, i * 250);
+        setTimeout(() => { span.style.opacity = "1"; }, i * 180);
       });
 
       setTimeout(() => {
         const bm = document.getElementById("bigMessage");
         bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-      }, words.length * 250 + 3000);
+      }, words.length * 180 + 1000);
     });
+
+    // 💕 Uçan kalpler
+    function createHearts() {
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.textContent = "💖";
+          heart.style.left = Math.random() * 100 + "vw";
+          heart.style.fontSize = Math.random() * 1.5 + 1 + "rem";
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 4000);
+        }, i * 200);
+      }
+    }
   </script>
 </body>
 </html>
