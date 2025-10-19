@@ -55,28 +55,6 @@
       display: block;
     }
 
-    .play-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.9);
-      color: #ff1493;
-      font-weight: 700;
-      border: none;
-      border-radius: 40px;
-      padding: 14px 32px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(255, 20, 147, 0.4);
-      transition: all 0.3s ease;
-    }
-
-    .play-button:hover {
-      background: rgba(255, 182, 193, 0.95);
-      transform: translate(-50%, -50%) scale(1.05);
-    }
-
     .message {
       margin: 30px auto;
       font-size: 1.4rem;
@@ -89,15 +67,15 @@
 
     .message span {
       opacity: 0;
-      display: block;
-      transform: translateX(-30px);
-      animation: fadeInText 1.5s forwards;
+      display: inline-block;
+      transform: translateY(10px);
+      animation: fadeInWord 0.8s forwards;
+      margin-right: 4px;
     }
 
-    @keyframes fadeInText {
-      0% { opacity: 0; transform: translateX(-30px); filter: brightness(1.4); }
-      60% { opacity: 1; transform: translateX(0); filter: brightness(1.8); }
-      100% { opacity: 1; transform: translateX(0); filter: brightness(1); }
+    @keyframes fadeInWord {
+      0% { opacity: 0; transform: translateY(10px); filter: brightness(1.4); }
+      100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
     }
 
     #bigMessage {
@@ -178,7 +156,6 @@
       #bigMessage { font-size: 1.4rem; padding: 15px; }
       iframe { height: 450px; }
       .fallback img { height: 450px; }
-      .play-button { font-size: 1rem; padding: 10px 22px; }
       h5.item { font-size: 0.8rem; }
     }
 
@@ -213,13 +190,6 @@
       text-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
 
-    .introContent .smallNote {
-      font-size: 1rem;
-      opacity: 0.8;
-      margin-top: 12px;
-      font-style: italic;
-    }
-
     @keyframes fadeOutIntro {
       from { opacity: 1; }
       to { opacity: 0; visibility: hidden; }
@@ -237,7 +207,6 @@
     <div class="introContent">
       <h2>💖 Hoş Geldin Aşkım 💖</h2>
       <p>🎵 Müzik başlaması için ekrana bir kez dokun...</p>
-      <p class="smallNote">(Daha sonra alttaki yazıları oku 💞)</p>
     </div>
   </div>
 
@@ -252,10 +221,10 @@
   </div>
 
   <div class="message" id="loveMessage">
-    <span>Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕</span>
-    <span>Sen benim hayatımın en güzel parçasısın 💞</span>
-    <span>Doğum günün kutlu olsun bir tanem 🎂</span>
-    <span>Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫</span>
+    Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕
+    Sen benim hayatımın en güzel parçasısın 💞
+    Doğum günün kutlu olsun bir tanem 🎂
+    Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫
   </div>
 
   <div id="bigMessage">
@@ -268,12 +237,11 @@
 
   <audio id="bgMusic" loop>
     <source src="music.mp3" type="audio/mpeg">
-    Tarayıcınız ses dosyasını desteklemiyor.
   </audio>
 
   <script>
-    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
     const decor = document.getElementById("decor");
+    const items = ["💖", "🎂", "🎈", "🎉", "💝", "💋", "🌹", "🎀", "✨", "💞", "🌸"];
     function createItem() {
       const item = document.createElement("h5");
       item.classList.add("item");
@@ -286,46 +254,42 @@
     }
     setInterval(createItem, 150);
 
-    setTimeout(() => {
-      const iframe = document.getElementById('ytiframe');
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-      } catch (e) {
-        const wrapper = document.getElementById('videoWrapper');
-        wrapper.innerHTML = `
-          <div class="fallback">
-            <img src="https://img.youtube.com/vi/sr7PADgCNP0/maxresdefault.jpg" alt="Video kapağı">
-            <button class="play-button" onclick="window.open('https://youtube.com/shorts/sr7PADgCNP0?si=1PZLTGeT96BF-ey','_blank')">▶️ Bas 🩷</button>
-          </div>`;
-      }
-    }, 2000);
-
-    setTimeout(() => {
-      const msg = document.getElementById("bigMessage");
-      msg.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-    }, 5000);
-
     const intro = document.getElementById("introScreen");
     const music = document.getElementById("bgMusic");
     intro.addEventListener("click", () => {
-      music.currentTime = 3; // 🎵 3. saniyeden başlasın
+      music.currentTime = 3;
       music.play().catch(() => {});
       intro.querySelector(".introContent").innerHTML = `
         <h2>💞 Harika! Müzik başladı 💞</h2>
-        <p>Şimdi sayfayı okumaya başlayabilirsin... 💖</p>`;
+        <p>Şimdi yazılar akmaya başlıyor... 💖</p>`;
       setTimeout(() => {
         intro.style.animation = "fadeOutIntro 1.5s ease forwards";
         setTimeout(() => intro.remove(), 1500);
       }, 1500);
     });
 
-    const spans = document.querySelectorAll("#loveMessage span");
-    spans.forEach((span, index) => {
-      setTimeout(() => {
-        span.style.opacity = "1";
-        span.style.animationDelay = "0s";
-      }, index * 2500 + 1000); // her satır arası 2.5 saniye, ilk çıkış 1sn sonra
+    // 🎀 Her kelimeyi ayrı ayrı animasyonla göster
+    const msg = document.getElementById("loveMessage");
+    const text = msg.innerText.trim();
+    msg.innerHTML = "";
+    const words = text.split(" ");
+    words.forEach((word, i) => {
+      const span = document.createElement("span");
+      span.textContent = word;
+      span.style.animationDelay = `${i * 1}s`;
+      msg.appendChild(span);
     });
+
+    setTimeout(() => {
+      document.querySelectorAll("#loveMessage span").forEach((s, i) => {
+        setTimeout(() => s.style.opacity = "1", i * 1000);
+      });
+    }, 2000);
+
+    setTimeout(() => {
+      const bm = document.getElementById("bigMessage");
+      bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
+    }, words.length * 1000 + 3000);
   </script>
 </body>
 </html>
