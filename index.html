@@ -6,380 +6,226 @@
   <title>💌 Küçük Bir Sürpriz 💌</title>
 
   <style>
-    :root{
+    :root {
       --pink1:#ffb6c1;
       --pink2:#ff66b2;
       --accent:#ff1493;
-      --curtain-dark:#7a0000;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter, "Poppins", "Dancing Script", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
-    body{
+    * { box-sizing: border-box; }
+    html, body {
+      margin:0; height:100%;
+      font-family:"Poppins","Dancing Script",system-ui;
       background: radial-gradient(circle at center, #ffe6f0, #ffd1e3 40%, #ffb3d0 100%);
-      display:flex;align-items:center;justify-content:center;overflow:hidden;padding:20px;
-      color:#2b2b2b;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden; color:#3a0033;
     }
 
-    /* ---------- CURTAIN ---------- */
-    .curtain-wrap{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;}
-    .curtain{flex:1;height:100vh;background:linear-gradient(180deg,var(--curtain-dark),#b2002f);transform-origin:left center;transition:transform 1.5s cubic-bezier(.2,.8,.2,1);box-shadow:inset -20px 0 40px rgba(0,0,0,0.3);}
-    .curtain.right{transform-origin:right center;box-shadow:inset 20px 0 40px rgba(0,0,0,0.3);}
-    .curtain.open.left{transform:translateX(-100%);} 
-    .curtain.open.right{transform:translateX(100%);}
+    /* === HEART CURTAIN === */
+    .curtain-wrap {
+      position:fixed; inset:0; display:flex; z-index:9999; pointer-events:none;
+    }
+    .curtain {
+      flex:1; display:flex; flex-wrap:wrap; align-content:flex-start;
+      justify-content:center; transition:transform 2s cubic-bezier(.2,.8,.2,1);
+      overflow:hidden;
+    }
+    .curtain span {
+      display:inline-block; font-size:clamp(14px,2vw,22px);
+      animation: floatHeart 3s ease-in-out infinite alternate;
+    }
+    @keyframes floatHeart {
+      0% { transform:translateY(0) rotate(0deg); }
+      100% { transform:translateY(-10px) rotate(10deg); }
+    }
+    .curtain.left { transform-origin:left center; background:transparent; }
+    .curtain.right { transform-origin:right center; background:transparent; }
+    .curtain.open.left { transform:translateX(-100%); }
+    .curtain.open.right { transform:translateX(100%); }
 
-    /* small velvet folds */
-    .curtain::after{
-      content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg, rgba(0,0,0,0.02) 0 6px, transparent 6px 12px);
-      opacity:0.08;
+    /* === STAGE === */
+    .stage {
+      position:relative; z-index:50; max-width:1000px;
+      display:flex; flex-direction:column; align-items:center; gap:20px;
+      padding:20px;
+    }
+    h1 {
+      font-family:"Dancing Script",cursive;
+      font-size:2.3rem; color:#a0006b; text-align:center;
+      text-shadow:0 2px 15px rgba(255,255,255,0.7);
+      margin-bottom:10px;
     }
 
-    /* ---------- STAGE (content) ---------- */
-    .stage{position:relative;z-index:50;max-width:1100px;width:100%;display:flex;flex-direction:column;align-items:center;gap:20px;padding-top:20px;}
-
-    h1{font-family:"Dancing Script", "Poppins", sans-serif;font-size:2.2rem;margin:0;color:#560033;text-shadow:0 2px 18px rgba(255,255,255,0.5);}
-
-    /* ---------- ENVELOPE ---------- */
-    .envelope-wrap{display:flex;align-items:center;justify-content:center;width:100%;}
-    .envelope{
-      position:relative; width:clamp(200px,36vw,420px); height:clamp(120px,22vw,260px);
+    /* === ENVELOPE === */
+    .envelope {
+      position:relative;
+      width:clamp(200px,36vw,420px);
+      height:clamp(120px,22vw,260px);
       background:linear-gradient(180deg,#ffd1e3,#ffb3d0);
-      border-radius:14px; box-shadow:0 10px 40px rgba(255,20,147,0.25);
+      border-radius:14px;
+      box-shadow:0 10px 40px rgba(255,20,147,0.25);
       border:2px solid rgba(255,255,255,0.5);
-      cursor:pointer; overflow:visible; transition:transform .5s ease, opacity .6s ease;
+      cursor:pointer;
+      overflow:visible;
+      transition:transform .5s ease, opacity .6s ease;
+    }
+    .envelope::before {
+      content:""; position:absolute; left:0; top:-1px;
+      width:100%; height:55%;
+      background:linear-gradient(180deg,#ff93bb,#ff5c96);
+      clip-path:polygon(0 0, 100% 0, 50% 100%);
+      border-radius:12px; transform-origin:top center;
+      transition:transform 1s cubic-bezier(.2,.8,.2,1);
+    }
+    .envelope.open::before { transform:translateY(-120%) rotateX(180deg); }
+    .envelope.pulse { animation:pulse 2.5s infinite; }
+    @keyframes pulse {
+      0%{transform:translateY(0)}
+      50%{transform:translateY(-6px) scale(1.02)}
+      100%{transform:translateY(0)}
+    }
+    .seal {
+      position:absolute; left:50%; top:calc(50% - 30px);
+      transform:translateX(-50%);
+      width:64px; height:64px; border-radius:50%;
+      background:radial-gradient(circle at 20% 20%, #ff4d6d, #c51162);
+      color:white; font-size:26px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 8px 30px rgba(197,10,80,0.28);
+    }
+    .label {
+      position:absolute; left:50%; transform:translateX(-50%);
+      bottom:14px; background:rgba(255,255,255,0.75);
+      color:#62103a; padding:10px 18px; border-radius:999px;
+      font-weight:700; font-size:1rem;
+      box-shadow:0 6px 18px rgba(255,105,180,0.12);
+    }
+    .envelope.hide { opacity:0; transform:scale(1.2); pointer-events:none; }
+
+    /* === LETTER === */
+    .letter {
+      display:none;
+      width:min(900px,92%);
+      background:white;
+      border-radius:14px;
+      padding:25px;
+      box-shadow:0 15px 50px rgba(255,20,147,0.2);
+      border:3px solid rgba(255,196,203,0.6);
+    }
+    .letter.show { display:block; animation:pop 1s cubic-bezier(.2,.9,.2,1); }
+    @keyframes pop { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
+
+    .continue-btn {
+      margin-top:15px; padding:12px 26px;
+      background:linear-gradient(90deg,#ff66b2,#ff1493);
+      border:none; border-radius:999px;
+      color:white; font-weight:700; font-size:1rem;
+      cursor:pointer; box-shadow:0 10px 30px rgba(255,20,147,0.18);
     }
 
-    /* triangular flap using pseudo element */
-    .envelope::before{
-      content:""; position:absolute; left:0; top:-1px; width:100%; height:55%;
-      background:linear-gradient(180deg,#ff93bb,#ff5c96); clip-path:polygon(0 0, 100% 0, 50% 100%); border-radius:12px;
-      transform-origin:top center; transition:transform 1s cubic-bezier(.2,.8,.2,1);
-      box-shadow:inset 0 -6px 12px rgba(255,255,255,0.05);
-    }
-
-    .envelope.open::before{transform:translateY(-120%) rotateX(180deg);}
-
-    /* envelope label & seal */
-    .label{
-      position:absolute; left:50%; transform:translateX(-50%); bottom:14px; font-weight:700;
-      background:rgba(255,255,255,0.75); color:#62103a; padding:10px 18px; border-radius:999px; font-size:1rem; box-shadow:0 6px 18px rgba(255,105,180,0.12);
-      backdrop-filter:blur(4px);
-    }
-
-    .seal{
-      position:absolute; left:50%; transform:translateX(-50%); top:calc(50% - 30px); width:64px; height:64px; border-radius:50%;
-      background: radial-gradient(circle at 20% 20%, #ff4d6d, #c51162); display:flex;align-items:center;justify-content:center;
-      color:white;font-size:26px;box-shadow:0 8px 30px rgba(197,10,80,0.28);
-    }
-
-    /* envelope pulse while waiting */
-    .envelope.pulse{animation:envelopePulse 2.5s infinite;}
-    @keyframes envelopePulse{0%{transform:translateY(0)}50%{transform:translateY(-6px) scale(1.01)}100%{transform:translateY(0)}}
-
-    /* clicked state (disappear) */
-    .envelope.hide{opacity:0;transform:scale(1.2);pointer-events:none}
-
-    /* ---------- LETTER (big) ---------- */
-    .letter{
-      display:none; width:min(920px,92%); background:linear-gradient(180deg,#fff,#fffefc);
-      color:#4b0033;border-radius:14px;padding:28px 26px; box-shadow:0 20px 60px rgba(255,20,147,0.12);
-      border:3px solid rgba(255,196,203,0.6); transform-origin:center; z-index:60;
-    }
-    .letter.show{display:block; animation:letterIn .9s cubic-bezier(.2,.9,.2,1) both;}
-    @keyframes letterIn{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
-
-    .letter p{margin:0;font-size:1.05rem;line-height:1.7;color:#4b0033;text-align:left}
-
-    /* continue button (in letter) */
-    .continue-btn{
-      margin-top:18px; display:inline-block; padding:12px 28px; background:linear-gradient(90deg,var(--accent),#ff66b2);
-      color:white;border:none;border-radius:999px;font-weight:700;font-size:1rem;cursor:pointer; box-shadow:0 10px 30px rgba(255,20,147,0.18);
-    }
-
-    /* ---------- FIREWORK/CALLOUTS ---------- */
-    .particle{
-      position:fixed; left:0; top:0; pointer-events:none; font-size:18px; will-change:transform,opacity;
-    }
-
-    /* small sparks for canvas fallback styling if needed */
-    canvas#fw{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:40;mix-blend-mode:screen}
-
-    /* responsive tweaks */
-    @media (max-width:900px){
-      h1{font-size:1.6rem}
-      .seal{width:56px;height:56px;font-size:22px}
-      .label{font-size:.95rem;padding:8px 16px}
-    }
-    @media (max-width:480px){
-      body{padding:10px}
-      .envelope{width:76vw;height:46vw}
-      .letter{padding:18px;font-size:.95rem}
-      .seal{width:48px;height:48px;font-size:20px}
+    /* particle hearts */
+    .particle {
+      position:fixed; left:0; top:0; pointer-events:none;
+      will-change:transform,opacity; font-size:18px;
     }
   </style>
 </head>
 <body>
 
-  <!-- CURTAIN -->
-  <div class="curtain-wrap" aria-hidden="true">
+  <!-- HEART CURTAIN -->
+  <div class="curtain-wrap">
     <div class="curtain left" id="curtainLeft"></div>
     <div class="curtain right" id="curtainRight"></div>
   </div>
 
-  <!-- STAGE -->
-  <main class="stage" id="stage">
+  <main class="stage">
     <h1>💌 Birtanem... Sana bir sürpriz hazırladım</h1>
-
-    <div class="envelope-wrap">
-      <div class="envelope pulse" id="envelope" aria-label="Zarf - Açmak için tıkla">
-        <div class="seal" id="seal">🩷</div>
-        <div class="label">Aç Beni ❤️</div>
-      </div>
+    <div class="envelope pulse" id="envelope">
+      <div class="seal">🩷</div>
+      <div class="label">Aç Beni ❤️</div>
     </div>
-
-    <article class="letter" id="letter" role="article" aria-labelledby="letterHeading">
-      <h2 id="letterHeading" style="font-family:'Dancing Script',cursive;font-size:1.6rem;margin:0 0 12px;color:#c1006f;">Sevgilim,</h2>
-      <p>
-        Bu küçük notu sana sevgimle yazıyorum. Seninle geçen her an, kalbimde özel bir yer açtı.
-        Gülüşün karanlık günleri aydınlatıyor, elin elimde olduğunda dünya daha güzel dönüyor.
-        Bu mektup sadece küçük bir başlangıç — asıl sürpriz için devam et butonuna bas.  
-        Seni her şeyden çok seviyorum. 💖
-      </p>
+    <article class="letter" id="letter">
+      <h2 style="font-family:'Dancing Script',cursive;">Sevgilim,</h2>
+      <p>Bu küçük notu sana sevgimle yazıyorum. Seninle geçen her an kalbimde özel bir yer açtı.  
+      Gülüşün karanlık günleri aydınlatıyor, elin elimde olduğunda dünya daha güzel dönüyor.  
+      Bu mektup sadece küçük bir başlangıç — asıl sürpriz için devam et butonuna bas. 💖</p>
       <div style="text-align:center">
         <button class="continue-btn" id="continueBtn">Devam Et 💞</button>
       </div>
     </article>
   </main>
 
-  <!-- Canvas for fireworks -->
-  <canvas id="fw"></canvas>
-
-  <!-- audio -->
   <audio id="openSound" preload="auto">
     <source src="open.mp3" type="audio/mpeg">
   </audio>
 
-<script>
-/* =========================
-   Curtain open (2s delay)
-   ========================= */
-const leftCurtain = document.getElementById("curtainLeft");
-const rightCurtain = document.getElementById("curtainRight");
-setTimeout(()=> {
-  leftCurtain.classList.add("open");
-  rightCurtain.classList.add("open");
-  // remove from layout after animation
-  setTimeout(()=> {
-    // hide the curtain wrapper to free pointer events to envelope
-    const wrapper = leftCurtain.parentElement;
-    if(wrapper) wrapper.style.display = "none";
-  },1600);
-},2000);
+  <script>
+    /* === Kalp perdesi oluştur === */
+    const leftCurtain = document.getElementById("curtainLeft");
+    const rightCurtain = document.getElementById("curtainRight");
 
-/* =========================
-   Envelope open & particles
-   ========================= */
-const envelope = document.getElementById("envelope");
-const letter = document.getElementById("letter");
-const continueBtn = document.getElementById("continueBtn");
-const openSound = document.getElementById("openSound");
-const canvas = document.getElementById("fw");
-const ctx = canvas.getContext && canvas.getContext("2d");
-let fwAnimId=null;
-
-function resizeCanvas(){
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-}
-resizeCanvas(); window.addEventListener("resize", resizeCanvas);
-
-function isMobile(){ return window.innerWidth < 768; }
-
-// particle generator: hearts and sparks fışkırma from envelope center
-function spawnParticles(count){
-  const rect = envelope.getBoundingClientRect();
-  const startX = rect.left + rect.width/2;
-  const startY = rect.top + rect.height*0.18; // from near flap
-
-  const hearts = ["💖","💞","💘","💝","❤️","🩷","💕","💗"];
-  const sparks = ["✨","🌟","💫","⭐"];
-  const total = count;
-
-  for(let i=0;i<total;i++){
-    // staggered spawn for fireworks effect
-    setTimeout(()=>{
-      // decide heart or spark
-      const isSpark = Math.random() < 0.18; // ~18% as spark
-      if(isSpark && ctx){
-        // spawn canvas based particle (fast)
-        spawnCanvasSpark(startX, startY);
-      } else {
-        spawnDOMParticle(startX,startY, hearts[Math.floor(Math.random()*hearts.length)]);
+    function makeHearts(sideEl){
+      const count = 250; // per side
+      for(let i=0;i<count;i++){
+        const s = document.createElement("span");
+        s.textContent = ["❤️","💖","💕","💗","💞","🩷"][Math.floor(Math.random()*6)];
+        s.style.opacity = 0.5 + Math.random()*0.5;
+        s.style.transform = `scale(${0.8+Math.random()*1.2}) rotate(${Math.random()*60-30}deg)`;
+        sideEl.appendChild(s);
       }
-    }, i*8 + (Math.random()*200)); // small jitter
-  }
-}
-
-// DOM particle (emoji) with JS-driven translate animation
-function spawnDOMParticle(sx,sy,char){
-  const el = document.createElement("div");
-  el.className = "particle particle-emoji";
-  el.innerText = char;
-  document.body.appendChild(el);
-
-  // initial style
-  const size = (Math.random()*14) + 14; // px
-  el.style.fontSize = size + "px";
-  el.style.left = (sx - size/2) + "px";
-  el.style.top = (sy - size/2) + "px";
-  el.style.opacity = "1";
-  el.style.transform = "translate3d(0,0,0)";
-
-  // random direction (prefer up and to sides)
-  const angle = (Math.random()*120 - 60) * (Math.PI/180); // between -60 and +60 deg from vertical
-  const spread = Math.random()*0.6 + 0.6; // multiplier on distance
-  const distance = (Math.random()*0.45 + 0.55) * Math.max(innerWidth, innerHeight) * 0.35 * spread;
-  const dx = Math.sin(angle) * distance * (Math.random()*0.8 + 0.6);
-  const dy = -Math.cos(angle) * distance * (Math.random()*0.6 + 0.9);
-
-  const rot = (Math.random()*360 - 180);
-  const dur = (Math.random()*1.6 + 1.6); // 1.6 - 3.2s
-  // force reflow to ensure transition (not using CSS transitions but JS step)
-  requestAnimationFrame(()=>{
-    el.style.transition = `transform ${dur}s cubic-bezier(.2,.8,.2,1), opacity ${dur*.9}s linear`;
-    el.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg) scale(${(Math.random()*0.6)+0.6})`;
-    el.style.opacity = "0";
-  });
-
-  // cleanup
-  setTimeout(()=> {
-    try{ el.remove(); }catch(e){}
-  }, (dur*1000)+200);
-}
-
-// canvas-based sparks/firework burst (fast)
-function spawnCanvasSpark(sx,sy){
-  if(!ctx) return;
-  const particles = [];
-  const count = 10 + Math.round(Math.random()*12);
-  for(let i=0;i<count;i++){
-    const angle = Math.random()*Math.PI*2;
-    const speed = 2 + Math.random()*6;
-    particles.push({
-      x: sx,
-      y: sy,
-      vx: Math.cos(angle)*speed*(Math.random()*0.9 + 0.6),
-      vy: Math.sin(angle)*speed*(Math.random()*0.9 + 0.6),
-      life: 0,
-      ttl: 40 + Math.random()*30,
-      size: 1 + Math.random()*3,
-      hue: Math.random()*60 + 20
-    });
-  }
-  // push to animator
-  addFirework(particles);
-}
-
-/* FIREWORKS engine (simple, performant) */
-const fireworksStore = [];
-function addFirework(particles){ fireworksStore.push(...particles); if(!fwAnimId) fwLoop(); }
-
-function fwLoop(){
-  if(!ctx) return;
-  fwAnimId = requestAnimationFrame(fwLoop);
-  // clear with slight alpha for trailing
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  for(let i = fireworksStore.length-1; i>=0; i--){
-    const p = fireworksStore[i];
-    p.x += p.vx;
-    p.y += p.vy;
-    // gravity-ish
-    p.vy += 0.06;
-    p.life++;
-    const alpha = 1 - p.life / p.ttl;
-    ctx.beginPath();
-    ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${alpha})`;
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-    ctx.fill();
-
-    if(p.life > p.ttl){
-      fireworksStore.splice(i,1);
     }
-  }
-  if(fireworksStore.length === 0){
-    cancelAnimationFrame(fwAnimId); fwAnimId = null;
-  }
-}
+    makeHearts(leftCurtain);
+    makeHearts(rightCurtain);
 
-/* envelope click handler */
-let spawned=false;
-envelope.addEventListener("click", async (e) => {
-  if(spawned) return;
-  spawned = true;
+    setTimeout(()=>{
+      leftCurtain.classList.add("open");
+      rightCurtain.classList.add("open");
+      setTimeout(()=>document.querySelector(".curtain-wrap").remove(),2000);
+    },2000);
 
-  // fade out label & pulse / hide envelope after small animation
-  envelope.classList.remove("pulse");
-  envelope.classList.add("hide");
+    /* === Envelope interaction === */
+    const envelope = document.getElementById("envelope");
+    const letter = document.getElementById("letter");
+    const continueBtn = document.getElementById("continueBtn");
+    const openSound = document.getElementById("openSound");
 
-  // play open sound (if available)
-  try{
-    openSound.currentTime = 0; openSound.volume = 0.7;
-    await openSound.play();
-  }catch(e){ /* ignore autoplay / play fail */ }
+    let opened=false;
+    envelope.addEventListener("click", async ()=>{
+      if(opened) return; opened=true;
+      envelope.classList.remove("pulse");
+      envelope.classList.add("hide");
+      try{openSound.currentTime=0;await openSound.play();}catch(e){}
+      spawnHearts(400);
+      setTimeout(()=>letter.classList.add("show"),2000);
+    });
 
-  // animate flap (done via class toggled in CSS pseudo)
-  envelope.classList.add("open");
-
-  // particle counts adaptive
-  const targetCount = isMobile() ? 500 : 750;
-
-  // spawn particles from envelope center
-  spawnParticles(targetCount);
-
-  // show fireworks bursts occasionally during the spawn
-  let bursts = Math.round(targetCount / 120);
-  for(let i=0;i<bursts;i++){
-    setTimeout(()=> {
+    function spawnHearts(count){
       const rect = envelope.getBoundingClientRect();
-      spawnCanvasSpark(rect.left + rect.width/2, rect.top + rect.height*0.15);
-    }, i*350 + 100);
-  }
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top + rect.height/4;
+      for(let i=0;i<count;i++){
+        setTimeout(()=>{
+          const h = document.createElement("div");
+          h.className="particle";
+          h.textContent=["💖","💕","💘","💗","❤️","🩷"][Math.floor(Math.random()*6)];
+          const size=16+Math.random()*12;
+          h.style.fontSize=size+"px";
+          h.style.left=cx+"px";
+          h.style.top=cy+"px";
+          document.body.appendChild(h);
+          const dx=(Math.random()-0.5)*innerWidth*0.9;
+          const dy=(Math.random()-1)*innerHeight*0.9;
+          const dur=1.8+Math.random()*1.8;
+          requestAnimationFrame(()=>{
+            h.style.transition=`transform ${dur}s cubic-bezier(.2,.8,.2,1), opacity ${dur}s ease`;
+            h.style.transform=`translate(${dx}px,${dy}px) rotate(${Math.random()*360}deg) scale(${Math.random()+0.5})`;
+            h.style.opacity="0";
+          });
+          setTimeout(()=>h.remove(),dur*1000);
+        },i*5);
+      }
+    }
 
-  // reveal letter after short delay
-  setTimeout(()=> {
-    letter.classList.add("show");
-    // scroll letter into view on very small screens
-    if(window.innerWidth < 480) letter.scrollIntoView({behavior:"smooth",block:"center"});
-  }, 2200);
-
-  // after some time fade out remaining canvas particles
-  setTimeout(()=> {
-    // allow last fireworks to finish, then clear
-    setTimeout(()=> {
-      fireworksStore.length = 0;
-      if(ctx) ctx.clearRect(0,0,canvas.width,canvas.height);
-    }, 1200);
-  }, 4200);
-});
-
-/* Continue button */
-continueBtn.addEventListener("click", ()=> {
-  // small click animation then navigate
-  continueBtn.disabled = true;
-  continueBtn.style.transform = "scale(.96)";
-  setTimeout(()=> window.location.href = "love.html", 200);
-});
-
-/* Accessibility: allow Enter on envelope */
-envelope.tabIndex = 0;
-envelope.addEventListener("keydown", (ev)=>{
-  if(ev.key === "Enter" || ev.key === " ") envelope.click();
-});
-
-/* cleanup on unload for animations */
-window.addEventListener("beforeunload", ()=>{
-  try{ cancelAnimationFrame(fwAnimId); }catch(e){}
-});
-</script>
+    continueBtn.addEventListener("click",()=>window.location.href="love.html");
+  </script>
 </body>
 </html>
