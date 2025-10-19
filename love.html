@@ -210,7 +210,7 @@
   <div id="introScreen">
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
-      <p>Müziği başlatmak için kalbe dokun 💖</p>
+      <p>Müziği başlatmak için aşağıdaki kalbe dokun 💖</p>
       <div id="startBtn" class="iconButton" style="margin-top:15px;">❤️</div>
     </div>
   </div>
@@ -233,7 +233,7 @@
     </iframe>
   </div>
 
-  <div class="message" id="loveMessage">
+  <div class="message" id="loveMessage" style="opacity:0;">
     Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕  
     Sen benim hayatımın en güzel parçasısın 💞  
     Doğum günün kutlu olsun bir tanem 🎂  
@@ -258,19 +258,21 @@
     const musicBtn = document.getElementById("musicBtn");
     const restartBtn = document.getElementById("restartBtn");
     const musicText = document.getElementById("musicText");
+    const msg = document.getElementById("loveMessage");
 
     let isPlaying = false;
 
     // 🎵 Başlatma
     startBtn.addEventListener("click", async () => {
       try {
-        music.currentTime = 8; // 🎶 8. saniyeden başla
+        music.currentTime = 8; // 8. saniyeden başla
         await music.play();
         isPlaying = true;
         controls.style.display = "flex";
         intro.style.animation = "fadeOutIntro 1.5s ease forwards";
         setTimeout(() => intro.remove(), 1500);
         createHearts();
+        setTimeout(startTextAnimation, 1500);
       } catch (e) { console.log(e); }
     });
 
@@ -298,9 +300,9 @@
       createHearts();
     });
 
-    // 💬 Yazı efektleri
-    window.addEventListener("load", () => {
-      const msg = document.getElementById("loveMessage");
+    // 💬 Yazı efektleri (sadece müzik başladıktan sonra)
+    function startTextAnimation() {
+      msg.style.opacity = "1";
       const text = msg.textContent.trim();
       msg.textContent = "";
       const words = text.split(" ");
@@ -319,7 +321,7 @@
         const bm = document.getElementById("bigMessage");
         bm.style.animation = "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
       }, words.length * 180 + 1000);
-    });
+    }
 
     // 💕 Uçan kalpler
     function createHearts() {
