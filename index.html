@@ -169,11 +169,17 @@
   <div id="heartContainer"></div>
   <div id="flash"></div>
 
+  <!-- 🎵 Açılış sesi -->
+  <audio id="openSound">
+    <source src="open.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     const envelope = document.getElementById("envelope");
     const continueBtn = document.getElementById("continueBtn");
     const heartContainer = document.getElementById("heartContainer");
     const flash = document.getElementById("flash");
+    const openSound = document.getElementById("openSound");
 
     const hearts = ["💖","💞","💘","💝","❤️","🩷","💕","💗","💓","💜"];
 
@@ -182,6 +188,10 @@
 
       // 💥 Parıltı efekti
       flash.classList.add("flashActive");
+
+      // 🔊 Açılma sesi
+      openSound.currentTime = 0;
+      openSound.play();
 
       // 💖 Kalplerin patlaması
       for (let i = 0; i < 200; i++) {
@@ -199,12 +209,12 @@
       // 💫 Kalplerin solması + buton çıkışı
       setTimeout(() => {
         heartContainer.classList.add("fadeOut");
-      }, 2000);
+      }, 2500);
 
       setTimeout(() => {
         continueBtn.style.display = "inline-block";
         continueBtn.style.animation = "fadeIn 1.5s ease forwards";
-      }, 3500);
+      }, 3800);
     });
   </script>
 </body>
