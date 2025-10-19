@@ -68,10 +68,12 @@
       display: inline-block;
     }
 
+    /* 💖 kelime efekti için */
     #loveMessage span {
       opacity: 0;
       display: inline-block;
       transition: opacity 0.6s ease;
+      white-space: pre; /* boşlukları korur */
     }
 
     @keyframes fadeIn {
@@ -208,20 +210,17 @@
       } catch (e) {}
     });
 
-    // 💬 Kelime kelime çıkış efekti
+    // 💬 Kelime kelime çıkış efekti (boşluklar korunur)
     window.addEventListener("load", () => {
       const msg = document.getElementById("loveMessage");
-      const text = msg.textContent.trim();
-      msg.textContent = "";
-      const words = text.split(" ");
+      const text = msg.innerHTML.trim();
+      msg.innerHTML = "";
+      const words = text.split(/(\s+)/); // boşlukları da koru
+
       words.forEach((word, i) => {
         const span = document.createElement("span");
-        span.textContent = word + " ";
+        span.innerHTML = word;
         msg.appendChild(span);
-      });
-
-      const spans = msg.querySelectorAll("span");
-      spans.forEach((span, i) => {
         setTimeout(() => {
           span.style.opacity = "1";
         }, i * 600);
