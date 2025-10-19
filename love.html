@@ -1,223 +1,280 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aşk Sayfası 💞</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doğum Günün Kutlu Olsun Aşkım 💞</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
-      font-family: "Poppins", sans-serif;
-      color: white;
-      overflow-x: hidden;
-      text-align: center;
+    :root{
+      --accent:#ff2e86;
+      --accent-2:#ff7ab8;
+      --bg1:#ffe6f0;
+      --bg2:#ff99cc;
+      --bg3:#ff66b2;
+    }
+    * { box-sizing: border-box; }
+    html,body{ height:100%; margin:0; font-family:'Merriweather', serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    body{
+      background: radial-gradient(circle at center, var(--bg1), var(--bg2), var(--bg3));
+      color:#111; text-align:center; padding: 20px 12px 80px; overflow-x:hidden;
     }
 
-    #startContainer {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 192, 203, 0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      transition: opacity 1s ease;
-      z-index: 1000;
+    h1{ margin-top:28px; font-size:2.4rem; color:#222; text-shadow:2px 2px 8px rgba(255,255,255,0.6); }
+
+    /* video */
+    #videoWrapper{ margin:20px auto 10px; width:92%; max-width:720px; position:relative; }
+    iframe{ width:100%; height: 420px; border-radius:16px; border:6px solid #fff; box-shadow:0 10px 40px rgba(255,20,147,0.12); display:block; }
+
+    /* message boxes */
+    .message {
+      margin:18px auto; font-size:1.15rem; line-height:1.85;
+      background: rgba(255,255,255,0.45); border-radius:14px; padding:18px; max-width:900px;
+      white-space: pre-wrap;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    }
+    #bigMessage{
+      margin-top:18px; font-size:1.45rem; font-weight:700; color:#222; opacity:0;
+      background: rgba(255,255,255,0.45); display:inline-block; border-radius:14px; padding:14px 18px;
+      transform-origin:center;
     }
 
-    #startContainer h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      animation: pulse 2s infinite ease-in-out;
+    /* spans for words */
+    .message span { opacity:0; display:inline-block; white-space:pre; transform: translateY(6px); transition: opacity .28s ease, transform .34s ease; }
+
+    /* intro overlay (only visual, button is interactive below) */
+    #introOverlay{
+      position:fixed; inset:0; z-index:2200;
+      display:flex; align-items:center; justify-content:center; pointer-events:none;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
     }
 
-    #startButton {
-      font-size: 3rem;
-      cursor: pointer;
-      transition: transform 0.5s ease, top 1s ease, left 1s ease;
-      position: relative;
-      animation: glow 2s infinite alternate;
+    /* heart start button (initially center) */
+    #heartStart{
+      position:fixed; z-index:3000; width:88px; height:88px; border-radius:999px; background:linear-gradient(180deg,#fff,#ffeef7);
+      display:flex; align-items:center; justify-content:center; font-size:40px; color:var(--accent); border:2px solid rgba(255,255,255,0.7);
+      box-shadow:0 12px 36px rgba(255,105,180,0.14); cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent;
+      transition: all 700ms cubic-bezier(.2,.9,.2,1);
+      left:50%; top:50%; transform:translate(-50%,-50%) scale(1.02); pointer-events:auto;
+    }
+    /* when moved to top-left */
+    .top-left{
+      left:18px !important; top:14px !important; transform:none !important; width:62px !important; height:62px !important; font-size:26px !important;
+      box-shadow:0 8px 20px rgba(255,105,180,0.12);
     }
 
-    #restartButton {
-      position: fixed;
-      top: 20px;
-      left: 90px;
-      font-size: 2rem;
-      cursor: pointer;
-      display: none;
-      animation: glow 2s infinite alternate;
+    /* restart button near it */
+    #restartBtn{
+      position:fixed; left:94px; top:18px; width:48px; height:48px; border-radius:999px; display:none;
+      background:linear-gradient(180deg,#fff,#fff); color:var(--accent); border:2px solid rgba(255,255,255,0.7); box-shadow:0 8px 18px rgba(0,0,0,0.06);
+      display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:2999; transition: all 360ms ease;
     }
 
-    #loveMessage {
-      margin-top: 150px;
-      font-size: 1.5rem;
-      max-width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.8;
+    /* controls text (hologram) */
+    .controlLabel{
+      position:fixed; left:18px; top:86px; z-index:2998; color:#fff; font-weight:700; text-shadow:0 0 10px rgba(255,255,255,0.6);
+      pointer-events:none; font-size:0.95rem; animation:hologram 1.1s infinite alternate;
+    }
+    .restartLabel{
+      position:fixed; left:94px; top:70px; z-index:2998; color:#fff; font-weight:700; text-shadow:0 0 10px rgba(255,255,255,0.6);
+      pointer-events:none; font-size:0.9rem; animation:hologram 1.2s infinite alternate;
+      opacity:0; transition:opacity .4s ease;
+    }
+    .restartLabel.visible{ opacity:1; }
+
+    @keyframes hologram{
+      from { opacity:0.7; filter: drop-shadow(0 0 8px rgba(255,102,178,0.6)); }
+      to { opacity:1; filter: drop-shadow(0 0 20px rgba(255,20,147,0.9)); }
     }
 
-    #loveMessage span {
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      display: inline-block;
-    }
+    /* accessibility focus outline */
+    #heartStart:focus, #restartBtn:focus { outline: 3px solid rgba(255,20,147,0.14); outline-offset:3px; }
 
-    #bigMessage {
-      font-size: 2.5rem;
-      margin-top: 60px;
-      opacity: 0;
-    }
-
-    #musicControls {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 999;
-    }
-
-    #controlText {
-      font-size: 0.9rem;
-      font-weight: 600;
-      animation: hologram 2s infinite;
-    }
-
-    #restartText {
-      font-size: 0.9rem;
-      font-weight: 600;
-      animation: hologram 2s infinite;
-    }
-
-    @keyframes glow {
-      from {
-        text-shadow: 0 0 10px #fff;
-      }
-      to {
-        text-shadow: 0 0 30px #ff1493;
-      }
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    @keyframes hologram {
-      0%, 100% { opacity: 0.6; text-shadow: 0 0 5px #fff; }
-      50% { opacity: 1; text-shadow: 0 0 15px #ff69b4; }
-    }
-
-    @keyframes slideDown {
-      0% { opacity: 0; transform: translateY(-20px); }
-      100% { opacity: 1; transform: translateY(0); }
+    /* responsive tweaks */
+    @media (max-width:700px){
+      iframe{ height: 360px; }
+      #heartStart{ width:76px; height:76px; font-size:34px; }
+      .controlLabel{ left:12px; top:76px; font-size:0.86rem; }
+      .restartLabel{ left:84px; top:60px; font-size:0.82rem; }
+      #restartBtn{ left:80px; top:12px; width:44px; height:44px; }
     }
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="music.mp3"></audio>
 
-  <div id="startContainer">
-    <h1>Hoş geldin aşkım 💖<br> Müziği başlatmak için kalbe dokun 💞</h1>
-    <div id="startButton">💗</div>
+  <!-- video area -->
+  <div id="videoWrapper">
+    <iframe id="yt" src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0" title="Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
 
-  <div id="musicControls">
-    <div id="controlText">🎵 Durdur</div>
-    <div id="restartButton">⟳</div>
-    <div id="restartText">⟳ Yeniden Başlat</div>
+  <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
+
+  <!-- main message (will be split into spans preserving whitespace) -->
+  <div class="message" id="loveMessage">
+    Bu özel gününde, seni ne kadar çok sevdiğimi bir kez daha hatırlatmak istedim. 💕  
+    Sen benim hayatımın en güzel parçasısın 💞  
+    Doğum günün kutlu olsun bir tanem 🎂  
+    Nice mutlu, sağlıklı ve aşk dolu yıllarımız olsun 💫  
   </div>
 
-  <div id="loveMessage">Seninle her şey daha güzel, her an daha anlamlı, her nefes daha özel...</div>
-  <div id="bigMessage">💞 SENİ ÇOK SEVİYORUM 💞</div>
+  <div id="bigMessage">💞 SENİ ÇOK SEVİYORUM BİRTANEM 💞</div>
 
-  <script>
-    const startContainer = document.getElementById("startContainer");
-    const startButton = document.getElementById("startButton");
-    const bgMusic = document.getElementById("bgMusic");
-    const controlText = document.getElementById("controlText");
-    const restartButton = document.getElementById("restartButton");
-    const restartText = document.getElementById("restartText");
+  <!-- overlay + start button center (visual) -->
+  <div id="introOverlay" style="position:fixed; inset:0; z-index:2100; pointer-events:none;"></div>
+  <button id="heartStart" aria-pressed="false" aria-label="Müziği başlat/durdur">💗</button>
+  <button id="restartBtn" aria-label="Baştan başlat">🔁</button>
+  <div class="controlLabel" id="musicLabel">🎵 Durdur</div>
+  <div class="restartLabel" id="restartLabel">Yeniden Başlat</div>
 
-    let isPlaying = false;
+  <!-- hidden audio element -->
+  <audio id="bg" preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
 
-    startButton.addEventListener("click", () => {
-      if (!isPlaying) {
-        bgMusic.currentTime = 9; // 💿 Müzik 9. saniyeden başlar
-        bgMusic.play();
-        isPlaying = true;
+<script>
+(function(){
+  const START_TIME = 9;           // başlangıç saniyesi
+  const WORD_DELAY = 180;         // ms (0.18s)
+  const BIGMSG_DELAY_AFTER = 1000;// ms after words done
 
-        startContainer.style.opacity = "0";
-        setTimeout(() => {
-          startContainer.style.display = "none";
-          startButton.style.position = "fixed";
-          startButton.style.top = "20px";
-          startButton.style.left = "20px";
-          restartButton.style.display = "inline";
-          restartText.style.display = "inline";
-        }, 1000);
-      } else {
-        bgMusic.pause();
-        isPlaying = false;
-        controlText.textContent = "▶️ Devam Ettir";
-      }
+  const heart = document.getElementById('heartStart');
+  const restartBtn = document.getElementById('restartBtn');
+  const restartLabel = document.getElementById('restartLabel');
+  const musicLabel = document.getElementById('musicLabel');
+  const music = document.getElementById('bg');
+  const loveMessage = document.getElementById('loveMessage');
+  const bigMessage = document.getElementById('bigMessage');
+
+  let started = false;
+  let playing = false;
+
+  // prepare text: preserve whitespace by splitting with capture group
+  function prepareText(){
+    const html = loveMessage.innerHTML;
+    // split into parts preserving whitespace tokens
+    const parts = html.split(/(\s+)/);
+    loveMessage.innerHTML = '';
+    parts.forEach(part => {
+      const span = document.createElement('span');
+      span.innerHTML = part; // keep spaces / entities
+      loveMessage.appendChild(span);
     });
+  }
 
-    startButton.addEventListener("click", () => {
-      if (isPlaying) {
-        bgMusic.pause();
-        isPlaying = false;
-        controlText.textContent = "▶️ Devam Ettir";
-      } else {
-        bgMusic.play();
-        isPlaying = true;
-        controlText.textContent = "🎵 Durdur";
-      }
-    });
-
-    restartButton.addEventListener("click", () => {
-      bgMusic.currentTime = 9;
-      bgMusic.play();
-      isPlaying = true;
-      controlText.textContent = "🎵 Durdur";
-    });
-
-    // 💬 Kelime kelime çıkış efekti
-    window.addEventListener("load", () => {
-      const msg = document.getElementById("loveMessage");
-      const text = msg.textContent.trim();
-      msg.textContent = "";
-      const words = text.split(" ");
-      words.forEach((word) => {
-        const span = document.createElement("span");
-        span.textContent = word + " ";
-        msg.appendChild(span);
-      });
-
-      const spans = msg.querySelectorAll("span");
-      spans.forEach((span, i) => {
-        setTimeout(() => {
-          span.style.opacity = "1";
-        }, i * 180); // 💨 Kelime çıkış hızı
-      });
-
+  // animate words with WORD_DELAY
+  function startWords(){
+    const spans = Array.from(loveMessage.querySelectorAll('span'));
+    spans.forEach((s, i) => {
       setTimeout(() => {
-        const bm = document.getElementById("bigMessage");
-        bm.style.animation =
-          "slideDown 1.5s ease-out forwards, pulse 3s infinite ease-in-out";
-      }, words.length * 180 + 1000);
+        s.style.opacity = '1';
+        s.style.transform = 'translateY(0)';
+      }, i * WORD_DELAY);
     });
-  </script>
+    // show big message after all words + buffer
+    setTimeout(() => {
+      bigMessage.style.animation = 'slideDown 1s ease-out forwards';
+      bigMessage.style.opacity = '1';
+    }, spans.length * WORD_DELAY + BIGMSG_DELAY_AFTER);
+  }
+
+  // move heart to top-left (visual) and show restart
+  function moveHeartTopLeft(){
+    heart.classList.add('top-left');
+    restartBtn.style.display = 'flex';
+    restartLabel.classList.add('visible');
+  }
+
+  // update labels based on playing state
+  function updateMusicLabel(){
+    if(playing) {
+      musicLabel.textContent = '🎵 Durdur';
+    } else {
+      musicLabel.textContent = '▶️ Devam Ettir';
+    }
+  }
+
+  // toggle play/pause logic
+  async function togglePlay(){
+    try {
+      if(!started){
+        // first interaction
+        started = true;
+        // move UI
+        moveHeartTopLeft();
+        // ensure start position
+        if (music.currentTime < START_TIME) {
+          try { music.currentTime = START_TIME; } catch(e){}
+        }
+        await music.play().catch(()=>{});
+        playing = true;
+        updateMusicLabel();
+        // start words animation (slightly delayed to feel synced)
+        setTimeout(startWords, 150);
+      } else {
+        if(playing){
+          music.pause();
+          playing = false;
+          updateMusicLabel();
+        } else {
+          await music.play().catch(()=>{});
+          playing = true;
+          updateMusicLabel();
+        }
+      }
+    } catch(e){
+      console.log('audio error', e);
+    }
+  }
+
+  // restart to START_TIME
+  async function restartMusic(){
+    try {
+      music.currentTime = START_TIME;
+      await music.play().catch(()=>{});
+      playing = true;
+      updateMusicLabel();
+    } catch(e){ console.log(e); }
+  }
+
+  // init
+  window.addEventListener('DOMContentLoaded', () => {
+    prepareText();
+    // keep focus for accessibility
+    setTimeout(()=> heart.focus(), 250);
+    updateMusicLabel();
+  });
+
+  // event binding
+  heart.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    togglePlay();
+    heart.setAttribute('aria-pressed', String(playing));
+  });
+
+  // space/enter keyboard support
+  heart.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); heart.click(); }
+  });
+
+  restartBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    restartMusic();
+  });
+
+  // make sure restartLabel visible after heart moved
+  // (no auto-hide on scroll: they are fixed)
+  // ensure restartLabel only shows when restartBtn visible
+  const obs = new MutationObserver(()=>{
+    if(restartBtn.style.display !== 'none') restartLabel.classList.add('visible');
+    else restartLabel.classList.remove('visible');
+  });
+  obs.observe(restartBtn, { attributes: true, attributeFilter: ['style'] });
+
+  // optional: if user scrolls, buttons stay fixed (requirement)
+  // no further action needed since buttons are position:fixed
+
+  // accessibility: let clicking outside not toggle audio (we restrict to heart/restart)
+})();
+</script>
 </body>
 </html>
