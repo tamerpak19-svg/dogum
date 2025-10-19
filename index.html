@@ -25,27 +25,65 @@
     }
 
     h1 {
-      font-size: 2.4rem;
+      font-size: 2.3rem;
       color: #3b3b3b;
       margin-bottom: 40px;
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
     }
 
-    #openBtn {
-      background: linear-gradient(135deg, #ff66b2, #ff1493);
-      color: white;
-      border: none;
-      padding: 18px 45px;
-      font-size: 1.3rem;
-      border-radius: 50px;
+    /* ✉️ Zarf */
+    .envelope {
+      position: relative;
+      width: 180px;
+      height: 120px;
+      background: #ff80b3;
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
-      transition: all 0.3s ease;
+      transition: transform 0.4s ease;
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.6);
     }
 
-    #openBtn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 35px rgba(255, 105, 180, 0.8);
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 90px solid transparent;
+      border-right: 90px solid transparent;
+      border-bottom: 60px solid #ff4d94;
+      transform-origin: top;
+      transition: transform 1s ease;
+      border-radius: 5px;
+    }
+
+    .letter {
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      width: 160px;
+      height: 80px;
+      background: white;
+      border-radius: 4px;
+      transition: transform 1.2s ease;
+      transform: translateY(30px);
+      opacity: 0;
+    }
+
+    .letter p {
+      margin: 10px;
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .open .flap {
+      transform: rotateX(180deg);
+    }
+
+    .open .letter {
+      transform: translateY(-70px);
+      opacity: 1;
     }
 
     #continueBtn {
@@ -60,6 +98,8 @@
       box-shadow: 0 0 20px rgba(255, 182, 193, 0.7);
       transition: all 0.3s ease;
       margin-top: 40px;
+      z-index: 50;
+      position: relative;
     }
 
     #continueBtn:hover {
@@ -75,14 +115,8 @@
     }
 
     @keyframes floatUp {
-      from {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-120vh) scale(1.8);
-        opacity: 0;
-      }
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to { transform: translateY(-120vh) scale(1.8); opacity: 0; }
     }
 
     /* 💥 Parıltı efekti */
@@ -104,12 +138,11 @@
 
     @keyframes flashEffect {
       0% { opacity: 0; }
-      20% { opacity: 1; }
-      60% { opacity: 0.8; }
+      30% { opacity: 1; }
       100% { opacity: 0; }
     }
 
-    /* Fade out kalpler */
+    /* Kalplerin solması */
     #heartContainer.fadeOut {
       animation: fadeOutHearts 2s ease forwards;
     }
@@ -124,7 +157,12 @@
 <body>
   <div class="container">
     <h1>💌 Sana Küçük Bir Mektubum Var 💌</h1>
-    <button id="openBtn">Zarfı Aç 💌</button>
+    <div class="envelope" id="envelope">
+      <div class="flap"></div>
+      <div class="letter">
+        <p>Bu mektup senin için... 💖<br>Hazırsan aç ve içindekilere kalbini bırak. 💞</p>
+      </div>
+    </div>
     <button id="continueBtn" onclick="window.location.href='love.html'">Devam Et 💕</button>
   </div>
 
@@ -132,34 +170,33 @@
   <div id="flash"></div>
 
   <script>
-    const openBtn = document.getElementById("openBtn");
+    const envelope = document.getElementById("envelope");
     const continueBtn = document.getElementById("continueBtn");
     const heartContainer = document.getElementById("heartContainer");
     const flash = document.getElementById("flash");
 
     const hearts = ["💖","💞","💘","💝","❤️","🩷","💕","💗","💓","💜"];
 
-    openBtn.addEventListener("click", () => {
-      // 💥 Parıltı
+    envelope.addEventListener("click", () => {
+      envelope.classList.add("open");
+
+      // 💥 Parıltı efekti
       flash.classList.add("flashActive");
 
-      // 💌 Butonu gizle
-      openBtn.style.display = "none";
-
-      // 💕 Kalp patlaması
+      // 💖 Kalplerin patlaması
       for (let i = 0; i < 200; i++) {
         const heart = document.createElement("div");
         heart.classList.add("heart");
         heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
         heart.style.left = Math.random() * 100 + "vw";
-        heart.style.bottom = Math.random() * 50 + "vh";
+        heart.style.bottom = Math.random() * 60 + "vh";
         heart.style.fontSize = Math.random() * 2 + 1 + "rem";
         heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
         heartContainer.appendChild(heart);
         setTimeout(() => heart.remove(), 4000);
       }
 
-      // 💫 Kalplerin solması + devam butonu çıkışı
+      // 💫 Kalplerin solması + buton çıkışı
       setTimeout(() => {
         heartContainer.classList.add("fadeOut");
       }, 2000);
