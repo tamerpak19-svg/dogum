@@ -33,33 +33,65 @@
       max-width: 90%;
     }
 
-    /* ✉️ Zarf */
+    /* ✉️ Zarf tasarımı */
     .envelope {
       position: relative;
       width: 90vw;
-      max-width: 400px;
+      max-width: 420px;
       aspect-ratio: 1.3 / 1;
-      background: #ff80b3;
-      border-radius: 8px;
+      background: linear-gradient(135deg, #ffb6c1, #ff99cc);
+      border-radius: 10px;
       cursor: pointer;
-      transition: transform 0.4s ease;
-      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.6);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
+      overflow: hidden;
     }
 
-    .flap {
+    .envelope::before {
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
-      width: 0;
-      height: 0;
-      border-left: 50% solid transparent;
-      border-right: 50% solid transparent;
-      border-bottom: 45% solid #ff4d94;
-      transform-origin: top;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to bottom, #ff80b3, #ff99cc);
+      clip-path: polygon(0 0, 50% 50%, 100% 0);
       transition: transform 1s ease;
-      border-radius: 8px;
+      transform-origin: top;
     }
 
+    .envelope.open::before {
+      transform: rotateX(180deg);
+    }
+
+    /* 🩷 Zarf üzerindeki yazı ve mühür */
+    .envelope .label {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #3b3b3b;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px 25px;
+      border-radius: 25px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(3px);
+      z-index: 2;
+    }
+
+    .envelope .seal {
+      position: absolute;
+      bottom: 18%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.6));
+    }
+
+    /* 📜 Mektup içeriği */
     .letter {
       position: absolute;
       top: 10%;
@@ -70,26 +102,23 @@
       border-radius: 12px;
       border: 3px solid #ffb6c1;
       transition: transform 1.2s ease;
-      transform: translateY(40px);
+      transform: translateY(50px);
       opacity: 0;
       box-shadow: 0 5px 25px rgba(255, 192, 203, 0.8);
       overflow-y: auto;
+      padding: 20px;
     }
 
     .letter p {
-      margin: 18px;
+      margin: 0;
       font-size: 1rem;
       color: #444;
-      line-height: 1.7;
+      line-height: 1.8;
       text-align: left;
     }
 
-    .open .flap {
-      transform: rotateX(180deg);
-    }
-
     .open .letter {
-      transform: translateY(-100px);
+      transform: translateY(-110px);
       opacity: 1;
     }
 
@@ -164,91 +193,6 @@
 
     /* 📱 Mobil uyumlu ayarlar */
     @media (max-width: 768px) {
-      h1 {
-        font-size: 1.6rem;
-      }
-      .letter p {
-        font-size: 0.95rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.3rem;
-      }
-      .letter p {
-        font-size: 0.9rem;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <h1>💌 Birtanem... Sana küçük bir şey hazırladım ama bu sadece bir başlangıç 💖</h1>
-    <div class="envelope" id="envelope">
-      <div class="flap"></div>
-      <div class="letter">
-        <p>
-          Aşkım, bu satırları yazarken kalbim tarif edemediğim bir mutlulukla dolu... 💞<br><br>
-          Sen hayatıma girdiğin andan itibaren her şey güzelleşti, her şey anlam kazandı.  
-          Sesini duymadığım, gülüşünü görmediğim bir gün eksik, hatta yarım kalıyor.  
-          İyi ki doğdun, iyi ki varsın, iyi ki benimlesin. 🎂💖<br><br>
-          Bu mektup sadece küçük bir önsöz... çünkü asıl hediyem seni bir adım ötede bekliyor.  
-          Devam et butonuna bastığında seni biraz daha içten bir sürpriz karşılayacak. 💫<br><br>
-          Unutma, seni kelimelerden daha çok seviyorum. 💋  
-        </p>
-      </div>
-    </div>
-    <button id="continueBtn" onclick="window.location.href='love.html'">Devam Et 💕</button>
-  </div>
-
-  <div id="heartContainer"></div>
-  <div id="flash"></div>
-
-  <audio id="openSound">
-    <source src="open.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
-    const envelope = document.getElementById("envelope");
-    const continueBtn = document.getElementById("continueBtn");
-    const heartContainer = document.getElementById("heartContainer");
-    const flash = document.getElementById("flash");
-    const openSound = document.getElementById("openSound");
-
-    const hearts = ["💖","💞","💘","💝","❤️","🩷","💕","💗","💓","💜","💫","✨","🌸","💎","🕊️"];
-
-    envelope.addEventListener("click", () => {
-      envelope.classList.add("open");
-      flash.classList.add("flashActive");
-
-      openSound.currentTime = 0;
-      openSound.volume = 0.7;
-      openSound.play();
-
-      // 💖 750 kalp fırlat
-      for (let i = 0; i < 750; i++) {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.bottom = Math.random() * 60 + "vh";
-        heart.style.fontSize = Math.random() * 1.5 + 0.8 + "rem";
-        heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
-        heartContainer.appendChild(heart);
-        setTimeout(() => heart.remove(), 4500);
-      }
-
-      setTimeout(() => {
-        heartContainer.classList.add("fadeOut");
-      }, 3500);
-
-      setTimeout(() => {
-        continueBtn.style.display = "inline-block";
-        continueBtn.style.animation = "fadeIn 1.5s ease forwards";
-      }, 4800);
-    });
-  </script>
-</body>
-</html>
+      h1 { font-size: 1.6rem; }
+      .letter p { font-size: 0.95rem; }
+      .envelope .label { font-size: 1.1r
