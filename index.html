@@ -6,17 +6,18 @@
   <title>Doğum Günü Sürprizi 🎉</title>
   <style>
     body {
-      background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ffc0cb);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-      color: white;
-      overflow: hidden;
-    }
+      
+  background: radial-gradient(circle at center, #ffe6f0, #ff99cc, #ff66b2, #ff3385);
+  font-family: 'Comic Sans MS', 'Segoe UI Emoji', 'Noto Color Emoji', 'Apple Color Emoji', cursive, sans-serif;
+  color: #fff;
+  text-align: center;
+  overflow-x: hidden;
+}
+    
 
     h1 {
       font-size: 2.5rem;
-      margin-bottom: 50px;
+      margin-bottom: 40px;
       text-shadow: 2px 2px 5px #ff1493;
     }
 
@@ -24,18 +25,19 @@
       background-color: #ff1493;
       border: none;
       color: white;
-      padding: 20px 40px;
-      margin: 15px;
+      padding: 15px 30px;
+      margin: 10px;
       font-size: 1.2rem;
       border-radius: 25px;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0px 4px 10px rgba(255, 0, 102, 0.5);
+      max-width: 90vw;
     }
 
     button:hover {
       background-color: #ff69b4;
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
 
     .hearts {
@@ -59,6 +61,18 @@
       from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
       to { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
     }
+
+    /* 📱 Mobil cihazlar için */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+      }
+      button {
+        font-size: 1rem;
+        padding: 12px 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -74,7 +88,6 @@
       window.location.href = "love.html";
     }
 
-    // kalpler animasyonu
     const heartsContainer = document.getElementById("hearts");
     function createHeart() {
       const heart = document.createElement("div");
