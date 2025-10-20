@@ -21,7 +21,7 @@
       text-align:center;
     }
 
-    /* Intro / Start button (big center heart) */
+    /* Intro / Start button */
     #introScreen{
       position:fixed; inset:0; z-index:9999;
       display:flex; align-items:center; justify-content:center; flex-direction:column;
@@ -33,7 +33,6 @@
     .introContent h2{font-size:2rem; margin:0; text-shadow:0 0 12px rgba(255,255,255,0.9)}
     .introContent p{margin:6px 0 0 0; font-size:1.1rem; text-shadow:0 0 8px rgba(255,255,255,0.7)}
 
-    /* start button styling (initial big heart) */
     #startBtn{
       margin-top:12px;
       background:linear-gradient(90deg,#ff699f,#ff2e7a);
@@ -49,8 +48,6 @@
       align-items:center;
       justify-content:center;
     }
-
-    /* transform startBtn into small icon during move - applied dynamically */
     #startBtn.move-to-top {
       position:fixed;
       left:15px;
@@ -60,12 +57,12 @@
       padding:0;
       border-radius:50%;
       font-size:1.2rem;
-      transform: none;
+      transform:none;
       box-shadow:0 8px 24px rgba(0,0,0,0.12);
       z-index:10001;
     }
 
-    /* Controls (play/pause/restart) */
+    /* Controls */
     #controls{
       position:fixed;
       top:15px;
@@ -84,10 +81,9 @@
       transition:transform .2s;
     }
     .iconButton:active{ transform:scale(.96) }
-
     .glowText{ color:white; font-size:.95rem; text-shadow:0 0 8px rgba(255,255,255,0.8); }
 
-    /* Title + heartbeat */
+    /* Title */
     h1{
       margin-top:40px;
       font-size:2.6rem;
@@ -97,22 +93,18 @@
       transform-origin:center;
     }
     @keyframes fadeIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
-    @keyframes heartbeat {
-      0%,100%{ transform:scale(1) }
-      30%{ transform:scale(1.06) }
-      50%{ transform:scale(1) }
-      70%{ transform:scale(1.08) }
-    }
+    @keyframes heartbeat {0%,100%{transform:scale(1)}30%{transform:scale(1.06)}50%{transform:scale(1)}70%{transform:scale(1.08)}}
 
-    /* Video wrapper + styling */
+    /* Video */
     #videoWrapper{ margin:30px auto; width:90%; max-width:480px; border-radius:20px; overflow:hidden; box-shadow:0 0 30px rgba(255,20,147,0.6) }
     iframe{ width:100%; height:270px; border:0; display:block }
 
-    /* Message and big message */
+    /* Message */
     .message{
       margin:30px auto; font-size:1.15rem; line-height:1.7;
       background:rgba(255,255,255,0.55); padding:20px; border-radius:20px; max-width:92%;
-      box-shadow:0 8px 24px rgba(255,255,255,0.4); opacity:0; transform:translateY(8px); transition:all .7s ease;
+      box-shadow:0 8px 24px rgba(255,255,255,0.4);
+      opacity:0; transform:translateY(8px); transition:all .7s ease;
     }
     .message.show{ opacity:1; transform:translateY(0) }
 
@@ -121,23 +113,50 @@
       background:rgba(255,255,255,0.45); padding:18px; border-radius:24px; display:inline-block; opacity:0;
     }
     #bigMessage.show{ opacity:1; animation: slideDown 1s ease forwards }
-
     @keyframes slideDown { from{ transform:translateY(-20px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
 
-    /* Emoji floating */
+    /* Emoji */
     .emoji{ position:fixed; bottom:-50px; font-size:2rem; animation:flyUp 6s linear forwards; z-index:9000; pointer-events:none }
     @keyframes flyUp { 0%{transform:translateY(0) scale(1); opacity:1} 100%{transform:translateY(-900px) scale(1.6); opacity:0} }
 
-    /* Pink wave on load */
-    body::before{
-      content:""; position:fixed; inset:0; z-index:9998; pointer-events:none;
-      background: radial-gradient(circle at center, rgba(255,192,203,0.85), rgba(255,105,180,0.15), transparent);
-      opacity:0; transform:scale(1.03); filter:blur(6px);
-      animation: pinkFlash 2.1s ease-out forwards;
+    /* Music started text */
+    #musicStarted {
+      position:fixed;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:rgba(255,255,255,0.8);
+      padding:20px 30px;
+      border-radius:20px;
+      font-size:1.4rem;
+      color:#ff1493;
+      box-shadow:0 0 20px rgba(255,20,147,0.5);
+      opacity:0;
+      transition:opacity 0.6s ease;
+      z-index:9000;
     }
-    @keyframes pinkFlash { 0%{opacity:.95; transform:scale(1.04)} 50%{opacity:.7; filter:blur(3px)} 100%{opacity:0; transform:scale(1)} }
 
-    /* responsive tweaks */
+    /* Reminder message */
+    #reminder {
+      position:fixed;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(255,255,255,0.85);
+      padding:10px 20px;
+      border-radius:20px;
+      font-size:1rem;
+      color:#d63384;
+      box-shadow:0 0 20px rgba(255,20,147,0.4);
+      opacity:0;
+      animation: blink 5s infinite;
+    }
+    @keyframes blink {
+      0%, 20% { opacity: 1; }
+      40%, 100% { opacity: 0; }
+    }
+
+    /* responsive */
     @media(max-width:768px){
       h1{ font-size:2.1rem; margin-top:28px }
       #videoWrapper iframe{ height:220px }
@@ -147,21 +166,23 @@
   </style>
 </head>
 <body>
-  <!-- Intro overlay -->
-  <div id="introScreen" role="dialog" aria-label="Hoşgeldin ekranı">
+
+  <!-- Intro -->
+  <div id="introScreen">
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
       <p>Müziği başlatmak için kalbe dokun 💖</p>
-      <button id="startBtn" aria-label="Müziği başlat">❤️</button>
+      <button id="startBtn">❤️</button>
     </div>
   </div>
 
-  <!-- Controls (hidden until after start) -->
-  <div id="controls" aria-hidden="true">
-    <button id="musicBtn" class="iconButton" aria-pressed="true">❤️</button>
-    <div id="musicText" class="glowText">Durdur</div>
-    <button id="restartBtn" class="iconButton">🔁</button>
-    <div id="restartText" class="glowText">Yeniden</div>
+  <!-- Music started text -->
+  <div id="musicStarted">🎶 Müzik Başladı 🎶</div>
+
+  <!-- Controls -->
+  <div id="controls">
+    <button id="musicBtn" class="iconButton">🔈</button>
+    <div id="musicText" class="glowText">Müziği Durdur</div>
   </div>
 
   <h1 id="title">💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
@@ -179,91 +200,66 @@
 
   <div id="bigMessage">💞 SENİ ÇOK SEVİYORUM AŞKIM 💞<br>🎂 DOĞUM GÜNÜN KUTLU OLSUN 🎂</div>
 
+  <div id="reminder">🎧 Videoyu başlatmadan önce müziği durdurmayı unutma 💞</div>
+
   <audio id="bgMusic" loop preload="auto">
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
 <script>
-/* Elements */
 const intro = document.getElementById('introScreen');
 const startBtn = document.getElementById('startBtn');
 const controls = document.getElementById('controls');
 const musicBtn = document.getElementById('musicBtn');
-const restartBtn = document.getElementById('restartBtn');
 const musicText = document.getElementById('musicText');
-const restartText = document.getElementById('restartText');
 const music = document.getElementById('bgMusic');
 const yt = document.getElementById('ytiframe');
 const loveMessage = document.getElementById('loveMessage');
 const bigMessage = document.getElementById('bigMessage');
+const musicStarted = document.getElementById('musicStarted');
+const reminder = document.getElementById('reminder');
 
 let isPlaying = false;
 let emojiInterval = null;
 
-/* helper to safely play sound (some browsers require user gesture) */
+/* Play music from 10s */
 async function tryPlayAt(sec){
-  try {
-    music.currentTime = sec;
-  } catch(e) {
-    // some browsers disallow setting currentTime before metadata loaded; fallback to 0
-    try{ music.currentTime = 0; }catch(e2){}
-  }
+  try { music.currentTime = sec; } catch(e){}
   try {
     await music.play();
     isPlaying = true;
-    musicBtn.textContent = '❤️';
-    musicText.textContent = 'Durdur';
-  } catch (err) {
-    console.warn('play() rejected', err);
-    isPlaying = false;
-  }
+    musicBtn.textContent = '🔈';
+    musicText.textContent = 'Müziği Durdur';
+  } catch (err) { console.warn(err); }
 }
 
-/* move startBtn to top-left smoothly then reveal controls */
+/* Move button and show controls */
 function animateStartToControls(){
-  // make startBtn fixed and animate by adding class
   startBtn.classList.add('move-to-top');
-  // after animation small delay show actual controls and remove moving button
-  setTimeout(()=> {
-    // show controls (we'll show the controls container)
+  setTimeout(()=>{
     controls.style.display = 'flex';
-    controls.setAttribute('aria-hidden','false');
-    // make sure musicBtn reflects playing state
-    musicBtn.textContent = isPlaying ? '❤️' : '💔';
-    musicText.textContent = isPlaying ? 'Durdur' : 'Devam Ettir';
-    // remove the floating startBtn (we now have controls)
-    try{ startBtn.remove(); }catch(e){}
-  }, 850); // matches CSS transition feel
+    startBtn.remove();
+  }, 850);
 }
 
-/* start emojis and text animations after intro */
-function startExtras(){
-  // show message with word-by-word fade
-  showMessageWords();
-  // start emoji rain
-  startEmojis();
-  // show bigMessage after delay
-  setTimeout(()=> { bigMessage.classList.add('show'); }, 2200);
-}
-
-/* word-by-word message (faster) */
+/* Show words one by one */
 function showMessageWords(){
-  loveMessage.style.opacity = '1';
+  loveMessage.classList.add('show');
   const text = loveMessage.textContent.trim();
   loveMessage.textContent = '';
   const words = text.split(' ');
   words.forEach((w,i)=>{
-    const sp = document.createElement('span');
-    sp.textContent = w + (i<words.length-1 ? ' ' : '');
-    sp.style.opacity = '0';
-    sp.style.display = 'inline-block';
-    sp.style.transition = 'opacity .22s ease';
-    loveMessage.appendChild(sp);
-    setTimeout(()=> sp.style.opacity = '1', i * 120); // faster cadence
+    const span = document.createElement('span');
+    span.textContent = w + ' ';
+    span.style.opacity = '0';
+    span.style.display = 'inline-block';
+    span.style.transition = 'opacity .4s ease';
+    loveMessage.appendChild(span);
+    setTimeout(()=> span.style.opacity = '1', i * 180);
   });
 }
 
-/* emojis */
+/* Emojis */
 const emojis = ["💖","💞","💘","💝","💋","❤️","🩷","💕","💓","💗","💜","💙","🎂","🎉","✨","🌈","🌹"];
 function startEmojis(){
   if(emojiInterval) return;
@@ -278,76 +274,47 @@ function startEmojis(){
   }, 200);
 }
 
-/* start button click */
-startBtn.addEventListener('click', async () => {
-  // try to set music time to 10s and play
+/* Start button click */
+startBtn.addEventListener('click', async ()=>{
   await tryPlayAt(10);
 
-  // animate moving button to controls and hide intro overlay
+  musicStarted.style.opacity = '1';
+  setTimeout(()=> musicStarted.style.opacity = '0', 1500);
+
   animateStartToControls();
-
-  // fade out intro overlay
   intro.style.opacity = '0';
-  setTimeout(()=> {
-    try{ intro.remove(); }catch(e){}
-  }, 900);
+  setTimeout(()=> intro.remove(), 900);
 
-  // extras after small delay
-  setTimeout(()=> startExtras(), 600);
+  setTimeout(()=>{
+    showMessageWords();
+    startEmojis();
+    setTimeout(()=> bigMessage.classList.add('show'), 2200);
+  }, 600);
+
+  // Show reminder after 15s
+  setTimeout(()=> reminder.style.opacity = '1', 15000);
 });
 
-/* music control button */
-musicBtn.addEventListener('click', async () => {
+/* Music control */
+musicBtn.addEventListener('click', async ()=>{
   if(isPlaying){
     music.pause();
     isPlaying = false;
-    musicBtn.textContent = '💔';
-    musicText.textContent = 'Devam Ettir';
+    musicBtn.textContent = '🔊';
+    musicText.textContent = 'Müziği Devam Ettir';
   } else {
-    try {
-      await music.play();
-      isPlaying = true;
-      musicBtn.textContent = '❤️';
-      musicText.textContent = 'Durdur';
-    } catch(e) { console.warn(e); }
+    await tryPlayAt(music.currentTime);
   }
 });
 
-/* restart button */
-restartBtn.addEventListener('click', async () => {
-  try {
-    // set to 10s and play
-    await tryPlayAt(10);
-    isPlaying = true;
-    musicBtn.textContent = '❤️';
-    musicText.textContent = 'Durdur';
-  } catch(e){ console.warn(e); }
-});
-
-/* when video iframe clicked, pause music */
-yt.addEventListener('click', () => {
+/* Pause when video clicked */
+yt.addEventListener('click', ()=>{
   if(isPlaying){
     music.pause();
     isPlaying = false;
-    musicBtn.textContent = '💔';
-    musicText.textContent = 'Devam Ettir';
+    musicBtn.textContent = '🔊';
+    musicText.textContent = 'Müziği Devam Ettir';
   }
-});
-
-/* show bigMessage animation when ready */
-bigMessage.addEventListener('animationend', ()=>{ /* noop for future hooks */ });
-
-/* accessibility: allow Enter key on startBtn (if not removed) */
-startBtn.addEventListener('keydown', async (e) => {
-  if(e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    startBtn.click();
-  }
-});
-
-/* cleanup on unload */
-window.addEventListener('beforeunload', ()=> {
-  if(emojiInterval) clearInterval(emojiInterval);
 });
 </script>
 </body>
