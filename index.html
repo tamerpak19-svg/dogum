@@ -54,9 +54,9 @@
     /* ✉️ Zarf */
     .envelope {
       position: relative;
-      width: 300px;
-      height: 200px;
-      margin: 180px auto 0;
+      width: 360px;
+      height: 240px;
+      margin: 160px auto 0;
       background: #ff8fab;
       border-radius: 10px;
       box-shadow: 0 0 25px rgba(255,20,147,0.4);
@@ -76,9 +76,9 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 150px solid transparent;
-      border-right: 150px solid transparent;
-      border-bottom: 100px solid #ff5c8d;
+      border-left: 180px solid transparent;
+      border-right: 180px solid transparent;
+      border-bottom: 120px solid #ff5c8d;
       border-radius: 5px;
       transform-origin: top;
       transition: transform 0.8s ease-in-out;
@@ -104,7 +104,7 @@
     }
 
     .letter.show {
-      height: 160px;
+      height: 200px;
       padding-top: 15px;
     }
 
@@ -164,11 +164,44 @@
       to { opacity: 1; }
     }
 
+    /* 🎵 Uyarı kutusu */
+    #musicAlert {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.8);
+      color: #ff1493;
+      padding: 12px 25px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(255,20,147,0.5);
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 2000;
+    }
+
+    #musicAlert.show {
+      opacity: 1;
+    }
+
+    #musicAlert span {
+      font-size: 1.5rem;
+      animation: bounceArrow 1s infinite alternate;
+    }
+
+    @keyframes bounceArrow {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+
     @media (max-width: 768px) {
-      .envelope { width: 230px; height: 150px; margin-top: 150px; }
-      .flap { border-left: 115px solid transparent; border-right: 115px solid transparent; border-bottom: 75px solid #ff5c8d; }
-      .letter.show { height: 120px; font-size: 0.9rem; }
-      .open-btn { padding: 10px 25px; font-size: 1rem; }
+      .envelope { width: 260px; height: 170px; margin-top: 130px; }
+      .flap { border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 85px solid #ff5c8d; }
+      .letter.show { height: 140px; font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -195,6 +228,8 @@
   <button class="open-btn" id="openBtn">💖 Aç Beni 💖</button>
   <button id="continueBtn" onclick="goToLove()">💌 Devam Et 💌</button>
 
+  <div id="musicAlert">🎵 Videoyu başlatmadan önce müziği durdurmayı unutma! <span>⬆️</span></div>
+
   <script>
     const heartOverlay = document.getElementById("heartOverlay");
     const flash = document.getElementById("flash");
@@ -203,6 +238,7 @@
     const letter = document.getElementById("letter");
     const openBtn = document.getElementById("openBtn");
     const continueBtn = document.getElementById("continueBtn");
+    const musicAlert = document.getElementById("musicAlert");
 
     // 💖 Kalpler perde olarak
     for (let i = 0; i < 600; i++) {
@@ -237,11 +273,28 @@
       setTimeout(() => flash.style.opacity = "0", 400);
     }
 
+    // 💖 Kalp fışkırtma fonksiyonu
+    function heartBurst() {
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement("div");
+        heart.textContent = "💖";
+        heart.style.position = "fixed";
+        heart.style.left = "50%";
+        heart.style.top = "50%";
+        heart.style.fontSize = (1 + Math.random() * 1.8) + "rem";
+        heart.style.transform = `translate(-50%, -50%) rotate(${Math.random()*360}deg)`;
+        heart.style.animation = "floatHearts 2s ease-out forwards";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 2000);
+      }
+    }
+
     // ✉️ Zarf açma
     openBtn.addEventListener("click", () => {
       flashEffect();
       openBtn.style.display = "none";
       flap.classList.add("open");
+      heartBurst(); // 💖 Kalpler fışkırıyor
       setTimeout(() => {
         letter.classList.add("show");
         setTimeout(() => continueBtn.classList.add("show"), 2000);
@@ -252,6 +305,12 @@
     function goToLove() {
       window.location.href = "love.html";
     }
+
+    // 🎵 15 saniye sonra uyarı
+    setTimeout(() => {
+      musicAlert.classList.add("show");
+      setTimeout(() => musicAlert.classList.remove("show"), 7000);
+    }, 15000);
   </script>
 
 </body>
