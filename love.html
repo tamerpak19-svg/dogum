@@ -346,14 +346,32 @@ musicBtn.addEventListener('click', async ()=>{
 });
 
 /* Pause when video clicked */
-yt.addEventListener('click', ()=>{
-  if(isPlaying){
-    music.pause();
-    isPlaying = false;
-    musicBtn.textContent = '🔊';
-    musicText.textContent = 'Müziği Devam Ettir';
-  }
-});
+// 🎬 Videoya tıklayınca müziği durdur
+yt.addEventListener('mouseenter', stopMusicSafely);
+yt.addEventListener('touchstart', stopMusicSafely);
+yt.addEventListener('click', stopMusicSafely);
+
+// 🎬 YouTube oynatma başlayınca müziği otomatik durdur
+function onYouTubeIframeAPIReady() {
+  const player = new YT.Player('ytiframe', {
+    events: {
+      'onStateChange': function(event) {
+        // 1 = video oynatılıyor
+        if (event.data === 1 && isPlaying) {
+          music.pause();
+          isPlaying = false;
+          musicBtn.textContent = '🔊';
+          musicText.textContent = 'Müziği Devam Ettir';
+        }
+      }
+    }
+  });
+}
+
+// YouTube API'sini yükle
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
 </script>
 </body>
 </html>
