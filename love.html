@@ -21,7 +21,7 @@
       text-align:center;
     }
 
-    /* Intro */
+    /* Intro / Start button */
     #introScreen{
       position:fixed; inset:0; z-index:9999;
       display:flex; align-items:center; justify-content:center; flex-direction:column;
@@ -48,7 +48,6 @@
       align-items:center;
       justify-content:center;
     }
-
     #startBtn.move-to-top {
       position:fixed;
       left:15px;
@@ -63,7 +62,6 @@
       z-index:10001;
     }
 
-    /* Controls */
     #controls{
       position:fixed;
       top:15px;
@@ -85,7 +83,6 @@
 
     .glowText{ color:white; font-size:.95rem; text-shadow:0 0 8px rgba(255,255,255,0.8); }
 
-    /* Title */
     h1{
       margin-top:40px;
       font-size:2.6rem;
@@ -102,11 +99,9 @@
       70%{ transform:scale(1.08) }
     }
 
-    /* Video */
     #videoWrapper{ margin:30px auto; width:90%; max-width:480px; border-radius:20px; overflow:hidden; box-shadow:0 0 30px rgba(255,20,147,0.6) }
     iframe{ width:100%; height:270px; border:0; display:block }
 
-    /* Message */
     .message{
       margin:30px auto; font-size:1.15rem; line-height:1.7;
       background:rgba(255,255,255,0.55); padding:20px; border-radius:20px; max-width:92%;
@@ -122,11 +117,9 @@
 
     @keyframes slideDown { from{ transform:translateY(-20px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
 
-    /* Emojis */
     .emoji{ position:fixed; bottom:-50px; font-size:2rem; animation:flyUp 6s linear forwards; z-index:9000; pointer-events:none }
     @keyframes flyUp { 0%{transform:translateY(0) scale(1); opacity:1} 100%{transform:translateY(-900px) scale(1.6); opacity:0} }
 
-    /* Pink wave */
     body::before{
       content:""; position:fixed; inset:0; z-index:9998; pointer-events:none;
       background: radial-gradient(circle at center, rgba(255,192,203,0.85), rgba(255,105,180,0.15), transparent);
@@ -135,9 +128,17 @@
     }
     @keyframes pinkFlash { 0%{opacity:.95; transform:scale(1.04)} 50%{opacity:.7; filter:blur(3px)} 100%{opacity:0; transform:scale(1)} }
 
+    @keyframes fadeInOut {
+      0%{opacity:0; transform:translate(-50%,20px);}
+      10%,90%{opacity:1; transform:translate(-50%,0);}
+      100%{opacity:0; transform:translate(-50%,-10px);}
+    }
+
     @media(max-width:768px){
       h1{ font-size:2.1rem; margin-top:28px }
       #videoWrapper iframe{ height:220px }
+      #startBtn.move-to-top{ left:10px; top:10px; width:46px; height:46px }
+      #controls{ left:10px; top:10px }
     }
   </style>
 </head>
@@ -151,8 +152,10 @@
   </div>
 
   <div id="controls">
-    <button id="musicBtn" class="iconButton">🔈</button>
+    <button id="musicBtn" class="iconButton">❤️</button>
     <div id="musicText" class="glowText">Durdur</div>
+    <button id="restartBtn" class="iconButton">🔁</button>
+    <div id="restartText" class="glowText">Yeniden</div>
   </div>
 
   <h1>💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
@@ -175,91 +178,132 @@
   </audio>
 
 <script>
-const intro=document.getElementById('introScreen');
-const startBtn=document.getElementById('startBtn');
-const controls=document.getElementById('controls');
-const musicBtn=document.getElementById('musicBtn');
-const musicText=document.getElementById('musicText');
-const music=document.getElementById('bgMusic');
-const yt=document.getElementById('ytiframe');
-const loveMessage=document.getElementById('loveMessage');
-const bigMessage=document.getElementById('bigMessage');
-let isPlaying=false;
-let emojiInterval=null;
+const intro = document.getElementById('introScreen');
+const startBtn = document.getElementById('startBtn');
+const controls = document.getElementById('controls');
+const musicBtn = document.getElementById('musicBtn');
+const restartBtn = document.getElementById('restartBtn');
+const musicText = document.getElementById('musicText');
+const music = document.getElementById('bgMusic');
+const yt = document.getElementById('ytiframe');
+const loveMessage = document.getElementById('loveMessage');
+const bigMessage = document.getElementById('bigMessage');
+
+let isPlaying = false;
+let emojiInterval = null;
 
 async function tryPlayAt(sec){
-  try{ music.currentTime=sec; }catch(e){}
-  try{
+  try { music.currentTime = sec; } catch(e){}
+  try {
     await music.play();
-    isPlaying=true;
-    musicBtn.textContent='🔈';
-    musicText.textContent='Durdur';
-  }catch(err){console.warn('play rejected',err);}
+    isPlaying = true;
+    musicBtn.textContent = '❤️';
+    musicText.textContent = 'Durdur';
+  } catch (err) { isPlaying = false; }
 }
 
 function animateStartToControls(){
   startBtn.classList.add('move-to-top');
+  setTimeout(()=> {
+    controls.style.display = 'flex';
+    musicBtn.textContent = isPlaying ? '❤️' : '💔';
+    musicText.textContent = isPlaying ? 'Durdur' : 'Devam Ettir';
+    startBtn.remove();
+  }, 850);
+}
+
+function startExtras(){
+  showMessageWords();
+  startEmojis();
+  setTimeout(()=> { bigMessage.classList.add('show'); }, 2200);
+
+  // 15 saniye sonra tatlı uyarı
   setTimeout(()=>{
-    controls.style.display='flex';
-    try{ startBtn.remove(); }catch(e){}
-  },850);
+    const tip = document.createElement('div');
+    tip.textContent = '🎧 Videoyu başlatmadan önce müziği durdur 💕';
+    tip.style.position = 'fixed';
+    tip.style.bottom = '20px';
+    tip.style.left = '50%';
+    tip.style.transform = 'translateX(-50%)';
+    tip.style.background = 'rgba(255,255,255,0.85)';
+    tip.style.padding = '12px 18px';
+    tip.style.borderRadius = '20px';
+    tip.style.color = '#ff1493';
+    tip.style.fontWeight = '600';
+    tip.style.boxShadow = '0 0 15px rgba(255,20,147,0.4)';
+    tip.style.animation = 'fadeInOut 6s ease forwards';
+    document.body.appendChild(tip);
+    setTimeout(()=>tip.remove(),6000);
+  },15000);
 }
 
 function showMessageWords(){
-  loveMessage.style.opacity='1';
-  const text=loveMessage.textContent.trim();
-  loveMessage.textContent='';
-  const words=text.split(' ');
+  loveMessage.style.opacity = '1';
+  const text = loveMessage.textContent.trim();
+  loveMessage.textContent = '';
+  const words = text.split(' ');
   words.forEach((w,i)=>{
-    const sp=document.createElement('span');
-    sp.textContent=w+(i<words.length-1?' ':'');
-    sp.style.opacity='0';
-    sp.style.transition='opacity .25s ease';
+    const sp = document.createElement('span');
+    sp.textContent = w + (i<words.length-1 ? ' ' : '');
+    sp.style.opacity = '0';
+    sp.style.display = 'inline-block';
+    sp.style.transition = 'opacity .3s ease';
     loveMessage.appendChild(sp);
-    setTimeout(()=>sp.style.opacity='1',i*120);
+    setTimeout(()=> sp.style.opacity = '1', i * 300);
   });
 }
 
-const emojis=["💖","💞","💘","💝","💋","❤️","🩷","💕","💓","💗","💜","💙","🎂","🎉","✨","🌈","🌹"];
+const emojis = ["💖","💞","💘","💝","💋","❤️","🩷","💕","💓","💗","💜","💙","🎂","🎉","✨","🌈","🌹"];
 function startEmojis(){
   if(emojiInterval) return;
-  emojiInterval=setInterval(()=>{
-    const el=document.createElement('div');
-    el.className='emoji';
-    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-    el.style.left=Math.random()*100+'vw';
-    el.style.fontSize=(1+Math.random()*1.6)+'rem';
+  emojiInterval = setInterval(()=>{
+    const el = document.createElement('div');
+    el.className = 'emoji';
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.fontSize = (1 + Math.random()*1.6) + 'rem';
     document.body.appendChild(el);
-    setTimeout(()=>el.remove(),6200);
-  },200);
+    setTimeout(()=> el.remove(), 6200);
+  }, 200);
 }
 
-startBtn.addEventListener('click',async()=>{
+startBtn.addEventListener('click', async () => {
   await tryPlayAt(10);
   animateStartToControls();
-  intro.style.opacity='0';
-  setTimeout(()=>{try{intro.remove();}catch(e){}},900);
-  setTimeout(()=>{showMessageWords();startEmojis();setTimeout(()=>bigMessage.classList.add('show'),2200);},600);
+  intro.style.opacity = '0';
+  setTimeout(()=> intro.remove(), 900);
+  setTimeout(()=> startExtras(), 600);
 });
 
-musicBtn.addEventListener('click',async()=>{
+musicBtn.addEventListener('click', async () => {
   if(isPlaying){
     music.pause();
-    isPlaying=false;
-    musicBtn.textContent='🔊';
-    musicText.textContent='Devam Ettir';
-  }else{
-    await tryPlayAt(music.currentTime||10);
+    isPlaying = false;
+    musicBtn.textContent = '💔';
+    musicText.textContent = 'Devam Ettir';
+  } else {
+    await music.play();
+    isPlaying = true;
+    musicBtn.textContent = '❤️';
+    musicText.textContent = 'Durdur';
   }
 });
 
-yt.addEventListener('click',()=>{
+restartBtn.addEventListener('click', async () => {
+  await tryPlayAt(10);
+});
+
+yt.addEventListener('click', () => {
   if(isPlaying){
     music.pause();
-    isPlaying=false;
-    musicBtn.textContent='🔊';
-    musicText.textContent='Devam Ettir';
+    isPlaying = false;
+    musicBtn.textContent = '💔';
+    musicText.textContent = 'Devam Ettir';
   }
+});
+
+window.addEventListener('beforeunload', ()=> {
+  if(emojiInterval) clearInterval(emojiInterval);
 });
 </script>
 </body>
