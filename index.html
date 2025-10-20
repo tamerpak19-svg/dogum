@@ -1,185 +1,304 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birtanem... Sana küçük bir sürprizim var 💌</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Küçük Bir Sürpriz 💌</title>
 <style>
-  body {
-    margin: 0;
-    font-family: 'Comic Neue', cursive;
-    background-color: #ffd6e0;
-    text-align: center;
-    overflow-x: hidden;
+  :root{
+    --bg1:#ffd9e8;
+    --bg2:#ffd0e1;
+    --accent:#ff1493;
+    --deep:#6b0033;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, "Poppins", system-ui; background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:var(--deep); overflow:hidden}
+
+  /* FULLSCREEN HEART WALL */
+  .heart-wall {
+    position:fixed; inset:0; z-index:9998; display:flex; pointer-events:none;
+    background: linear-gradient(180deg, rgba(255,220,235,0.95), rgba(255,210,230,0.95));
+    backdrop-filter: blur(6px);
   }
 
-  h1 {
-    font-size: 2.3em;
-    color: #800040;
-    text-shadow: 0 0 10px #ff99cc;
+  .panel {
+    flex:1; display:grid; grid-template-columns:repeat(auto-fill,minmax(28px,1fr)); grid-auto-rows:28px; gap:2px;
+    align-content:start; justify-items:center; padding:6px;
+    transform:translateX(0); transition:transform 1.6s cubic-bezier(.2,.9,.2,1);
   }
 
+  .panel .h {
+    font-size:clamp(12px,2vw,20px); opacity:.95; transform-origin:center; animation:beat 1.6s infinite ease-in-out;
+  }
+  @keyframes beat { 0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)} }
+
+  /* when opened move panels away */
+  .left-open { transform: translateX(-105%); }
+  .right-open{ transform: translateX(105%); }
+
+  /* subtle overlay while hearts present (blurs background) */
+  .backdrop-overlay { position:fixed; inset:0; z-index:9997; pointer-events:none; backdrop-filter: blur(6px); background: rgba(255,230,240,0.10); transition:backdrop-filter .9s ease, background .9s ease; }
+
+  /* lens flare */
+  #lens { position:fixed; inset:0; z-index:10001; pointer-events:none; opacity:0; mix-blend-mode:screen; }
+  #lens .core { position:absolute; left:50%; top:38%; transform:translate(-50%,-50%) scale(.3); width:24vmax; height:24vmax; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,1), rgba(255,230,245,0.92) 18%, rgba(255,150,200,0.4) 45%, transparent 70% );
+    filter:blur(6px); transition:all 700ms cubic-bezier(.2,.9,.2,1); }
+  #lens .glare { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%) rotate(12deg) scale(.6); width:70vmax; height:8vmax;
+    background:linear-gradient(90deg, rgba(255,255,255,0.25), rgba(255,200,230,0.12), rgba(255,255,255,0.08)); opacity:0; transition:all 700ms ease; }
+
+  /* STAGE: title + envelope + letter */
+  main.stage { position:relative; z-index:50; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:24px; }
+
+  h1.title { font-family:"Dancing Script",cursive; font-size:2.2rem; margin:0; color:var(--deep); text-shadow:0 6px 20px rgba(255,255,255,0.6); opacity:0; transform:translateY(6px); transition:all .8s ease; }
+  h1.title.show { opacity:1; transform:translateY(0); }
+
+  /* Envelope */
   .envelope {
-    position: relative;
-    width: 400px;
-    height: 260px;
-    background: #ffb6c1;
-    margin: 50px auto;
-    border-radius: 10px;
-    box-shadow: 0 0 25px rgba(255, 0, 102, 0.2);
-    overflow: hidden;
+    position:relative; width:clamp(280px,38vw,460px); height:clamp(170px,26vw,300px);
+    border-radius:14px; background:linear-gradient(180deg,#ffdff0,#ffd1e6); box-shadow:0 22px 60px rgba(255,20,147,0.12); border:1px solid rgba(255,255,255,0.6);
+    display:flex; align-items:flex-start; justify-content:center; overflow:visible; opacity:0; transform:scale(.96) translateY(12px); transition:all .8s cubic-bezier(.2,.9,.2,1);
+  }
+  .envelope.visible { opacity:1; transform:scale(1) translateY(0); }
+
+  .flap { position:absolute; top:0; left:0; width:100%; height:58%; background:linear-gradient(180deg,#ff7ab0,#ff4f8f); clip-path:polygon(0 0,100% 0,50% 100%); transform-origin:top center; transition: transform .9s cubic-bezier(.2,.9,.2,1); z-index:3;}
+  .envelope.open .flap { transform: translateY(-130%) rotateX(180deg); }
+
+  .seal {
+    position:absolute; left:50%; top:48%; transform:translate(-50%,-50%); width:72px; height:72px; border-radius:50%;
+    background:radial-gradient(circle at 20% 20%, #ff5b8f, #c4005f); color:white; display:flex; align-items:center; justify-content:center; z-index:6;
+    box-shadow:0 12px 30px rgba(197,10,80,0.3);
+  }
+  .open-btn { background:linear-gradient(90deg,var(--accent),#ff66b2); border:none; color:#fff; padding:10px 18px; border-radius:999px; cursor:pointer; font-weight:700; }
+
+  /* body (letter) hidden initially */
+  .body {
+    position:absolute; bottom:0; left:0; width:100%; height:68%; background:linear-gradient(180deg,#fff0f6,#fff8fb);
+    border-radius:0 0 12px 12px; padding:20px; transform:translateY(105%); transition:transform .9s cubic-bezier(.2,.9,.2,1); opacity:0; pointer-events:none;
+    display:flex; align-items:flex-start; justify-content:center;
+  }
+  .envelope.open .body { transform:translateY(0); opacity:1; pointer-events:auto; }
+
+  .letter { width:92%; color:var(--deep); line-height:1.7; text-align:left; }
+
+  /* continue button sits OVER envelope center (süzülerek gelecek) */
+  .continue {
+    position:absolute; left:50%; top:48%; transform:translate(-50%,-50%) translateY(-24px); display:none;
+    background:linear-gradient(90deg,var(--accent),#ff66b2); color:#fff; border:none; padding:10px 18px; border-radius:999px; cursor:pointer;
+    box-shadow:0 10px 30px rgba(255,20,147,0.18); z-index:8; font-weight:700; transition:transform .4s ease, opacity .4s ease;
+  }
+  .continue.show { display:block; opacity:0; animation:slideIn .7s forwards .15s; }
+  @keyframes slideIn { from{opacity:0; transform:translate(-50%,-50%) translateY(-60px) scale(.98)} to{opacity:1; transform:translate(-50%,-50%) translateY(-24px) scale(1)} }
+
+  /* particle hearts */
+  .particle { position:fixed; pointer-events:none; will-change:transform,opacity; font-size:18px; z-index:10010; }
+
+  /* responsive tweaks */
+  @media(max-width:720px){
+    h1.title{font-size:1.6rem}
+    .seal{width:56px;height:56px}
+    .open-btn{padding:8px 14px;font-size:.95rem}
   }
 
-  .flap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: #ff6fa0;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    transform-origin: top;
-    transition: transform 1s ease;
-  }
-
-  .open .flap {
-    transform: rotateX(180deg);
-  }
-
-  .open-button {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #ff1493;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 1em;
-    padding: 18px 28px;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(255, 20, 147, 0.4);
-    transition: all 0.3s ease;
-    z-index: 10;
-  }
-
-  .open-button:hover {
-    background: #ff69b4;
-    box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
-  }
-
-  .letter {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s ease;
-    max-width: 400px;
-    margin: 20px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
-    color: #400020;
-  }
-
-  .show-letter {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .continue-button {
-    display: block;
-    margin: 20px auto;
-    padding: 12px 22px;
-    font-size: 1em;
-    color: white;
-    background: #ff4da6;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .continue-button:hover {
-    background: #ff1a75;
-  }
-
-  /* Kalp patlama animasyonu */
-  @keyframes floatHearts {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
-  }
-
-  .heart {
-    position: absolute;
-    bottom: 0;
-    font-size: 20px;
-    animation: floatHearts 4s linear forwards;
-  }
 </style>
 </head>
 <body>
 
-<h1>💌 Birtanem... Sana küçük bir sürprizim var 💌</h1>
+  <!-- Full-screen heart wall (two panels) -->
+  <div class="heart-wall" id="heartWall" aria-hidden="true">
+    <div class="panel" id="panelLeft"></div>
+    <div class="panel" id="panelRight"></div>
+  </div>
+  <div class="backdrop-overlay active" id="backdrop"></div>
 
-<div class="envelope" id="envelope">
-  <div class="flap"></div>
-  <button class="open-button" id="openBtn">💖 Aç Beni 💖</button>
-</div>
+  <!-- Romantic lens (flash) -->
+  <div id="lens" aria-hidden="true"><div class="core"></div><div class="glare"></div></div>
 
-<div class="letter" id="letter">
-  <p>Sevgilim,</p>
-<p>Bu küçük notla sadece şunu söylemek istedim...  
-Sen benim en huzurlu anım, en içten gülüşümsün. 💗  
-Ne zaman aklıma gelsen, kalbim istemsizce tebessüm ediyor.</p>
+  <!-- Stage -->
+  <main class="stage" id="stage">
+    <h1 class="title" id="title">💌 Birtanem... Sana küçük bir sürprizim var</h1>
 
-<p>Bu mektup bir başlangıç sadece —  
-devam ettiğinde seni kocaman bir gülümseme bekliyor. 💌</p>
-  <button class="continue-button">Devam Et 💫</button>
-</div>
+    <div class="envelope" id="envelope" role="region" aria-label="Sürpriz zarfı">
+      <div class="flap" id="flap"></div>
+
+      <div class="seal" id="seal" role="button" tabindex="0">
+        <button class="open-btn" id="openBtn">💖 Aç Beni</button>
+      </div>
+
+      <div class="body" id="body">
+        <div class="letter" id="letter">
+          <p style="margin-top:0"><strong>Sevgilim,</strong></p>
+          <p id="letterInner">Sen benim en huzurlu anım, en içten gülüşümsün. Her aklıma gelişinle içim sıcacık oluyor. Bu mektup yalnızca küçük bir başlangıç — devam ettikçe seni bekleyen şey büyüyecek. 💌</p>
+        </div>
+      </div>
+
+      <button class="continue" id="continueBtn" aria-hidden="true">Devam Et 💞</button>
+    </div>
+  </main>
 
 <script>
-  const openBtn = document.getElementById("openBtn");
-  const envelope = document.getElementById("envelope");
-  const letter = document.getElementById("letter");
+/* ---------- build heart wall ---------- */
+const left = document.getElementById('panelLeft');
+const right = document.getElementById('panelRight');
+function fillHeartPanels(){
+  left.innerHTML = ''; right.innerHTML = '';
+  // dynamic cols/rows based on viewport for density/perf
+  const cols = Math.max(12, Math.floor(window.innerWidth/36));
+  const rows = Math.max(8, Math.floor(window.innerHeight/36));
+  const total = cols * rows;
+  const hearts = ["❤️","💖","💕","💗","💞","🩷"];
+  for(let i=0;i<total;i++){
+    const a = document.createElement('div'); a.className='h'; a.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    const b = document.createElement('div'); b.className='h'; b.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    left.appendChild(a); right.appendChild(b);
+  }
+}
+fillHeartPanels();
+window.addEventListener('resize', ()=>{ clearTimeout(window._rc); window._rc=setTimeout(fillHeartPanels,200); });
 
-  openBtn.addEventListener("click", () => {
-    envelope.classList.add("open");
-    openBtn.style.display = "none";
-    
-    // Parıltı efekti (beyaz + pembe lens flare tarzı)
-    const flash = document.createElement("div");
-    flash.style.position = "fixed";
-    flash.style.top = 0;
-    flash.style.left = 0;
-    flash.style.width = "100%";
-    flash.style.height = "100%";
-    flash.style.background = "radial-gradient(circle, rgba(255,255,255,0.8), rgba(255,182,193,0.6))";
-    flash.style.zIndex = 999;
-    flash.style.opacity = 1;
-    flash.style.transition = "opacity 1s ease";
-    document.body.appendChild(flash);
+/* ---------- lens flare ---------- */
+const lens = document.getElementById('lens');
+const core = lens.querySelector('.core');
+const glare = lens.querySelector('.glare');
+function playFlare(delay=0, dur=900){
+  setTimeout(()=>{
+    lens.style.opacity = 1;
+    core.style.transform = 'translate(-50%,-50%) scale(1.05)';
+    core.style.opacity = 1;
+    glare.style.opacity = 1;
+    glare.style.transform = 'translate(-50%,-50%) rotate(12deg) scale(1.05)';
+    setTimeout(()=>{ core.style.opacity = 0; glare.style.opacity = 0; setTimeout(()=> lens.style.opacity=0,200); }, dur*0.7);
+  }, delay);
+}
 
-    setTimeout(() => { flash.style.opacity = 0; }, 300);
-    setTimeout(() => { flash.remove(); }, 1200);
+/* ---------- intro sequence: panels open + flare + reveal envelope ---------- */
+const heartWall = document.getElementById('heartWall');
+const backdrop = document.getElementById('backdrop');
+const title = document.getElementById('title');
+const envelope = document.getElementById('envelope');
 
-    // Kalpler
-    for (let i = 0; i < 30; i++) {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.innerHTML = "💖";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
-      heart.style.fontSize = 16 + Math.random() * 24 + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
-    }
+function introSequence(){
+  // early small flare then show title
+  playFlare(120, 700);
+  setTimeout(()=> title.classList.add('show'), 700);
 
-    // Mektup ışıltılı geçişle görünsün
-    setTimeout(() => {
-      letter.classList.add("show-letter");
-    }, 1000);
+  // after 2s open panels outward
+  setTimeout(() => {
+    left.classList.add('left-open');
+    right.classList.add('right-open');
+    // stronger flare as panels move
+    playFlare(150, 1000);
+    // remove heartWall & reduce blur after animation
+    setTimeout(()=> {
+      try{ heartWall.remove(); }catch(e){}
+      backdrop.classList.remove('active');
+      // show envelope (fade in)
+      envelope.classList.add('visible');
+    }, 1700);
+  }, 2000);
+}
+
+/* ---------- envelope open interaction ---------- */
+const openBtn = document.getElementById('openBtn');
+const seal = document.getElementById('seal');
+const body = document.getElementById('body');
+const continueBtn = document.getElementById('continueBtn');
+const letter = document.getElementById('letter');
+const particlesRoot = document.body; // append particles to body
+let opened=false;
+
+function spawnParticle(x,y,char, size, dur){
+  const el = document.createElement('div');
+  el.className='particle';
+  el.textContent = char;
+  el.style.left = (x - size/2) + 'px';
+  el.style.top = (y - size/2) + 'px';
+  el.style.fontSize = size + 'px';
+  el.style.opacity = '1';
+  el.style.transition = `transform ${dur}s cubic-bezier(.2,.9,.2,1), opacity ${dur}s linear`;
+  particlesRoot.appendChild(el);
+
+  // random direction (upwards + sideways)
+  const angle = (Math.random()*120 - 60) * (Math.PI/180);
+  const dist = (Math.random()*0.6 + 0.6) * Math.max(window.innerWidth, window.innerHeight) * 0.36;
+  const dx = Math.sin(angle) * dist * (Math.random()*0.8 + 0.6);
+  const dy = -Math.cos(angle) * dist * (Math.random()*0.6 + 0.9);
+  const rot = (Math.random()*720 - 360);
+
+  requestAnimationFrame(()=> {
+    el.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg) scale(${(Math.random()*0.8)+0.6})`;
+    el.style.opacity = '0';
   });
-</script>
+  setTimeout(()=> el.remove(), (dur*1000)+300);
+}
 
+function spawnSpark(x,y,color){
+  const el = document.createElement('div');
+  el.className = 'particle';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.width = '8px';
+  el.style.height = '8px';
+  el.style.borderRadius = '50%';
+  el.style.background = color;
+  el.style.opacity = '1';
+  el.style.transform = 'scale(0)';
+  el.style.transition = 'transform .9s ease-out, opacity .9s linear';
+  document.body.appendChild(el);
+  requestAnimationFrame(()=> { el.style.transform = `scale(${6 + Math.random()*6})`; el.style.opacity = '0'; });
+  setTimeout(()=> el.remove(), 900);
+}
+
+async function openEnvelope(){
+  if(opened) return;
+  opened = true;
+  // strong romantic flare
+  playFlare(0, 1000);
+
+  // open flap animation via class
+  envelope.classList.add('open');
+
+  // spawn particle burst from near flap
+  const rect = envelope.getBoundingClientRect();
+  const sx = rect.left + rect.width/2;
+  const sy = rect.top + rect.height * 0.18;
+
+  // particle count adapted for perf
+  const total = (window.innerWidth < 760) ? 320 : 600;
+  for(let i=0;i<total;i++){
+    setTimeout(()=> {
+      const hearts = ["💖","💘","💕","💞","💝","❤️"];
+      const char = hearts[Math.floor(Math.random()*hearts.length)];
+      spawnParticle(sx + (Math.random()-0.5)*30, sy + (Math.random()-0.5)*20, char, 12 + Math.random()*18, 1.6 + Math.random()*1.6);
+    }, i*6 + Math.random()*200);
+  }
+
+  // occasional sparks
+  const bursts = Math.max(2, Math.round(total/220));
+  for(let i=0;i<bursts;i++){
+    setTimeout(()=> spawnSpark(sx + (Math.random()-0.5)*160, sy + (Math.random()-0.5)*60, ["#fff","#ffd6ec","#ff8fc2"][Math.floor(Math.random()*3)]), i*420);
+  }
+
+  // reveal letter & continue button after short delay
+  setTimeout(()=> {
+    // letter revealed by CSS transform & opacity (class on envelope)
+    // show continue button on top of envelope, centered
+    continueBtn.classList.add('show');
+    continueBtn.setAttribute('aria-hidden','false');
+  }, 1000);
+}
+
+// open via click & keyboard
+openBtn.addEventListener('click', openEnvelope);
+seal.addEventListener('keydown', (e)=> { if(e.key==='Enter' || e.key===' ') openEnvelope(); });
+
+// continue button click -> navigate
+continueBtn.addEventListener('click', ()=> { window.location.href = 'love.html'; });
+
+/* start intro on load */
+window.addEventListener('load', ()=> {
+  setTimeout(()=> introSequence(), 240);
+});
+</script>
 </body>
 </html>
