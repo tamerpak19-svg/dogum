@@ -1,281 +1,185 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Küçük Bir Sürpriz 💌</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      background: #ffd6e8;
-      font-family: 'Quicksand', sans-serif;
-      overflow: hidden;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birtanem... Sana küçük bir sürprizim var 💌</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Comic Neue', cursive;
+    background-color: #ffd6e0;
+    text-align: center;
+    overflow-x: hidden;
+  }
 
-    /* 💞 Kalpli perde */
-    .heart-curtain {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent 0 10px,
-        rgba(255, 182, 193, 0.3) 10px 20px
-      );
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      flex-wrap: wrap;
-      z-index: 999;
-      overflow: hidden;
-    }
+  h1 {
+    font-size: 2.3em;
+    color: #800040;
+    text-shadow: 0 0 10px #ff99cc;
+  }
 
-    .heart-curtain span {
-      font-size: 2rem;
-      color: #ff5ca8;
-      animation: float 3s ease-in-out infinite;
-    }
+  .envelope {
+    position: relative;
+    width: 400px;
+    height: 260px;
+    background: #ffb6c1;
+    margin: 50px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(255, 0, 102, 0.2);
+    overflow: hidden;
+  }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+  .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: #ff6fa0;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 1s ease;
+  }
 
-    .curtain-left, .curtain-right {
-      position: fixed;
-      top: 0; width: 50%; height: 100%;
-      background: radial-gradient(circle at center, #ffb6c1, #ff4d94);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      z-index: 1000;
-    }
+  .open .flap {
+    transform: rotateX(180deg);
+  }
 
-    .curtain-left { left: 0; }
-    .curtain-right { right: 0; }
+  .open-button {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ff1493;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1em;
+    padding: 18px 28px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.4);
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
 
-    .curtain-heart {
-      font-size: 2rem;
-      color: #fff;
-      animation: pulse 1.5s infinite ease-in-out;
-    }
+  .open-button:hover {
+    background: #ff69b4;
+    box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
+  }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.7; }
-    }
+  .letter {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease;
+    max-width: 400px;
+    margin: 20px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
+    color: #400020;
+  }
 
-    /* 🌟 Flaş efekti */
-    .flash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,192,203,0.5), transparent);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 1500;
-    }
+  .show-letter {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    /* 💌 Başlık ve zarf */
-    h1 {
-      margin-top: 100px;
-      color: #6b0023;
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.2rem;
-      opacity: 0;
-      animation: fadeIn 2s ease forwards 3s;
-    }
+  .continue-button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 22px;
+    font-size: 1em;
+    color: white;
+    background: #ff4da6;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+  .continue-button:hover {
+    background: #ff1a75;
+  }
 
-    .envelope {
-      position: relative;
-      width: 300px;
-      height: 200px;
-      background: #ffc0cb;
-      margin: 40px auto;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(255,105,180,0.6);
-      opacity: 0;
-      animation: fadeIn 2s ease forwards 4s;
-    }
+  /* Kalp patlama animasyonu */
+  @keyframes floatHearts {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
+  }
 
-    .flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: #ff80aa;
-      clip-path: polygon(0 0, 50% 100%, 100% 0);
-      z-index: 2;
-    }
-
-    .seal {
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #ff1a75;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 0 15px rgba(255,255,255,0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-      z-index: 3;
-    }
-
-    .seal:hover {
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-
-    /* 💬 Mektup içeriği */
-    .letter {
-      display: none;
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(255,105,180,0.5);
-      color: #330011;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      text-align: left;
-      position: relative;
-    }
-
-    .continue-btn {
-      display: none;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 50%;
-      background: #ff4da6;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(255,255,255,0.8);
-      animation: floatUp 1.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatUp {
-      0% { transform: translate(-50%, 0); }
-      100% { transform: translate(-50%, -10px); }
-    }
-
-    /* ❤️ Kalp yağmuru */
-    .heart {
-      position: fixed;
-      bottom: 0;
-      font-size: 1.4rem;
-      animation: fly 4s linear forwards;
-      z-index: 1200;
-      pointer-events: none;
-    }
-
-    @keyframes fly {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-100vh) scale(1.6); opacity: 0; }
-    }
-  </style>
+  .heart {
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+    animation: floatHearts 4s linear forwards;
+  }
+</style>
 </head>
-
 <body>
-  <div class="flash" id="flash"></div>
 
-  <div class="curtain-left" id="leftCurtain"></div>
-  <div class="curtain-right" id="rightCurtain"></div>
+<h1>💌 Birtanem... Sana küçük bir sürprizim var 💌</h1>
 
-  <h1>💌 Birtanem... Sana küçük bir sürprizim var 💖</h1>
+<div class="envelope" id="envelope">
+  <div class="flap"></div>
+  <button class="open-button" id="openBtn">💖 Aç Beni 💖</button>
+</div>
 
-  <div class="envelope" id="envelope">
-    <div class="flap"></div>
-    <div class="seal" id="openBtn">💖<br>Aç Beni</div>
-  </div>
+<div class="letter" id="letter">
+  <p>Sevgilim,</p>
+<p>Bu küçük notla sadece şunu söylemek istedim...  
+Sen benim en huzurlu anım, en içten gülüşümsün. 💗  
+Ne zaman aklıma gelsen, kalbim istemsizce tebessüm ediyor.</p>
 
-  <div class="letter" id="letter">
-    Sevgilim,<br><br>
-    Bu küçük notla seni ne kadar çok sevdiğimi hatırlatmak istedim.  
-    Sen benim en güzel şansım, en içten gülüşümsün. 💕  
-    Bu mektup sadece başlangıç — “Devam Et 💌” dediğinde,  
-    gerçek sürpriz seni bekliyor... ✨  
-    <button class="continue-btn" onclick="window.location.href='love.html'">Devam Et 💌</button>
-  </div>
+<p>Bu mektup bir başlangıç sadece —  
+devam ettiğinde seni kocaman bir gülümseme bekliyor. 💌</p>
+  <button class="continue-button">Devam Et 💫</button>
+</div>
 
-  <script>
-    const leftCurtain = document.getElementById('leftCurtain');
-    const rightCurtain = document.getElementById('rightCurtain');
-    const flash = document.getElementById('flash');
-    const openBtn = document.getElementById('openBtn');
-    const letter = document.getElementById('letter');
+<script>
+  const openBtn = document.getElementById("openBtn");
+  const envelope = document.getElementById("envelope");
+  const letter = document.getElementById("letter");
 
-    // 🎭 Kalpli perde oluştur
-    function createHeartCurtain() {
-      for (let i = 0; i < 300; i++) {
-        const heart = document.createElement('span');
-        heart.textContent = "💖";
-        heart.style.position = "absolute";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.top = Math.random() * 100 + "vh";
-        heart.style.fontSize = (Math.random() * 1.5 + 1) + "rem";
-        heart.style.opacity = Math.random();
-        document.body.appendChild(heart);
-      }
+  openBtn.addEventListener("click", () => {
+    envelope.classList.add("open");
+    openBtn.style.display = "none";
+    
+    // Parıltı efekti (beyaz + pembe lens flare tarzı)
+    const flash = document.createElement("div");
+    flash.style.position = "fixed";
+    flash.style.top = 0;
+    flash.style.left = 0;
+    flash.style.width = "100%";
+    flash.style.height = "100%";
+    flash.style.background = "radial-gradient(circle, rgba(255,255,255,0.8), rgba(255,182,193,0.6))";
+    flash.style.zIndex = 999;
+    flash.style.opacity = 1;
+    flash.style.transition = "opacity 1s ease";
+    document.body.appendChild(flash);
+
+    setTimeout(() => { flash.style.opacity = 0; }, 300);
+    setTimeout(() => { flash.remove(); }, 1200);
+
+    // Kalpler
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+      heart.style.fontSize = 16 + Math.random() * 24 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
     }
 
-    // 🎬 Perde animasyonu
-    window.onload = () => {
-      createHeartCurtain();
-      setTimeout(() => {
-        leftCurtain.style.transition = "transform 2s ease-in-out";
-        rightCurtain.style.transition = "transform 2s ease-in-out";
-        leftCurtain.style.transform = "translateX(-100%)";
-        rightCurtain.style.transform = "translateX(100%)";
-        flashEffect();
-      }, 2000);
-    };
+    // Mektup ışıltılı geçişle görünsün
+    setTimeout(() => {
+      letter.classList.add("show-letter");
+    }, 1000);
+  });
+</script>
 
-    // ✨ Flaş efekti
-    function flashEffect() {
-      flash.style.transition = "opacity 0.8s ease";
-      flash.style.opacity = "1";
-      setTimeout(() => {
-        flash.style.opacity = "0";
-      }, 800);
-    }
-
-    // 💌 Zarf açılınca
-    openBtn.addEventListener('click', () => {
-      flashEffect();
-      for (let i = 0; i < 200; i++) {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.textContent = ["💖","💘","💝","💕","💞","💗"][Math.floor(Math.random()*6)];
-        heart.style.left = Math.random()*100 + "vw";
-        heart.style.animationDuration = (Math.random()*3 + 2) + "s";
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(), 4000);
-      }
-      letter.style.display = "block";
-      setTimeout(()=>{
-        document.querySelector('.continue-btn').style.display = "block";
-      }, 2000);
-    });
-  </script>
 </body>
 </html>
