@@ -24,10 +24,8 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
     }
 
-    /* Kalpler */
     #heartOverlay {
       position: fixed; inset: 0; z-index: 1200;
       pointer-events: none;
@@ -46,14 +44,12 @@
       100% { transform: scale(2.5) translateY(-120px); opacity: 0; }
     }
 
-    /* Havai fişek patlama efekti */
     @keyframes heartPop {
-      0% { transform: scale(1); opacity: 1; filter: brightness(1); }
-      50% { transform: scale(2.5); opacity: 0.8; filter: brightness(1.6); }
-      100% { transform: scale(0); opacity: 0; filter: brightness(0.5); }
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(2.5); opacity: 0.8; }
+      100% { transform: scale(0); opacity: 0; }
     }
 
-    /* Flash */
     #flash {
       position: fixed; inset: 0; z-index: 1600;
       background: radial-gradient(circle at center, rgba(255,255,255,0.9), rgba(255,200,220,0.25) 40%, transparent 60%);
@@ -61,7 +57,6 @@
       pointer-events: none;
     }
 
-    /* Zarf */
     .envelope {
       position: relative;
       width: 360px; height: 240px;
@@ -108,7 +103,6 @@
     .letter.show { height: 170px; padding-top: 16px; }
     .letter p { margin: 0; font-size: 15px; line-height: 1.6; text-align: left; }
 
-    /* Devam butonu */
     #continueBtn {
       position: absolute;
       top: -56px; left: 50%;
@@ -125,10 +119,9 @@
     #continueBtn.show { transform: translateX(-50%) scale(1); opacity: 1; pointer-events: auto; animation: pulse 2.2s infinite; }
     @keyframes pulse { 0%,100%{ transform:translateX(-50%) scale(1); } 50%{ transform:translateX(-50%) scale(1.06); } }
 
-    /* Yazı (mektubun üst kısmında sabit) */
     #hint {
-      position: absolute;
-      top: calc(50% - 180px);
+      position: fixed;
+      top: 22%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.9);
       color: #fff;
@@ -139,13 +132,11 @@
       opacity: 0;
       transition: all 1.2s cubic-bezier(.2,.9,.2,1);
       letter-spacing: 1px;
-      text-align: center;
-      width: 90%;
+      white-space: nowrap;
     }
 
     #hint.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-    /* 🌹 Gül efekti */
     .rose {
       position: fixed;
       top: -40px;
@@ -161,20 +152,19 @@
       100% { transform: translateY(110vh) rotate(240deg); opacity: 0; }
     }
 
-    /* Mobil uyum */
     @media (max-width: 720px) {
       .envelope { width: 260px; height: 180px; }
-      #hint { font-size: 24px; top: calc(50% - 130px); }
+      #hint { font-size: 26px; top: 30%; white-space: normal; text-align: center; }
       .letter p { font-size: 13px; }
     }
   </style>
 </head>
 <body>
+  <div id="hint">Küçük bir sürprizim var 💌</div>
   <div id="heartOverlay"></div>
   <div id="flash"></div>
 
   <div class="envelope" id="envelope">
-    <div id="hint">Küçük bir sürprizim var 💌</div>
     <div class="flap" id="flap"></div>
     <button id="continueBtn" onclick="goToLove()">💌 Devam Et 💌</button>
     <div class="letter" id="letter">
@@ -195,7 +185,7 @@
   let opened=false;
 
   // 💖 Optimize edilmiş kalpler
-  const HEART_COUNT = 80;
+  const HEART_COUNT = 40;
   for(let i=0;i<HEART_COUNT;i++){
     const h=document.createElement('div');
     h.className='heart';
@@ -203,10 +193,9 @@
     h.style.left=Math.random()*100+'vw';
     h.style.top=Math.random()*100+'vh';
     h.style.fontSize=(24+Math.random()*36)+'px';
-    h.style.animationDelay=(Math.random()*0.6)+'s';
+    h.style.animationDelay=(Math.random()*0.8)+'s';
     heartOverlay.appendChild(h);
 
-    // Kalp patlama efekti
     h.addEventListener('animationend',()=>{
       h.style.animation='heartPop 0.5s ease forwards';
       setTimeout(()=>h.remove(),600);
@@ -219,10 +208,12 @@
     heartOverlay.style.opacity='0';
     setTimeout(()=>{
       heartOverlay.remove();
-      hint.classList.add('show');
+      showHint();
       setTimeout(()=>runFlashAndShowEnvelope(),1600);
     },900);
-  },3000);
+  },2800);
+
+  function showHint(){ hint.classList.add('show'); }
 
   function runFlashAndShowEnvelope(){
     flash.style.opacity='1';
@@ -230,7 +221,6 @@
     setTimeout(()=>envelope.classList.add('show'),420);
   }
 
-  // 🌹 Gül animasyonu
   function createRose(leftPercent,sizePx,delaySec){
     const r=document.createElement('div');
     r.className='rose';
@@ -243,12 +233,11 @@
   }
 
   function startRoseRain(){
-    for(let i=0;i<80;i++){
+    for(let i=0;i<25;i++){
       createRose(Math.random()*100,20+Math.random()*20,Math.random()*2);
     }
   }
 
-  // 💌 Zarf tıklama
   envelope.addEventListener('click',()=>{
     if(opened) return;
     opened=true;
@@ -266,7 +255,7 @@
   function quickHeartBurst(){
     const cx=window.innerWidth/2;
     const cy=window.innerHeight/2;
-    for(let i=0;i<12;i++){
+    for(let i=0;i<10;i++){
       const h=document.createElement('div');
       h.className='heart';
       h.textContent='💖';
