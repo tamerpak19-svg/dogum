@@ -1,280 +1,266 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Küçük Bir Sürpriz 💌</title>
   <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at center, #ffb6c1, #ff66b2, #ff1493);
-      color: white;
-      text-align: center;
-      position: relative;
+    :root{
+      --accent:#ff1493;
+      --bg1:#ffb6c1;
+      --bg2:#ff66b2;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Quicksand', system-ui, sans-serif;
+      background:radial-gradient(circle at center,var(--bg1),var(--bg2));
+      color:#111;
+      overflow:hidden;
+      text-align:center;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
     }
 
-    /* ❤️ Kalpli perde efekti */
-    #heartOverlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 1.5s ease-in-out, backdrop-filter 2s ease-in-out;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
+    /* ---------- hearts ---------- */
+    #heartOverlay{
+      position:fixed; inset:0; z-index:1200;
+      background:rgba(255,255,255,0.06);
+      pointer-events:none;
+    }
+    .heart{
+      position:absolute;
+      animation:heartPop 2.2s ease forwards;
+      filter:drop-shadow(0 6px 10px rgba(255,105,180,0.18));
+    }
+    @keyframes heartPop{
+      0%{ transform:scale(0) translateY(0); opacity:1; }
+      100%{ transform:scale(2.8) translateY(-60px); opacity:0; }
     }
 
-    .heart {
-      font-size: 1.6rem;
-      opacity: 0.9;
-      animation: floatHearts 3s ease-in-out forwards;
+    /* ---------- flash ---------- */
+    #flash{
+      position:fixed; inset:0; z-index:1600;
+      background:radial-gradient(circle at center, rgba(255,255,255,0.95), rgba(255,200,220,0.25) 40%, transparent 60%);
+      opacity:0; transition:opacity .35s ease;
+      mix-blend-mode:screen;
+      pointer-events:none;
     }
 
-    @keyframes floatHearts {
-      0% { transform: scale(0) rotate(0deg); opacity: 1; }
-      100% { transform: scale(2.5) rotate(360deg); opacity: 0; }
+    /* ---------- envelope ---------- */
+    .envelope{
+      position:relative;
+      width:360px; height:240px;
+      background:linear-gradient(180deg,#ffd3e6,#ffb6d6);
+      border-radius:16px;
+      box-shadow:0 30px 60px rgba(255,20,147,0.12);
+      transform:scale(0.85);
+      opacity:0;
+      transition:transform .9s cubic-bezier(.2,.9,.2,1), opacity .9s;
+      z-index:1500;
+      cursor:pointer;
+    }
+    .envelope.show{ transform:scale(1); opacity:1; }
+
+    .flap{
+      position:absolute; top:0; left:0;
+      width:0; height:0;
+      border-left:180px solid transparent;
+      border-right:180px solid transparent;
+      border-bottom:120px solid #ff6f9a;
+      transform-origin:top center;
+      transition:transform .9s cubic-bezier(.2,.9,.2,1);
+      border-radius:6px;
+      z-index:4;
+    }
+    .flap.open{ transform:rotateX(180deg); }
+
+    .letter{
+      position:absolute;
+      left:12px; right:12px; bottom:12px;
+      height:0;
+      background:#fff;
+      border-radius:10px;
+      overflow:hidden;
+      transition:height 1s cubic-bezier(.2,.9,.2,1), padding .6s;
+      color:#222;
+      z-index:2;
+      box-shadow:0 8px 24px rgba(0,0,0,0.06);
+      padding:0 14px;
+    }
+    .letter.show{ height:170px; padding-top:16px; }
+    .letter p{ margin:0; font-size:15px; line-height:1.6; color:#222; text-align:left; }
+
+    /* ---------- continue button ---------- */
+    #continueBtn{
+      position:absolute;
+      top:-56px; left:50%;
+      transform:translateX(-50%) scale(0.9);
+      background:linear-gradient(90deg,var(--accent),#ff69b4);
+      color:white; border:none;
+      padding:10px 28px; border-radius:999px; font-weight:700;
+      box-shadow:0 12px 30px rgba(255,20,147,0.18);
+      opacity:0; transition:all .6s cubic-bezier(.2,.9,.2,1);
+      z-index:1700;
+      pointer-events:none;
+    }
+    #continueBtn.show{ transform:translateX(-50%) scale(1); opacity:1; pointer-events:auto; animation:pulse 2.2s infinite; }
+    @keyframes pulse{ 0%,100%{ transform:translateX(-50%) scale(1); } 50%{ transform:translateX(-50%) scale(1.06); } }
+
+    /* ---------- hint ---------- */
+    #hint{
+      position:fixed;
+      top:28%;
+      left:50%;
+      transform:translate(-50%, -50%) scale(0.9);
+      color:#fff;
+      font-weight:800;
+      font-size:42px;
+      text-shadow:0 0 25px rgba(255,255,255,0.7), 0 0 35px rgba(255,105,180,0.9);
+      z-index:1550;
+      opacity:0;
+      transition:all 1.2s cubic-bezier(.2,.9,.2,1);
+      letter-spacing:1px;
+    }
+    #hint.show{ opacity:1; transform:translate(-50%, -50%) scale(1); }
+
+    /* ---------- roses ---------- */
+    .rose{
+      position:fixed;
+      top:-40px;
+      font-size:24px;
+      z-index:2000;
+      opacity:0.9;
+      animation:roseFall 5s ease-in forwards;
+      pointer-events:none;
+    }
+    @keyframes roseFall{
+      0%{ transform:translateY(-10vh) rotate(0deg); opacity:1; }
+      100%{ transform:translateY(110vh) rotate(240deg); opacity:0; }
     }
 
-    /* 💥 Flaş efekti */
-    #flash {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,182,193,0.3));
-      opacity: 0;
-      z-index: 1500;
-      pointer-events: none;
-    }
-
-    /* ✉️ Zarf */
-    .envelope {
-      position: relative;
-      width: 360px;
-      height: 240px;
-      margin: 160px auto 0;
-      background: #ff8fab;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(255,20,147,0.4);
-      transform: scale(0);
-      opacity: 0;
-      transition: all 1s ease-in-out;
-    }
-
-    .envelope.show {
-      transform: scale(1);
-      opacity: 1;
-    }
-
-    .flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-left: 180px solid transparent;
-      border-right: 180px solid transparent;
-      border-bottom: 120px solid #ff5c8d;
-      border-radius: 5px;
-      transform-origin: top;
-      transition: transform 1s ease-in-out;
-      z-index: 3;
-    }
-
-    .flap.open {
-      transform: rotateX(180deg);
-    }
-
-    .letter {
-      position: absolute;
-      bottom: 0;
-      left: 10px;
-      right: 10px;
-      height: 0;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: height 1.2s ease-in-out;
-      color: #333;
-      font-size: 1rem;
-      padding: 0 10px;
-      z-index: 2;
-    }
-
-    .letter.show {
-      height: 200px;
-      padding-top: 15px;
-    }
-
-    .letter p {
-      margin: 15px 10px;
-      line-height: 1.6;
-    }
-
-    /* 🌹 Gül animasyonu */
-    .rose {
-      position: fixed;
-      top: -50px;
-      font-size: 1.8rem;
-      animation: fall 4s linear forwards;
-      z-index: 2000;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(180deg); opacity: 0; }
-    }
-
-    /* 💌 Devam Et butonu */
-    #continueBtn {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) scale(0);
-      background: linear-gradient(90deg, #ff1493, #ff69b4);
-      border: none;
-      color: white;
-      padding: 10px 28px;
-      border-radius: 25px;
-      font-size: 1rem;
-      box-shadow: 0 0 15px rgba(255,20,147,0.6);
-      cursor: pointer;
-      opacity: 0;
-      transition: all 0.8s ease-in-out;
-      z-index: 4;
-    }
-
-    #continueBtn.show {
-      transform: translateX(-50%) scale(1);
-      opacity: 1;
-    }
-
-    #introText {
-      font-size: 1.8rem;
-      position: relative;
-      margin-top: 100px;
-      opacity: 0;
-      animation: fadeInText 2.5s ease-in-out 2s forwards;
-      text-shadow: 0 0 10px rgba(255,255,255,0.8);
-    }
-
-    @keyframes fadeInText { to { opacity: 1; } }
-
-    @media (max-width: 768px) {
-      .envelope { width: 260px; height: 170px; margin-top: 130px; }
-      .flap { border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 85px solid #ff5c8d; }
-      .letter.show { height: 140px; font-size: 0.9rem; }
+    @media(max-width:720px){
+      .envelope{ width:280px; height:190px; }
+      #hint{ font-size:30px; top:40%; }
     }
   </style>
 </head>
 <body>
-
-  <!-- ❤️ Kalpli perde -->
+  <div id="hint">Küçük bir sürprizim var 💌</div>
   <div id="heartOverlay"></div>
-
-  <!-- 💥 Flaş efekti -->
   <div id="flash"></div>
 
-  <div id="introText">Küçük bir sürprizim var 💌</div>
-
-  <!-- ✉️ Zarf -->
   <div class="envelope" id="envelope">
     <div class="flap" id="flap"></div>
+    <button id="continueBtn" onclick="goToLove()">💌 Devam Et 💌</button>
     <div class="letter" id="letter">
-      <button id="continueBtn" onclick="goToLove()">💌 Devam Et 💌</button>
       <p>💖 Hayatımın en güzel yanısın, seni tanımak en büyük hediyem oldu.  
-      Bu mektup sadece bir başlangıç… 💌  
-      Devam et, çünkü asıl sürpriz seni bekliyor. ✨</p>
+      Bu mektup sadece bir başlangıç… 💌 Devam et, çünkü asıl sürpriz seni bekliyor. ✨</p>
     </div>
   </div>
 
-  <script>
-    const heartOverlay = document.getElementById("heartOverlay");
-    const flash = document.getElementById("flash");
-    const envelope = document.getElementById("envelope");
-    const flap = document.getElementById("flap");
-    const letter = document.getElementById("letter");
-    const continueBtn = document.getElementById("continueBtn");
+<script>
+(function(){
+  const heartOverlay=document.getElementById('heartOverlay');
+  const flash=document.getElementById('flash');
+  const envelope=document.getElementById('envelope');
+  const flap=document.getElementById('flap');
+  const letter=document.getElementById('letter');
+  const continueBtn=document.getElementById('continueBtn');
+  const hint=document.getElementById('hint');
 
-    // 💖 Kalpler perde olarak
-    for (let i = 0; i < 600; i++) {
-      const h = document.createElement("div");
-      h.classList.add("heart");
-      h.textContent = "💖";
-      h.style.position = "absolute";
-      h.style.left = Math.random() * 100 + "vw";
-      h.style.top = Math.random() * 100 + "vh";
-      h.style.fontSize = (1 + Math.random() * 1.5) + "rem";
-      heartOverlay.appendChild(h);
+  let opened=false;
+
+  // hearts
+  const HEART_COUNT=500;
+  for(let i=0;i<HEART_COUNT;i++){
+    const h=document.createElement('div');
+    h.className='heart';
+    h.textContent='💖';
+    h.style.left=Math.random()*100+'vw';
+    h.style.top=Math.random()*100+'vh';
+    h.style.fontSize=(10+Math.random()*24)+'px';
+    h.style.animationDelay=(Math.random()*0.6)+'s';
+    heartOverlay.appendChild(h);
+  }
+
+  // hearts finish -> show hint
+  setTimeout(()=>{
+    heartOverlay.style.transition='opacity 1s ease';
+    heartOverlay.style.opacity='0';
+    setTimeout(()=>{
+      heartOverlay.remove();
+      showHint();
+      setTimeout(()=>runFlashAndShowEnvelope(),1600);
+    },900);
+  },2200);
+
+  function showHint(){ hint.classList.add('show'); }
+
+  function runFlashAndShowEnvelope(){
+    flash.style.opacity='1';
+    setTimeout(()=>flash.style.opacity='0',380);
+    setTimeout(()=>envelope.classList.add('show'),420);
+  }
+
+  // 🌹 Zarf açılınca güller düşsün
+  function createRose(leftPercent, sizePx, delaySec){
+    const r=document.createElement('div');
+    r.className='rose';
+    r.textContent='🌹';
+    r.style.left=leftPercent+'vw';
+    r.style.fontSize=sizePx+'px';
+    r.style.animation=`roseFall ${4+Math.random()*2}s ease-in ${delaySec}s forwards`;
+    r.style.transform=`rotate(${Math.random()*60-30}deg)`;
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),(delaySec+6)*1000);
+  }
+
+  function startRoseRain(){
+    const ROSE_COUNT=200;
+    for(let i=0;i<ROSE_COUNT;i++){
+      createRose(Math.random()*100,20+Math.random()*20,Math.random()*2);
     }
+  }
 
-    // 🎬 Açılış animasyonu
-    setTimeout(() => {
-      heartOverlay.style.opacity = "0";
-      setTimeout(() => {
-        heartOverlay.remove();
-        flashEffect();
-        setTimeout(() => envelope.classList.add("show"), 800);
-      }, 1800);
-    }, 2500);
+  envelope.addEventListener('click',()=>{
+    if(opened) return;
+    opened=true;
+    flap.classList.add('open');
+    flash.style.opacity='1';
+    setTimeout(()=>flash.style.opacity='0',300);
+    quickHeartBurst();
+    startRoseRain(); // 🌹 efekt burada başlıyor
+    setTimeout(()=>{
+      letter.classList.add('show');
+      setTimeout(()=>continueBtn.classList.add('show'),800);
+    },900);
+  });
 
-    // 💥 Flaş efekti
-    function flashEffect() {
-      flash.style.transition = "opacity 0.5s ease-in-out";
-      flash.style.opacity = "1";
-      setTimeout(() => flash.style.opacity = "0", 400);
+  function quickHeartBurst(){
+    const cx=window.innerWidth/2;
+    const cy=window.innerHeight/2;
+    for(let i=0;i<18;i++){
+      const h=document.createElement('div');
+      h.className='heart';
+      h.textContent='💖';
+      h.style.left=cx+'px';
+      h.style.top=cy+'px';
+      h.style.fontSize=(10+Math.random()*20)+'px';
+      document.body.appendChild(h);
+      requestAnimationFrame(()=>{
+        h.style.transition='transform 1.1s ease,opacity 1.1s';
+        h.style.transform=`translate(${(Math.random()-0.5)*300}px,${-80-Math.random()*280}px) rotate(${Math.random()*360}deg) scale(${1+Math.random()*0.6})`;
+        h.style.opacity='0';
+      });
+      setTimeout(()=>h.remove(),1200);
     }
+  }
 
-    // 🌹 Gül düşürme
-    function dropRoses() {
-      for (let i = 0; i < 12; i++) {
-        const rose = document.createElement("div");
-        rose.classList.add("rose");
-        rose.textContent = "🌹";
-        rose.style.left = Math.random() * 100 + "vw";
-        rose.style.animationDuration = (3 + Math.random() * 2) + "s";
-        document.body.appendChild(rose);
-        setTimeout(() => rose.remove(), 5000);
-      }
-    }
-
-    // 💖 Kalp fışkırtma
-    function heartBurst() {
-      for (let i = 0; i < 25; i++) {
-        const heart = document.createElement("div");
-        heart.textContent = "💖";
-        heart.style.position = "fixed";
-        heart.style.left = "50%";
-        heart.style.top = "50%";
-        heart.style.fontSize = (1 + Math.random() * 1.8) + "rem";
-        heart.style.transform = `translate(-50%, -50%) rotate(${Math.random()*360}deg)`;
-        heart.style.animation = "floatHearts 2s ease-out forwards";
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(), 2000);
-      }
-    }
-
-    // ✉️ Zarf tıklanınca açılma
-    envelope.addEventListener("click", () => {
-      if (flap.classList.contains("open")) return;
-      flashEffect();
-      dropRoses();
-      heartBurst();
-      flap.classList.add("open");
-      setTimeout(() => {
-        letter.classList.add("show");
-        setTimeout(() => continueBtn.classList.add("show"), 1800);
-      }, 1000);
-    });
-
-    // 💌 Love.html'e geçiş
-    function goToLove() {
-      window.location.href = "love.html";
-    }
-  </script>
-
+  window.goToLove=()=>window.location.href='love.html';
+})();
+</script>
 </body>
 </html>
