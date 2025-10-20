@@ -2,176 +2,278 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>💌 Hoş Geldin Aşkım 💌</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Küçük Bir Sürpriz 💌</title>
   <style>
-    :root{
-      --bg1:#ffe6f0;
-      --bg2:#ff99cc;
-      --accent:#ff1493;
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      background:radial-gradient(circle at center,var(--bg1),var(--bg2),#ff66b2);
-      font-family:'Quicksand',sans-serif;
-      overflow:hidden;
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, #ffb6c1, #ff66b2, #ff1493);
+      color: white;
+      text-align: center;
+      position: relative;
     }
 
-    .envelope{
-      position:relative;
-      width:320px;
-      height:220px;
-      background:#ffb6c1;
-      border-radius:10px;
-      box-shadow:0 12px 30px rgba(255,105,180,0.4);
-      transform-style:preserve-3d;
-      cursor:pointer;
-      transition:transform 1s ease;
+    /* ❤️ Kalpli perde efekti */
+    #heartOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.5s ease-in-out, backdrop-filter 2s ease-in-out;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
     }
 
-    .envelope::before{
-      content:"";
-      position:absolute;
-      top:0;left:0;
-      width:100%;height:100%;
-      background:linear-gradient(to top right,#ff8ab8,#ff4d94);
-      clip-path:polygon(0 0,100% 0,50% 60%);
-      transform-origin:top;
-      transition:transform 1s ease;
-      border-top-left-radius:10px;
-      border-top-right-radius:10px;
+    .heart {
+      font-size: 1.6rem;
+      opacity: 0.9;
+      animation: floatHearts 3s ease-in-out forwards;
     }
 
-    .envelope.open::before{
-      transform:rotateX(180deg);
+    @keyframes floatHearts {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      100% { transform: scale(2.5) rotate(360deg); opacity: 0; }
     }
 
-    .letter{
-      position:absolute;
-      top:20%;
-      left:50%;
-      transform:translateX(-50%);
-      width:85%;
-      height:0;
-      background:white;
-      border-radius:10px;
-      box-shadow:0 6px 15px rgba(0,0,0,0.15);
-      padding:20px;
-      opacity:0;
-      transition:all 1s ease;
-      overflow:hidden;
+    /* 💥 Flaş efekti */
+    #flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,182,193,0.3));
+      opacity: 0;
+      z-index: 1500;
+      pointer-events: none;
     }
 
-    .envelope.open .letter{
-      height:180px;
-      opacity:1;
+    /* ✉️ Zarf */
+    .envelope {
+      position: relative;
+      width: 360px;
+      height: 240px;
+      margin: 160px auto 0;
+      background: #ff8fab;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(255,20,147,0.4);
+      transform: scale(0);
+      opacity: 0;
+      transition: all 1s ease-in-out;
     }
 
-    .letter h2{
-      margin:0;
-      color:#ff1493;
-      font-size:1.4rem;
+    .envelope.show {
+      transform: scale(1);
+      opacity: 1;
     }
 
-    .letter p{
-      font-size:1rem;
-      color:#333;
-      margin-top:10px;
-      line-height:1.6;
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 180px solid transparent;
+      border-right: 180px solid transparent;
+      border-bottom: 120px solid #ff5c8d;
+      border-radius: 5px;
+      transform-origin: top;
+      transition: transform 1s ease-in-out;
+      z-index: 3;
     }
 
-    #continueBtn{
-      display:none;
-      margin-top:20px;
-      padding:10px 22px;
-      background:linear-gradient(90deg,#ff4d94,#ff1493);
-      color:white;
-      font-size:1rem;
-      border:none;
-      border-radius:50px;
-      cursor:pointer;
-      box-shadow:0 8px 20px rgba(255,20,147,0.4);
-      transition:all 0.3s ease;
-      animation:fadeIn 1s forwards;
+    .flap.open {
+      transform: rotateX(180deg);
     }
 
-    #continueBtn:hover{
-      transform:scale(1.05);
-      box-shadow:0 8px 25px rgba(255,20,147,0.5);
+    .letter {
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      right: 10px;
+      height: 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: height 1.2s ease-in-out;
+      color: #333;
+      font-size: 1rem;
+      padding: 0 10px;
+      z-index: 2;
     }
 
-    @keyframes fadeIn {
-      from{opacity:0; transform:translateY(10px);}
-      to{opacity:1; transform:translateY(0);}
+    .letter.show {
+      height: 200px;
+      padding-top: 15px;
     }
 
-    .floating-hearts{
-      position:fixed;
-      bottom:0;
-      left:0;
-      width:100%;
-      height:100%;
-      pointer-events:none;
-      overflow:hidden;
-      z-index:-1;
+    .letter p {
+      margin: 15px 10px;
+      line-height: 1.6;
     }
 
-    .heart{
-      position:absolute;
-      bottom:-10px;
-      font-size:1.5rem;
-      animation:fly 6s linear forwards;
+    /* 🌹 Gül animasyonu */
+    .rose {
+      position: fixed;
+      top: -50px;
+      font-size: 1.8rem;
+      animation: fall 4s linear forwards;
+      z-index: 2000;
     }
 
-    @keyframes fly{
-      0%{transform:translateY(0) scale(1);opacity:1;}
-      100%{transform:translateY(-700px) scale(1.6);opacity:0;}
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(180deg); opacity: 0; }
+    }
+
+    /* 💌 Devam Et butonu */
+    #continueBtn {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: linear-gradient(90deg, #ff1493, #ff69b4);
+      border: none;
+      color: white;
+      padding: 10px 28px;
+      border-radius: 25px;
+      font-size: 1rem;
+      box-shadow: 0 0 15px rgba(255,20,147,0.6);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.8s ease-in-out;
+      z-index: 4;
+    }
+
+    #continueBtn.show {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+    }
+
+    #introText {
+      font-size: 1.8rem;
+      position: relative;
+      margin-top: 100px;
+      opacity: 0;
+      animation: fadeInText 2.5s ease-in-out 2s forwards;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+
+    @keyframes fadeInText { to { opacity: 1; } }
+
+    @media (max-width: 768px) {
+      .envelope { width: 260px; height: 170px; margin-top: 130px; }
+      .flap { border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 85px solid #ff5c8d; }
+      .letter.show { height: 140px; font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ❤️ Kalpli perde -->
+  <div id="heartOverlay"></div>
+
+  <!-- 💥 Flaş efekti -->
+  <div id="flash"></div>
+
+  <div id="introText">Küçük bir sürprizim var 💌</div>
+
+  <!-- ✉️ Zarf -->
   <div class="envelope" id="envelope">
-    <div class="letter">
-      <h2>💞 Hoş Geldin Aşkım 💞</h2>
-      <p>Bu küçük sürprizin sana minik bir tebessüm getirmesini istedim...  
-      Hazırsan mektubun devamına geçelim 💖</p>
+    <div class="flap" id="flap"></div>
+    <div class="letter" id="letter">
+      <button id="continueBtn" onclick="goToLove()">💌 Devam Et 💌</button>
+      <p>💖 Hayatımın en güzel yanısın, seni tanımak en büyük hediyem oldu.  
+      Bu mektup sadece bir başlangıç… 💌  
+      Devam et, çünkü asıl sürpriz seni bekliyor. ✨</p>
     </div>
   </div>
 
-  <button id="continueBtn" onclick="window.location.href='love.html'">Devam Et 💖</button>
-
-  <div class="floating-hearts" id="heartContainer"></div>
-
   <script>
-    const envelope=document.getElementById('envelope');
-    const btn=document.getElementById('continueBtn');
-    const heartContainer=document.getElementById('heartContainer');
+    const heartOverlay = document.getElementById("heartOverlay");
+    const flash = document.getElementById("flash");
+    const envelope = document.getElementById("envelope");
+    const flap = document.getElementById("flap");
+    const letter = document.getElementById("letter");
+    const continueBtn = document.getElementById("continueBtn");
 
-    const emojis=["💖","💞","💘","💝","💋","❤️","💕","💗"];
-    function createHeart(){
-      const el=document.createElement('div');
-      el.className='heart';
-      el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-      el.style.left=Math.random()*100+'vw';
-      el.style.fontSize=(1+Math.random()*1.6)+'rem';
-      heartContainer.appendChild(el);
-      setTimeout(()=>el.remove(),6000);
+    // 💖 Kalpler perde olarak
+    for (let i = 0; i < 600; i++) {
+      const h = document.createElement("div");
+      h.classList.add("heart");
+      h.textContent = "💖";
+      h.style.position = "absolute";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.top = Math.random() * 100 + "vh";
+      h.style.fontSize = (1 + Math.random() * 1.5) + "rem";
+      heartOverlay.appendChild(h);
     }
 
-    let hearts=setInterval(createHeart,300);
+    // 🎬 Açılış animasyonu
+    setTimeout(() => {
+      heartOverlay.style.opacity = "0";
+      setTimeout(() => {
+        heartOverlay.remove();
+        flashEffect();
+        setTimeout(() => envelope.classList.add("show"), 800);
+      }, 1800);
+    }, 2500);
 
-    envelope.addEventListener('click',()=>{
-      envelope.classList.add('open');
-      setTimeout(()=>btn.style.display='inline-block',1600);
+    // 💥 Flaş efekti
+    function flashEffect() {
+      flash.style.transition = "opacity 0.5s ease-in-out";
+      flash.style.opacity = "1";
+      setTimeout(() => flash.style.opacity = "0", 400);
+    }
+
+    // 🌹 Gül düşürme
+    function dropRoses() {
+      for (let i = 0; i < 12; i++) {
+        const rose = document.createElement("div");
+        rose.classList.add("rose");
+        rose.textContent = "🌹";
+        rose.style.left = Math.random() * 100 + "vw";
+        rose.style.animationDuration = (3 + Math.random() * 2) + "s";
+        document.body.appendChild(rose);
+        setTimeout(() => rose.remove(), 5000);
+      }
+    }
+
+    // 💖 Kalp fışkırtma
+    function heartBurst() {
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement("div");
+        heart.textContent = "💖";
+        heart.style.position = "fixed";
+        heart.style.left = "50%";
+        heart.style.top = "50%";
+        heart.style.fontSize = (1 + Math.random() * 1.8) + "rem";
+        heart.style.transform = `translate(-50%, -50%) rotate(${Math.random()*360}deg)`;
+        heart.style.animation = "floatHearts 2s ease-out forwards";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 2000);
+      }
+    }
+
+    // ✉️ Zarf tıklanınca açılma
+    envelope.addEventListener("click", () => {
+      if (flap.classList.contains("open")) return;
+      flashEffect();
+      dropRoses();
+      heartBurst();
+      flap.classList.add("open");
+      setTimeout(() => {
+        letter.classList.add("show");
+        setTimeout(() => continueBtn.classList.add("show"), 1800);
+      }, 1000);
     });
+
+    // 💌 Love.html'e geçiş
+    function goToLove() {
+      window.location.href = "love.html";
+    }
   </script>
 
 </body>
