@@ -174,16 +174,16 @@
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
       <p>Müziği başlatmak için kalbe dokun 💖</p>
-      <button id="startBtn" aria-label="Müziği başlat">💓</button>
+      <button id="startBtn" aria-label="Müziği başlat">❤️</button>
     </div>
   </div>
 
   <!-- Controls (hidden until after start) -->
   <div id="controls" aria-hidden="true">
-    <button id="musicBtn" class="iconButton" aria-pressed="true">💓</button>
-    <div id="musicText" class="glowText">Müziği Durdur</div>
-    <button id="restartBtn" class="iconButton"></button>
-    <div id="restartText" class="glowText"></div>
+    <button id="musicBtn" class="iconButton" aria-pressed="true">❤️</button>
+    <div id="musicText" class="glowText">Durdur</div>
+    <button id="restartBtn" class="iconButton">🔁</button>
+    <div id="restartText" class="glowText">Yeniden</div>
   </div>
 
   <h1 id="title">💖 Doğum Günün Kutlu Olsun Aşkım 💖</h1>
@@ -206,7 +206,7 @@
   </audio>
 
   <!-- müzik uyarısı (15s sonra gösterilecek) -->
-  <div id="musicAlert" role="status" aria-hidden="true">🎵 Videoyu başlatmadan önce müziği durdurmayı unutma! <span class="arrow">⬆S</span></div>
+  <div id="musicAlert" role="status" aria-hidden="true">🎵 Videoyu başlatmadan önce müziği durdurmayı unutma! <span class="arrow">⬆️</span></div>
 
 <script>
 /* Elements */
@@ -236,8 +236,8 @@ async function tryPlayAt(sec){
   try {
     await music.play();
     isPlaying = true;
-    musicBtn.textContent = '🔊';
-    musicText.textContent = 'Müziği Durdur';
+    musicBtn.textContent = '❤️';
+    musicText.textContent = 'Durdur';
   } catch (err) {
     console.warn('play() rejected', err);
     isPlaying = false;
@@ -287,7 +287,7 @@ function animateStartToControls(){
   setTimeout(()=> {
     controls.style.display = 'flex';
     controls.setAttribute('aria-hidden','false');
-    musicBtn.textContent = isPlaying ? '🎶' : '🎶';
+    musicBtn.textContent = isPlaying ? '🔈' : '🔊';
     musicText.textContent = isPlaying ? 'Müziği Durdur' : 'Devam Ettir';
     try{ startBtn.remove(); }catch(e){}
   }, 850);
@@ -363,7 +363,7 @@ musicBtn.addEventListener('click', async () => {
   if(isPlaying){
     music.pause();
     isPlaying = false;
-    musicBtn.textContent = '🔊';
+    musicBtn.textContent = '💔';
     musicText.textContent = 'Devam Ettir';
     // heart burst when pausing
     createBurstHearts(30);
@@ -371,8 +371,8 @@ musicBtn.addEventListener('click', async () => {
     try {
       await music.play();
       isPlaying = true;
-      musicBtn.textContent = '🔈';
-      musicText.textContent = 'Müziği Durdur';
+      musicBtn.textContent = '❤️';
+      musicText.textContent = 'Durdur';
     } catch(e) { console.warn(e); }
   }
 });
