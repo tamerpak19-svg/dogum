@@ -174,13 +174,13 @@
     <div class="introContent">
       <h2>💞 Hoş Geldin Aşkım 💞</h2>
       <p>Müziği başlatmak için kalbe dokun 💖</p>
-      <button id="startBtn" aria-label="Müziği başlat">🎶</button>
+      <button id="startBtn" aria-label="Müziği başlat">🔊</button>
     </div>
   </div>
 
   <!-- Controls (hidden until after start) -->
   <div id="controls" aria-hidden="true">
-    <button id="musicBtn" class="iconButton" aria-pressed="true">🎶</button>
+    <button id="musicBtn" class="iconButton" aria-pressed="true">🔊</button>
     <div id="musicText" class="glowText">Müziği Durdur</div>
   </div>
 
@@ -234,7 +234,7 @@ async function tryPlayAt(sec){
   try {
     await music.play();
     isPlaying = true;
-    musicBtn.textContent = '❤️';
+    musicBtn.textContent = '🔊';
     musicText.textContent = 'Müziği Durdur';
   } catch (err) {
     console.warn('play() rejected', err);
@@ -285,8 +285,8 @@ function animateStartToControls(){
   setTimeout(()=> {
     controls.style.display = 'flex';
     controls.setAttribute('aria-hidden','false');
-    musicBtn.textContent = isPlaying ? '❤️' : '💔';
-    musicText.textContent = isPlaying ? 'Durdur' : 'Devam Ettir';
+    musicBtn.textContent = isPlaying ? '🎶' : '🎶';
+    musicText.textContent = isPlaying ? 'Müziği Durdur' : 'Devam Ettir';
     try{ startBtn.remove(); }catch(e){}
   }, 850);
 }
@@ -361,7 +361,7 @@ musicBtn.addEventListener('click', async () => {
   if(isPlaying){
     music.pause();
     isPlaying = false;
-    musicBtn.textContent = '💔';
+    musicBtn.textContent = '🔊';
     musicText.textContent = 'Devam Ettir';
     // heart burst when pausing
     createBurstHearts(30);
@@ -369,8 +369,8 @@ musicBtn.addEventListener('click', async () => {
     try {
       await music.play();
       isPlaying = true;
-      musicBtn.textContent = '❤️';
-      musicText.textContent = 'Durdur';
+      musicBtn.textContent = '🔈';
+      musicText.textContent = 'Müziği Durdur';
     } catch(e) { console.warn(e); }
   }
 });
