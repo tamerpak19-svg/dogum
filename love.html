@@ -115,6 +115,17 @@
       border-radius: 24px;
     }
 
+    /* Transparent overlay that captures the user's first intent to play the video.
+       We remove it after the first intentional click so iframe receives interactions. */
+    #videoOverlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1100;
+      background: transparent;
+      cursor: pointer;
+      /* accessibility */
+    }
+
     .flower {
       position: absolute;
       font-size: 1.6rem;
@@ -171,25 +182,7 @@
       z-index:9000;
     }
 
-    #reminder {
-      position:fixed;
-      bottom:20px;
-      left:50%;
-      transform:translateX(-50%);
-      background:rgba(255,255,255,0.85);
-      padding:10px 20px;
-      border-radius:20px;
-      font-size:1rem;
-      color:#d63384;
-      box-shadow:0 0 20px rgba(255,20,147,0.4);
-      opacity:0;
-      animation: blink 5s infinite;
-    }
-    @keyframes blink {
-      0%, 20% { opacity: 1; }
-      40%, 100% { opacity: 0; }
-    }
-
+    /* responsive */
     @media(max-width:768px){
       h1{ font-size:2.1rem; margin-top:28px }
       #videoFrame iframe{ height:220px }
@@ -223,8 +216,12 @@
 
   <!-- 🌼 Papatya çerçeveli video -->
   <div id="videoFrame">
-    <iframe id="ytiframe" src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0" 
+    <iframe id="ytiframe" src="https://www.youtube.com/embed/sr7PADgCNP0?rel=0&enablejsapi=1"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <!-- overlay captures the user's intent to play the video and lets us pause music safely.
+         it will be removed after first intentional click and then we programmatically start video via player.playVideo() -->
+    <div id="videoOverlay" aria-hidden="true"></div>
 
     <div class="flower top-left">🌼</div>
     <div class="flower top-center">🌼</div>
@@ -245,8 +242,6 @@
 
   <div id="bigMessage">💞 SENİ ÇOK SEVİYORUM AŞKIM 💞<br>🎂 DOĞUM GÜNÜN KUTLU OLSUN 🎂</div>
 
-  <div id="reminder">🎧 Videoyu başlatmadan önce müziği durdurmayı unutma 💞</div>
-
   <audio id="bgMusic" loop preload="auto">
     <source src="music.mp3" type="audio/mpeg">
   </audio>
@@ -262,10 +257,12 @@ const yt = document.getElementById('ytiframe');
 const loveMessage = document.getElementById('loveMessage');
 const bigMessage = document.getElementById('bigMessage');
 const musicStarted = document.getElementById('musicStarted');
-const reminder = document.getElementById('reminder');
+const videoOverlay = document.getElementById('videoOverlay');
 
 let isPlaying = false;
 let emojiInterval = null;
+let ytPlayerReady = false;
+window.player = null; // will hold YT player instance
 
 /* Play music from 10s */
 async function tryPlayAt(sec){
@@ -273,8 +270,9 @@ async function tryPlayAt(sec){
   try {
     await music.play();
     isPlaying = true;
-    musicBtn.textContent = '🔈';
-    musicText.textContent = 'Müziği Durdur';
+    // update UI if controls shown
+    if (musicBtn) musicBtn.textContent = '🔈';
+    if (musicText) musicText.textContent = 'Müziği Durdur';
   } catch (err) { console.warn(err); }
 }
 
@@ -317,6 +315,16 @@ function startEmojis(){
   }, 200);
 }
 
+/* utility: stop music and sync UI */
+function stopMusicSafely(){
+  if(isPlaying){
+    music.pause();
+    isPlaying = false;
+    if (musicBtn) musicBtn.textContent = '🔊';
+    if (musicText) musicText.textContent = 'Müziği Devam Ettir';
+  }
+}
+
 /* Start button click */
 startBtn.addEventListener('click', async ()=>{
   await tryPlayAt(10);
@@ -330,10 +338,9 @@ startBtn.addEventListener('click', async ()=>{
     startEmojis();
     setTimeout(()=> bigMessage.classList.add('show'), 2200);
   }, 600);
-  setTimeout(()=> reminder.style.opacity = '1', 15000);
 });
 
-/* Music control */
+/* Music control (manual) */
 musicBtn.addEventListener('click', async ()=>{
   if(isPlaying){
     music.pause();
@@ -341,37 +348,80 @@ musicBtn.addEventListener('click', async ()=>{
     musicBtn.textContent = '🔊';
     musicText.textContent = 'Müziği Devam Ettir';
   } else {
-    await tryPlayAt(music.currentTime);
+    await tryPlayAt(music.currentTime || 10);
   }
 });
 
-/* Pause when video clicked */
-// 🎬 Videoya tıklayınca müziği durdur
-yt.addEventListener('mouseenter', stopMusicSafely);
-yt.addEventListener('touchstart', stopMusicSafely);
-yt.addEventListener('click', stopMusicSafely);
+/* VIDEO overlay handling:
+   - overlay captures first "intent to play" (click/touch)
+   - it stops the music (if playing), updates UI, then removes itself
+   - it also attempts to start the actual YouTube player via API for a smooth UX
+*/
+videoOverlay.addEventListener('click', async (e) => {
+  // prevent accidental long-press context menus
+  e.preventDefault();
+  // stop background music and sync UI
+  stopMusicSafely();
 
-// 🎬 YouTube oynatma başlayınca müziği otomatik durdur
+  // remove overlay so iframe becomes interactive after this
+  try { videoOverlay.remove(); } catch(e){}
+
+  // if YT player ready, start the video programmatically
+  if (window.player && typeof window.player.playVideo === 'function') {
+    try {
+      window.player.playVideo();
+    } catch (err) {
+      // ignore — user can tap iframe to start if API couldn't
+      console.warn('player.playVideo() failed', err);
+    }
+  }
+}, {passive:false});
+
+/* Fallback: user may trigger playback inside iframe (or via keyboard). Use YouTube Player API to detect actual playback start. */
 function onYouTubeIframeAPIReady() {
-  const player = new YT.Player('ytiframe', {
+  window.player = new YT.Player('ytiframe', {
     events: {
+      'onReady': function(){ ytPlayerReady = true; },
       'onStateChange': function(event) {
-        // 1 = video oynatılıyor
-        if (event.data === 1 && isPlaying) {
-          music.pause();
-          isPlaying = false;
-          musicBtn.textContent = '🔊';
-          musicText.textContent = 'Müziği Devam Ettir';
+        // 1 = PLAYING
+        if (event.data === 1) {
+          // when video actually starts playing, ensure music stopped & UI synced
+          stopMusicSafely();
         }
       }
     }
   });
 }
 
-// YouTube API'sini yükle
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.body.appendChild(tag);
+/* Load YouTube Player API */
+(function loadYouTubeAPI(){
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.body.appendChild(tag);
+})();
+
+/* Pause background music when user taps inside the iframe area in other ways:
+   also listen for pointerdown on iframe wrapper (as an extra fallback)
+*/
+yt.addEventListener('pointerdown', (e)=>{
+  // only act if overlay was already removed (i.e. user interacting directly with iframe)
+  if (!document.getElementById('videoOverlay')) {
+    stopMusicSafely();
+  }
+});
+
+/* accessibility: allow Enter/Space to trigger start */
+startBtn.addEventListener('keydown', async (e) => {
+  if(e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    startBtn.click();
+  }
+});
+
+/* cleanup on unload */
+window.addEventListener('beforeunload', ()=> {
+  if(emojiInterval) clearInterval(emojiInterval);
+});
 </script>
 </body>
 </html>
