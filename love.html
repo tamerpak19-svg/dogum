@@ -318,7 +318,7 @@ function showMessageWords(){
     sp.style.whiteSpace = 'pre';
     sp.style.transition = 'opacity .22s ease';
     loveMessage.appendChild(sp);
-    setTimeout(()=> sp.style.opacity = '1', i * 120); // faster cadence
+    setTimeout(()=> sp.style.opacity = '1', i * 250); // faster cadence
   });
 }
 
@@ -363,7 +363,7 @@ musicBtn.addEventListener('click', async () => {
   if(isPlaying){
     music.pause();
     isPlaying = false;
-    musicBtn.textContent = '💔';
+    musicBtn.textContent = '🔊';
     musicText.textContent = 'Devam Ettir';
     // heart burst when pausing
     createBurstHearts(30);
@@ -371,7 +371,7 @@ musicBtn.addEventListener('click', async () => {
     try {
       await music.play();
       isPlaying = true;
-      musicBtn.textContent = '❤️';
+      musicBtn.textContent = '🔈';
       musicText.textContent = 'Durdur';
     } catch(e) { console.warn(e); }
   }
@@ -383,7 +383,7 @@ restartBtn.addEventListener('click', async () => {
     // set to 10s and play
     await tryPlayAt(10);
     isPlaying = true;
-    musicBtn.textContent = '❤️';
+    musicBtn.textContent = '🔈';
     musicText.textContent = 'Durdur';
   } catch(e){ console.warn(e); }
 });
@@ -393,7 +393,7 @@ yt.addEventListener('click', () => {
   if(isPlaying){
     music.pause();
     isPlaying = false;
-    musicBtn.textContent = '💔';
+    musicBtn.textContent = '🔊';
     musicText.textContent = 'Devam Ettir';
     // also a small heart burst to indicate pause
     createBurstHearts(18);
@@ -416,7 +416,7 @@ if (musicAlert) {
       if (music && !music.paused) {
         music.pause();
         isPlaying = false;
-        musicBtn.textContent = '💔';
+        musicBtn.textContent = '🔊';
         musicText.textContent = 'Devam Ettir';
         createBurstHearts(20);
       }
