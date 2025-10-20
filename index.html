@@ -1,209 +1,372 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Küçük Bir Sürpriz 💌</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>💌 Küçük Bir Sürpriz 💌</title>
 <style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: #ffd6e8;
-  overflow-x: hidden;
-  text-align: center;
-}
+  :root{
+    --pink-1:#ffd7e6;
+    --pink-2:#ff9fc3;
+    --accent:#ff1493;
+    --deep:#6e0033;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, Poppins, "Dancing Script", system-ui;background:linear-gradient(180deg,var(--pink-1),#ffd0e1);color:var(--deep);overflow:hidden}
 
-/* Başlık */
-h1 {
-  font-size: 2rem;
-  color: #7a003c;
-  margin-top: 30px;
-  animation: fadeIn 2s ease-in-out;
-}
+  /* ---------- curtain (two panels made of hearts) ---------- */
+  .curtain-wrap{position:fixed;inset:0;z-index:9999;display:flex;pointer-events:none;align-items:stretch;background:transparent}
+  .curtain-panel{flex:1;display:grid;grid-auto-rows:var(--cell,28px);grid-template-columns:repeat(var(--cols,20),minmax(0,1fr));align-content:start;justify-items:center;gap:2px;padding:6px;backdrop-filter:blur(6px)}
+  .curtain-panel .ch{font-size:clamp(14px,2vw,22px);opacity:.95;transform-origin:center center;animation:shimmer 1.8s ease-in-out infinite alternate}
+  @keyframes shimmer{from{transform:scale(1)}to{transform:scale(1.18) rotate(6deg)}}
 
-/* Zarf Alanı */
-.envelope {
-  position: relative;
-  width: 320px;
-  height: 220px;
-  margin: 40px auto;
-  background: #ffc4dd;
-  border-radius: 8px;
-  box-shadow: 0 0 25px rgba(255, 0, 85, 0.2);
-  overflow: hidden;
-  transition: transform 1s ease-in-out;
-}
+  /* open animation: panels slide outwards */
+  .panel-open-left{transform:translateX(-100%);transition:transform 1.6s cubic-bezier(.2,.9,.2,1)}
+  .panel-open-right{transform:translateX(100%);transition:transform 1.6s cubic-bezier(.2,.9,.2,1)}
 
-/* Zarf Üst Kapağı */
-.envelope::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: #ff7aa2;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transition: transform 1s ease-in-out;
-  transform-origin: top;
-}
+  /* overlay blur while curtain active */
+  .backdrop-blur{position:fixed;inset:0;background:rgba(255,230,240,0.0);z-index:9988;pointer-events:none;transition:backdrop-filter .9s ease, background .9s ease}
+  .backdrop-blur.active{backdrop-filter:blur(6px);background:rgba(255,230,240,0.15)}
 
-.envelope.open::before {
-  transform: rotateX(180deg);
-}
+  /* ---------- Lens flare (romantic white+pink flash) ---------- */
+  #lensFlare{position:fixed;inset:0;pointer-events:none;z-index:10001;opacity:0;mix-blend-mode:screen}
+  #lensFlare .core{position:absolute;left:50%;top:40%;width:20vmax;height:20vmax;border-radius:50%;
+    background:radial-gradient(circle at 40% 40%, rgba(255,255,255,1), rgba(255,230,245,0.9) 20%, rgba(255,150,200,0.35) 45%, rgba(255,120,180,0.12) 70%, transparent 100% );
+    transform:translate(-50%,-50%) scale(.3);opacity:0;filter:blur(6px)}
+  #lensFlare .glare{position:absolute;left:50%;top:42%;width:70vmax;height:8vmax;transform:translate(-50%,-50%) rotate(12deg);
+    background:linear-gradient(90deg, rgba(255,255,255,0.25), rgba(255,200,230,0.12), rgba(255,255,255,0.12));opacity:0}
+  @keyframes flareIn {0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}}
 
-/* Mühür */
-.seal {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, #ff3377, #cc0044);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  color: white;
-  font-weight: bold;
-  border: 3px solid #ff99bb;
-  box-shadow: 0 0 15px rgba(255, 0, 100, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-.seal:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-}
+  /* ---------- stage content ---------- */
+  main.stage{position:relative;z-index:50;display:flex;flex-direction:column;align-items:center;gap:18px;padding:18px;min-height:100vh;justify-content:center}
+  h1.title{font-family:"Dancing Script",cursive;font-size:2.4rem;margin:0;color:var(--deep);text-shadow:0 6px 18px rgba(255,255,255,0.6)}
+  .intro-text{opacity:0;transform:translateY(6px);transition:all .8s ease;pointer-events:none}
+  .intro-text.show{opacity:1;transform:translateY(0)}
 
-/* Mektup İçeriği */
-.letter {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  opacity: 0;
-  transition: all 1.2s ease;
-  box-shadow: 0 0 20px rgba(255, 150, 200, 0.4);
-  z-index: 5;
-}
-.envelope.open .letter {
-  top: 110%;
-  opacity: 1;
-}
+  /* ---------- envelope ---------- */
+  .envelope{position:relative;width:clamp(260px,38vw,480px);height:clamp(160px,24vw,300px);border-radius:14px;background:linear-gradient(180deg,#ffdfee,#ffd1e6);box-shadow:0 18px 60px rgba(255,20,147,0.18);border:1px solid rgba(255,255,255,.6);overflow:visible;display:flex;align-items:center;justify-content:center}
+  .envelope .flap{position:absolute;top:0;left:0;width:100%;height:60%;background:linear-gradient(180deg,#ff7aa6,#ff4e8c);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center;transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+  .envelope.open .flap{transform:translateY(-130%) rotateX(180deg)}
+  .seal{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:white;background:radial-gradient(circle at 20% 20%,#ff5b8f,#c4005f);box-shadow:0 12px 30px rgba(197,10,80,0.28);z-index:5}
+  .seal .open-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:linear-gradient(90deg,var(--accent),#ff66b2);border:none;color:white;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 8px 26px rgba(255,20,147,0.2)}
+  .seal .open-btn:active{transform:translate(-50%,-50%) scale(.98)}
+  .envelope .body{position:absolute;bottom:0;left:0;width:100%;height:68%;background:linear-gradient(180deg,#fff0f6,#fff8fb);border-radius:0 0 12px 12px;padding:18px;transform:translateY(105%);transition:transform .9s cubic-bezier(.2,.9,.2,1);display:flex;align-items:center;justify-content:center} .envelope .body { opacity: 0; pointer-events: none; }
+.envelope.open .body { opacity: 1; pointer-events: auto; }
+  .envelope.open .body{transform:translateY(0)}
 
-/* Devam Et Butonu */
-#nextButton {
-  display: none;
-  margin-top: 20px;
-  padding: 10px 25px;
-  font-size: 1rem;
-  background: linear-gradient(135deg, #ff75a0, #ff4d6d);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(255, 100, 150, 0.6);
-  animation: float 2s infinite ease-in-out;
-}
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
+  /* letter content style */
+  .letter{max-width:86%;color:var(--deep);font-size:1.05rem;line-height:1.75;text-align:left}
+  .letter .continue-on-letter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateY(-6px);display:none;background:linear-gradient(90deg,var(--accent),#ff66b2);color:#fff;border:none;padding:12px 22px;border-radius:999px;font-weight:700;box-shadow:0 10px 30px rgba(255,20,147,0.18);cursor:pointer;transition:transform .35s ease,opacity .4s}
+  .letter .continue-on-letter.show{display:block;opacity:0;animation:btnIn .7s forwards .2s}
+  @keyframes btnIn{from{opacity:0;transform:translate(-50%,-50%) translateY(-30px) scale(.98)}to{opacity:1;transform:translate(-50%,-50%) translateY(0) scale(1)}}
 
-/* Flaş Efekti */
-.flash {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,170,200,0.3));
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-  z-index: 9999;
-}
-.flash.active {
-  opacity: 1;
-  animation: flashGlow 1.2s ease;
-}
-@keyframes flashGlow {
-  0% { opacity: 0; }
-  40% { opacity: 1; }
-  100% { opacity: 0; }
-}
+  /* ---------- particle hearts (fired out) ---------- */
+  .particle{position:fixed;pointer-events:none;will-change:transform,opacity;font-size:18px;z-index:10010}
 
-/* Kalpler */
-.heart {
-  position: fixed;
-  font-size: 20px;
-  animation: floatUp 3s ease-in forwards;
-}
-@keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
-}
-
-/* Geçiş Efektleri */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  /* responsive */
+  @media(max-width:700px){
+    h1.title{font-size:1.7rem}
+    .envelope{width:80vw;height:42vw}
+    .seal{width:56px;height:56px;font-size:1.1rem}
+  }
 </style>
 </head>
 <body>
 
-<h1>💌 Birtanem... Sana küçük bir sürprizim var 💖</h1>
-
-<div class="envelope" id="envelope">
-  <div class="seal" id="seal">💖<br>Aç Beni</div>
-  <div class="letter" id="letter">
-    <p>Sevgilim,</p>
-    <p>Bu küçük notla seni ne kadar çok sevdiğimi hatırlatmak istedim.  
-    Sen benim en güzel şansım, en içten gülüşümsün. 💞</p>
-    <p>Bu mektup sadece başlangıç… devam et düğmesine bastığında asıl sürpriz seni bekliyor 💌</p>
+  <!-- heart curtain panels -->
+  <div class="curtain-wrap" id="curtainWrap" aria-hidden="true">
+    <div class="curtain-panel" id="curtainLeft" aria-hidden="true"></div>
+    <div class="curtain-panel" id="curtainRight" aria-hidden="true"></div>
   </div>
-</div>
 
-<button id="nextButton">💞 Devam Et 💞</button>
+  <!-- subtle backdrop blur when curtain active -->
+  <div class="backdrop-blur active" id="backdrop"></div>
 
-<div class="flash" id="flash"></div>
+  <!-- lens flare overlay -->
+  <div id="lensFlare" aria-hidden="true">
+    <div class="core"></div>
+    <div class="glare"></div>
+  </div>
+
+  <!-- main stage -->
+  <main class="stage" id="stage">
+    <h1 class="title">💌 Birtanem... Sana küçük bir sürprizim var</h1>
+
+    <div class="intro-text" id="introText"> <!-- appears after first flare -->
+      <div style="font-weight:700;font-size:1.05rem;color:#7a0033">Küçük bir sürprizim var 💌</div>
+    </div>
+
+    <!-- envelope -->
+    <div class="envelope" id="envelope" aria-label="Zarf">
+      <div class="flap" id="flap"></div>
+      <div class="seal" id="seal" role="button" tabindex="0" aria-pressed="false">
+        <button class="open-btn" id="openBtn" aria-label="Zarfı aç">💖 Aç Beni</button>
+      </div>
+      <div class="body" id="body">
+        <div class="letter" id="letter">
+          <p id="letterText">
+            Sevgilim,<br><br>
+            Bu küçük notla seni ne kadar çok sevdiğimi hatırlatmak istedim.  
+            Sen benim en güzel şansım, en içten gülüşümsün. 💞<br><br>
+            Bu mektup sadece başlangıç — devam et düğmesine bastığında gerçek sürpriz seni bekliyor.  
+          </p>
+          <button class="continue-on-letter" id="continueOnLetter">Devam Et 💞</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- particles container (DOM-created particles appear as .particle) -->
+  <div id="particlesRoot"></div>
+
+  <!-- optional open sound (place open.mp3 next to file) -->
+  <audio id="openSound" preload="auto">
+    <source src="open.mp3" type="audio/mpeg">
+  </audio>
 
 <script>
-const seal = document.getElementById('seal');
-const envelope = document.getElementById('envelope');
-const letter = document.getElementById('letter');
-const flash = document.getElementById('flash');
-const nextButton = document.getElementById('nextButton');
+/* -------------------------
+   Helper & Responsive Setup
+   ------------------------- */
+const left = document.getElementById('curtainLeft');
+const right = document.getElementById('curtainRight');
+const curtainWrap = document.getElementById('curtainWrap');
+const backdrop = document.getElementById('backdrop');
+const lensFlare = document.getElementById('lensFlare');
+const core = lensFlare.querySelector('.core');
+const glare = lensFlare.querySelector('.glare');
 
-seal.addEventListener('click', () => {
-  flash.classList.add('active');
-  setTimeout(() => {
-    envelope.classList.add('open');
-    flash.classList.remove('active');
-    setTimeout(() => {
-      letter.style.opacity = '1';
-      nextButton.style.display = 'inline-block';
-      createHearts();
-    }, 800);
-  }, 500);
-});
+function makeCurtainGrid(){
+  // calculate columns & rows based on viewport (keeps performance balanced)
+  const cell = Math.max(22, Math.floor(window.innerWidth / 40)); // approx cols
+  const cols = Math.min(40, Math.max(12, cell));
+  const rows = Math.min(30, Math.max(8, Math.floor(window.innerHeight / 36)));
 
-/* Kalp Fışkırması */
-function createHearts() {
-  for (let i = 0; i < 50; i++) {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.textContent = ['💖','💘','💝','💕','💞'][Math.floor(Math.random() * 5)];
-    document.body.appendChild(heart);
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.bottom = '0';
-    heart.style.fontSize = Math.random() * 25 + 15 + 'px';
-    heart.style.animationDuration = (2 + Math.random() * 2) + 's';
-    setTimeout(() => heart.remove(), 4000);
+  left.style.setProperty('--cols', cols);
+  right.style.setProperty('--cols', cols);
+
+  // clear existing
+  left.innerHTML = '';
+  right.innerHTML = '';
+
+  // fill panels (equal hearts)
+  const totalPerPanel = cols * rows;
+  const hearts = ["❤️","💖","💕","💗","💞","🩷"];
+  for(let i=0;i<totalPerPanel;i++){
+    const sL = document.createElement('div');
+    sL.className = 'ch';
+    sL.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    left.appendChild(sL);
+
+    const sR = document.createElement('div');
+    sR.className = 'ch';
+    sR.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    right.appendChild(sR);
   }
 }
+makeCurtainGrid();
+window.addEventListener('resize', ()=>{ clearTimeout(window._rc); window._rc = setTimeout(makeCurtainGrid,220); });
+
+/* -------------------------
+   Initial flow:
+   1) After short wait: play first lens flare (romantic)
+   2) show intro text "Küçük bir sürprizim var" (fade)
+   3) fade curtain by splitting panels (translate X)
+   4) after panels move, remove curtain and blur, show envelope (already in DOM)
+------------------------- */
+
+function runIntroSequence(){
+  // 1) flare
+  playLensFlare(0.0, 900); // small early pop - subtle before curtain opens
+  setTimeout(()=> {
+    // show intro text briefly
+    document.getElementById('introText').classList.add('show');
+  }, 700);
+
+  // 2) open curtain after 2s
+  setTimeout(()=> {
+    left.classList.add('panel-open-left');
+    right.classList.add('panel-open-right');
+    // also animate blur fade
+    backdrop.classList.remove('active');
+    // play a stronger flare as panels move apart
+    playLensFlare(200, 1200);
+    // remove curtain markup after animation complete
+    setTimeout(()=> {
+      try{ curtainWrap.remove(); } catch(e){}
+    }, 1700);
+  }, 2000);
+}
+
+function playLensFlare(delay = 0, duration = 1000){
+  // set initial state
+  core.style.transition = `transform ${duration}ms cubic-bezier(.2,.9,.2,1), opacity ${duration}ms linear`;
+  glare.style.transition = `opacity ${duration}ms linear, transform ${duration}ms ease`;
+  core.style.opacity = 0; glare.style.opacity = 0;
+  core.style.transform = 'translate(-50%,-50%) scale(.3)';
+  glare.style.transform = 'translate(-50%,-50%) rotate(12deg) scale(.6)';
+
+  setTimeout(()=> {
+    lensFlare.style.opacity = 1;
+    core.style.opacity = 1;
+    glare.style.opacity = 1;
+    core.style.transform = 'translate(-50%,-50%) scale(1.05)';
+    glare.style.transform = 'translate(-50%,-50%) rotate(12deg) scale(1.1)';
+    // fade out later
+    setTimeout(()=> {
+      core.style.opacity = 0;
+      glare.style.opacity = 0;
+      setTimeout(()=> lensFlare.style.opacity = 0, 200);
+    }, duration*0.7);
+  }, delay);
+}
+
+/* -------------------------
+   Envelope open interaction
+------------------------- */
+const envelope = document.getElementById('envelope');
+const openBtn = document.getElementById('openBtn');
+const seal = document.getElementById('seal');
+const body = document.getElementById('body');
+const letter = document.getElementById('letter');
+const continueOnLetter = document.getElementById('continueOnLetter');
+const particlesRoot = document.getElementById('particlesRoot');
+const openSound = document.getElementById('openSound');
+
+let opened = false;
+
+function spawnParticles(centerX, centerY, total){
+  const hearts = ["💖","💕","💘","💗","❤️","🩷"];
+  const sparksColor = ["#fff","#ffd6ec","#ff8fc2","#fff0f6"];
+  for(let i=0;i<total;i++){
+    setTimeout(()=>{
+      // decide heart or spark
+      const isSpark = Math.random() < 0.18;
+      if(isSpark){
+        spawnSpark(centerX + (Math.random()-0.5)*40, centerY + (Math.random()-0.5)*20, sparksColor[Math.floor(Math.random()*sparksColor.length)]);
+      } else {
+        spawnDOMParticle(centerX, centerY, hearts[Math.floor(Math.random()*hearts.length)]);
+      }
+    }, i * 8 + Math.random()*200);
+  }
+}
+
+function spawnDOMParticle(sx, sy, char){
+  const el = document.createElement('div');
+  el.className = 'particle';
+  el.textContent = char;
+  particlesRoot.appendChild(el);
+
+  const size = (Math.random()*18)+12;
+  el.style.fontSize = size+'px';
+  el.style.left = sx - size/2 + 'px';
+  el.style.top = sy - size/2 + 'px';
+  el.style.opacity = '1';
+
+  // random direction biased upward and sideways
+  const angle = (Math.random()*120 - 60) * (Math.PI/180);
+  const dist = (Math.random()*0.6 + 0.6) * Math.max(window.innerWidth, window.innerHeight)*0.36;
+  const dx = Math.sin(angle) * dist * (Math.random()*0.9 + 0.6);
+  const dy = -Math.cos(angle) * dist * (Math.random()*0.6 + 0.9);
+  const rot = (Math.random()*720-360);
+  const dur = 1.6 + Math.random()*1.6;
+
+  requestAnimationFrame(()=>{
+    el.style.transition = `transform ${dur}s cubic-bezier(.2,.9,.2,1), opacity ${dur*.9}s linear`;
+    el.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg) scale(${(Math.random()*0.8)+0.6})`;
+    el.style.opacity = '0';
+  });
+
+  setTimeout(()=> el.remove(), (dur*1000)+400);
+}
+
+function spawnSpark(sx, sy, color){
+  // small radial spark using simple div that scales out
+  const sp = document.createElement('div');
+  sp.className = 'particle';
+  sp.style.width = '8px';
+  sp.style.height = '8px';
+  sp.style.borderRadius = '50%';
+  sp.style.left = sx + 'px';
+  sp.style.top = sy + 'px';
+  sp.style.background = color;
+  sp.style.zIndex = 10005;
+  document.body.appendChild(sp);
+  sp.style.transform = 'scale(0)';
+  sp.style.opacity = '1';
+  sp.style.transition = 'transform .9s ease-out, opacity .9s linear';
+  requestAnimationFrame(()=> {
+    sp.style.transform = `scale(${6 + Math.random()*6})`;
+    sp.style.opacity = '0';
+  });
+  setTimeout(()=> sp.remove(), 900);
+}
+
+/* envelope open handler */
+async function handleOpen(){
+  if(opened) return;
+  opened = true;
+
+  // play sound if available
+  try{ openSound.currentTime = 0; openSound.volume = 0.8; await openSound.play(); }catch(e){ /* ignore */ }
+
+  // first: lens flare stronger
+  playLensFlare(0, 900);
+
+  // hide the small label button quickly (we keep seal visible)
+  openBtn.style.transform = 'scale(.92)';
+  openBtn.disabled = true;
+  // animate flap open
+  envelope.classList.add('open');
+
+  // spawn particles from flap center
+  const rect = envelope.getBoundingClientRect();
+  const sx = rect.left + rect.width/2;
+  const sy = rect.top + rect.height*0.18;
+
+  // spawn moderately: adapt by device
+  const count = (window.innerWidth < 768) ? 350 : 600;
+  spawnParticles(sx, sy, count);
+
+  // occasional larger flare sparks
+  const bursts = Math.max(2, Math.round(count / 220));
+  for(let i=0;i<bursts;i++){
+    setTimeout(()=> {
+      spawnSpark(sx + (Math.random()-0.5)*120, sy + (Math.random()-0.5)*40, ["#fff","#ffd6ec","#ff8fc2"][Math.floor(Math.random()*3)]);
+    }, i*420);
+  }
+
+  // reveal letter after short delay
+  setTimeout(()=> {
+    body.style.pointerEvents = 'auto';
+    letter.style.opacity = '1';
+    // show letter content
+    // ensure letter visible (body transforms handled by CSS)
+    // show continue button on letter center
+    const btn = document.querySelector('.continue-on-letter');
+    btn.classList.add('show');
+    // accessibility
+    btn.focus();
+  }, 1000);
+}
+
+// keyboard accessible envelope open
+openBtn.addEventListener('click', handleOpen);
+seal.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') handleOpen(); });
+
+/* continue button click */
+document.getElementById('continueOnLetter').addEventListener('click', ()=>{
+  // small feedback then navigate
+  const b = document.getElementById('continueOnLetter');
+  b.style.transform = 'translate(-50%,-50%) scale(.96)';
+  setTimeout(()=> window.location.href = 'love.html', 220);
+});
+
+/* start intro sequence after load */
+window.addEventListener('load', ()=>{
+  // small initial delay to let fonts paint
+  setTimeout(()=> runIntroSequence(), 240);
+});
 </script>
 </body>
 </html>
